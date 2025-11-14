@@ -1,0 +1,94 @@
+{
+  "kind": "collectionType",
+  "collectionName": "staff_members",
+  "info": {
+    "singularName": "staff",
+    "pluralName": "staff-members",
+    "displayName": "Staff",
+    "description": "Department staff members"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "office": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "profileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "photo_url": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "bio": {
+      "type": "richtext",
+      "maxLength": 3000
+    },
+    "shortBio": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "responsibilities": {
+      "type": "json",
+      "description": "Array of job responsibilities"
+    },
+    "department": {
+      "type": "enumeration",
+      "enum": [
+        "EEMB",
+        "MCDB",
+        "Administration",
+        "Shared"
+      ],
+      "default": "EEMB"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "fullName"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "joinedYear": {
+      "type": "integer",
+      "min": 1960,
+      "max": 2030
+    }
+  }
+}

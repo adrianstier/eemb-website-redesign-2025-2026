@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_shared_privacy_settings",
+  "info": {
+    "displayName": "Privacy Settings",
+    "icon": "shield",
+    "description": "Privacy controls for alumni profiles"
+  },
+  "options": {},
+  "attributes": {
+    "showEmail": {
+      "type": "boolean",
+      "default": false
+    },
+    "showPhone": {
+      "type": "boolean",
+      "default": false
+    },
+    "showEmployer": {
+      "type": "boolean",
+      "default": true
+    },
+    "showLocation": {
+      "type": "boolean",
+      "default": true
+    },
+    "showLinkedIn": {
+      "type": "boolean",
+      "default": true
+    },
+    "allowContact": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allow contact through platform"
+    },
+    "visibility": {
+      "type": "enumeration",
+      "enum": ["public", "alumni-only", "private"],
+      "default": "public"
+    }
+  }
+}

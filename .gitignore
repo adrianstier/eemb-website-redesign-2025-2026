@@ -1,0 +1,53 @@
+# R Studio
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Scraping output (can be large, regenerate as needed)
+scraping/data/*.csv
+scraping/data/*.json
+scraping/assets/images/
+scraping/assets/documents/
+scraping/assets/media/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Future backend/frontend builds
+backend/node_modules/
+backend/.cache/
+backend/build/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/

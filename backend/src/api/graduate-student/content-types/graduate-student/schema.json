@@ -1,0 +1,119 @@
+{
+  "kind": "collectionType",
+  "collectionName": "graduate_students",
+  "info": {
+    "singularName": "graduate-student",
+    "pluralName": "graduate-students",
+    "displayName": "Graduate Student",
+    "description": "PhD and MS graduate students"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "office": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "profileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "photo_url": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "bio": {
+      "type": "richtext",
+      "maxLength": 3000
+    },
+    "shortBio": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "researchInterests": {
+      "type": "json",
+      "description": "Array of research interests"
+    },
+    "degreeProgram": {
+      "type": "enumeration",
+      "enum": [
+        "PhD",
+        "MS",
+        "Combined BS/MS"
+      ],
+      "required": true
+    },
+    "yearEntered": {
+      "type": "integer",
+      "min": 2000,
+      "max": 2030
+    },
+    "expectedGraduation": {
+      "type": "integer",
+      "min": 2020,
+      "max": 2035
+    },
+    "advisor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::faculty.faculty"
+    },
+    "researchAreas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::research-area.research-area"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "fullName"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "labWebsite": {
+      "type": "string"
+    },
+    "personalWebsite": {
+      "type": "string"
+    },
+    "googleScholar": {
+      "type": "string"
+    },
+    "orcid": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    }
+  }
+}

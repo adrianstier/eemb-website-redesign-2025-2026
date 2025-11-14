@@ -1,0 +1,81 @@
+{
+  "kind": "collectionType",
+  "collectionName": "alumni_spotlights",
+  "info": {
+    "singularName": "alumni-spotlight",
+    "pluralName": "alumni-spotlights",
+    "displayName": "Alumni Spotlight",
+    "description": "Featured alumni stories and interviews"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "subtitle": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "alumniProfile": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::alumni-profile.alumni-profile",
+      "inversedBy": "spotlight"
+    },
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "publishDate": {
+      "type": "date",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true,
+      "maxLength": 10000
+    },
+    "excerpt": {
+      "type": "text",
+      "required": true,
+      "maxLength": 500
+    },
+    "questionsAnswers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.qa-pair"
+    },
+    "careerHighlights": {
+      "type": "json",
+      "description": "Key career achievements"
+    },
+    "adviceForStudents": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "tags": {
+      "type": "json",
+      "description": "Tags for categorization"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "relatedSpotlights": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::alumni-spotlight.alumni-spotlight"
+    }
+  }
+}

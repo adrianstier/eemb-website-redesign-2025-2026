@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_memorial_quotes",
+  "info": {
+    "displayName": "Memorial Quote",
+    "icon": "quote",
+    "description": "Memorial quote or remembrance"
+  },
+  "options": {},
+  "attributes": {
+    "quote": {
+      "type": "text",
+      "required": true,
+      "maxLength": 1000
+    },
+    "author": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "authorTitle": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "date": {
+      "type": "date"
+    }
+  }
+}

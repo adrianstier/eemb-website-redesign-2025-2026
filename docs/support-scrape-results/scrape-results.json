@@ -1,0 +1,1241 @@
+{
+  "timestamp": "2025-11-14T18:34:57.028Z",
+  "pages": [
+    {
+      "name": "Main Support",
+      "url": "https://www.eemb.ucsb.edu/support",
+      "status": 200,
+      "screenshot": "/Users/adrianstiermbp2023/eemb-website-redesign-2025-2026/docs/support-scrape-results/screenshots/main-support.png",
+      "data": {
+        "fullText": "Skip to main content\nMain navigation\nAbout\nPeople\nResearch\nAcademics \nNews\nEvents\nSupport \nGive\nSupport Services\nSupport Services Menu\nSupport Services\nAdministration\nRoom Reservations\nResearch Services\nTechnical Support\nCampus Resources\nShipping\nAdministration\nProvides departmental financial management and business operations in support of faculty, students, researchers, visitors and staff.\nConference Room Reservations\nEEMB faculty and staff can reserve conference rooms and equipment for classes, seminars and meetings.\nResearch Services\nEEMB Shop, Biology Greenhouse, Marine Operations, NRI / MCDB Microscopy Facility providing services for research.\nTechnical Support\nLSCG provides EEMB user accounts, network access, desktop support.\nCampus Resources\nResources for wellness and safety of our campus members.\nLeadership\nTodd Oakley\nEEMB Department Chair\nProfessor\n  \n4101 Life Sciences Building\nHillary Young\nEEMB Vice Chair, Resources\nProfessor\n  \n2116 Noble Hall\nStephen Proulx\nEEMB Vice Chair, Curriculum\nProfessor\n \n4109 Life Sciences Building\nContact Us\n 805.893.2974\n info@eemb.ucsb.edu\n Jobs\n Visit EEMB\nSupport Services\n Administration\n Room Reservations\n Research Services\nTechnical Support\nShipping / Receiving\nWebsite\n Information\n Terms of Use\n Privacy\n Login\n  \n\nEcology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\n© 2025 Regents of the University of California",
+        "headings": [
+          {
+            "level": "H2",
+            "text": "Main navigation"
+          },
+          {
+            "level": "H1",
+            "text": "Support Services"
+          },
+          {
+            "level": "H2",
+            "text": "Support Services Menu"
+          },
+          {
+            "level": "H3",
+            "text": "Administration"
+          },
+          {
+            "level": "H3",
+            "text": "Conference Room Reservations"
+          },
+          {
+            "level": "H3",
+            "text": "Research Services"
+          },
+          {
+            "level": "H3",
+            "text": "Technical Support"
+          },
+          {
+            "level": "H3",
+            "text": "Campus Resources"
+          },
+          {
+            "level": "H2",
+            "text": "Leadership"
+          },
+          {
+            "level": "H3",
+            "text": "Todd Oakley"
+          },
+          {
+            "level": "H3",
+            "text": "Hillary Young"
+          },
+          {
+            "level": "H3",
+            "text": "Stephen Proulx"
+          },
+          {
+            "level": "H2",
+            "text": "Contact Us"
+          },
+          {
+            "level": "H2",
+            "text": "Support Services"
+          },
+          {
+            "level": "H2",
+            "text": "Website"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to main content",
+            "href": "https://www.eemb.ucsb.edu/support#main-content"
+          },
+          {
+            "text": "About",
+            "href": "https://www.eemb.ucsb.edu/about"
+          },
+          {
+            "text": "People",
+            "href": "https://www.eemb.ucsb.edu/people"
+          },
+          {
+            "text": "Research",
+            "href": "https://www.eemb.ucsb.edu/research"
+          },
+          {
+            "text": "Academics",
+            "href": "https://www.eemb.ucsb.edu/academics"
+          },
+          {
+            "text": "Biology Undergraduate Program",
+            "href": "https://undergrad.biology.ucsb.edu/"
+          },
+          {
+            "text": "Graduate Program",
+            "href": "https://www.eemb.ucsb.edu/academics/graduate"
+          },
+          {
+            "text": "News",
+            "href": "https://www.eemb.ucsb.edu/news"
+          },
+          {
+            "text": "Events",
+            "href": "https://www.eemb.ucsb.edu/events"
+          },
+          {
+            "text": "Support",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Shipping",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Give",
+            "href": "https://www.eemb.ucsb.edu/give"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Shipping",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Conference Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Todd Oakley",
+            "href": "https://www.eemb.ucsb.edu/people/faculty/oakley"
+          },
+          {
+            "text": "Hillary Young",
+            "href": "https://www.eemb.ucsb.edu/people/faculty/young"
+          },
+          {
+            "text": "Stephen Proulx",
+            "href": "https://www.eemb.ucsb.edu/people/faculty/proulx"
+          },
+          {
+            "text": "805.893.2974",
+            "href": "tel:+18058932974"
+          },
+          {
+            "text": "info@eemb.ucsb.edu",
+            "href": "mailto:info@eemb.ucsb.edu"
+          },
+          {
+            "text": "Jobs",
+            "href": "https://www.eemb.ucsb.edu/jobs"
+          },
+          {
+            "text": "Visit EEMB",
+            "href": "https://www.eemb.ucsb.edu/visiting"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Shipping / Receiving",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Information",
+            "href": "https://www.eemb.ucsb.edu/info"
+          },
+          {
+            "text": "Terms of Use",
+            "href": "http://www.policy.ucsb.edu/terms-of-use"
+          },
+          {
+            "text": "Privacy",
+            "href": "http://www.policy.ucsb.edu/privacy-notification"
+          },
+          {
+            "text": "Login",
+            "href": "https://www.eemb.ucsb.edu/user/login"
+          }
+        ],
+        "emails": [
+          "oakley@ucsb.edu",
+          "hillary.young@lifesci.ucsb.edu",
+          "sproul@ucsb.edu",
+          "info@eemb.ucsb.edu"
+        ],
+        "phones": [
+          "",
+          "805.893.2974"
+        ],
+        "lists": [
+          {
+            "type": "ul",
+            "items": [
+              "About",
+              "People",
+              "Research",
+              "Academics",
+              "Biology Undergraduate Program",
+              "Graduate Program",
+              "News",
+              "Events",
+              "Support",
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping",
+              "Give"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Biology Undergraduate Program",
+              "Graduate Program"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "805.893.2974",
+              "info@eemb.ucsb.edu",
+              "Jobs",
+              "Visit EEMB"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Shipping / Receiving"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Information",
+              "Terms of Use",
+              "Privacy",
+              "Login"
+            ]
+          }
+        ],
+        "paragraphs": [
+          "Ecology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\n© 2025 Regents of the University of California"
+        ]
+      }
+    },
+    {
+      "name": "Administration",
+      "url": "https://www.eemb.ucsb.edu/support/administration",
+      "status": 200,
+      "screenshot": "/Users/adrianstiermbp2023/eemb-website-redesign-2025-2026/docs/support-scrape-results/screenshots/administration.png",
+      "data": {
+        "fullText": "Skip to main content\nMain navigation\nAbout\nPeople\nResearch\nAcademics \nNews\nEvents\nSupport \nGive\nAdministration\nSupport Services Menu\nSupport Services\nAdministration\nRoom Reservations\nResearch Services\nTechnical Support\nCampus Resources\nShipping\n\nAdministrative staff provides departmental financial management and business operations in support of faculty, graduate and undergraduate students, researchers, visitors and other staff.\n\nAcademic Personnel\nProvides assistance with all academic personnel matters within the department including recruitment, merit & promotion cases, and curriculum planning\nFacilities & Operations\nFacilities Issues, Keys, Access, & Office Space, and Departmental Equipment\nFinance & Procurement\nSupport for all departmental financial matters including procurement, accounts payable, recharges, and fund management.\nInstructional Support\nInstructional support services provided by departmental staff including DSP accommodations, faculty and TA course evaluation administration, one-time room requests, and textbook adoptions.\nReimbursements\nIn accordance with existing University policy, provides guidance in obtaining reimbursement for travel, entertainment and supplies/miscellaneous expenses required to conduct University business.\nStaff Personnel & Payroll\nResponsible for departmental personnel matters (with the exception of academic personnel) and payroll for all EEMB employees.\nDepartment Administration\n\nAcademic Business Officer\nAndrea Jorgensen\namjorgen@ucsb.edu\n\nAcademic Personnel\nRosa Vasquez\nrosavasquez@ucsb.edu\n\nDepartmental Assistant\nDanielle Perez\ndcperez@ucsb.edu\n\nDirector of Finance\nHaley Martin\nhaleymartin@ucsb.edu\n\nStaff Graduate Advisor\nMengshu Ye\nmengshuye@ucsb.edu\n\nUndergraduate Advisor\nEllery Wilkie\newilkie@lifesci.ucsb.edu\n\nMailing Address\n\nEcology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\nSanta Barbara, CA 93106-9620\n\nContact Us\n 805.893.2974\n info@eemb.ucsb.edu\n Jobs\n Visit EEMB\nSupport Services\n Administration\n Room Reservations\n Research Services\nTechnical Support\nShipping / Receiving\nWebsite\n Information\n Terms of Use\n Privacy\n Login\n  \n\nEcology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\n© 2025 Regents of the University of California",
+        "headings": [
+          {
+            "level": "H2",
+            "text": "Main navigation"
+          },
+          {
+            "level": "H1",
+            "text": "Administration"
+          },
+          {
+            "level": "H2",
+            "text": "Support Services Menu"
+          },
+          {
+            "level": "H3",
+            "text": "Academic Personnel"
+          },
+          {
+            "level": "H3",
+            "text": "Facilities & Operations"
+          },
+          {
+            "level": "H3",
+            "text": "Finance & Procurement"
+          },
+          {
+            "level": "H3",
+            "text": "Instructional Support"
+          },
+          {
+            "level": "H3",
+            "text": "Reimbursements"
+          },
+          {
+            "level": "H3",
+            "text": "Staff Personnel & Payroll"
+          },
+          {
+            "level": "H2",
+            "text": "Department Administration"
+          },
+          {
+            "level": "H2",
+            "text": "Mailing Address"
+          },
+          {
+            "level": "H2",
+            "text": "Contact Us"
+          },
+          {
+            "level": "H2",
+            "text": "Support Services"
+          },
+          {
+            "level": "H2",
+            "text": "Website"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to main content",
+            "href": "https://www.eemb.ucsb.edu/support/administration#main-content"
+          },
+          {
+            "text": "About",
+            "href": "https://www.eemb.ucsb.edu/about"
+          },
+          {
+            "text": "People",
+            "href": "https://www.eemb.ucsb.edu/people"
+          },
+          {
+            "text": "Research",
+            "href": "https://www.eemb.ucsb.edu/research"
+          },
+          {
+            "text": "Academics",
+            "href": "https://www.eemb.ucsb.edu/academics"
+          },
+          {
+            "text": "Biology Undergraduate Program",
+            "href": "https://undergrad.biology.ucsb.edu/"
+          },
+          {
+            "text": "Graduate Program",
+            "href": "https://www.eemb.ucsb.edu/academics/graduate"
+          },
+          {
+            "text": "News",
+            "href": "https://www.eemb.ucsb.edu/news"
+          },
+          {
+            "text": "Events",
+            "href": "https://www.eemb.ucsb.edu/events"
+          },
+          {
+            "text": "Support",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Shipping",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Give",
+            "href": "https://www.eemb.ucsb.edu/give"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Shipping",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Academic Personnel",
+            "href": "https://www.eemb.ucsb.edu/support/administration/academic-personnel"
+          },
+          {
+            "text": "Facilities & Operations",
+            "href": "https://www.eemb.ucsb.edu/support/facilities-operations"
+          },
+          {
+            "text": "Finance & Procurement",
+            "href": "https://www.eemb.ucsb.edu/support/administration/finance-and-procurement"
+          },
+          {
+            "text": "Instructional Support",
+            "href": "https://www.eemb.ucsb.edu/support/administration/instructional-support"
+          },
+          {
+            "text": "Reimbursements",
+            "href": "https://www.eemb.ucsb.edu/support/administration/reimbursements"
+          },
+          {
+            "text": "Staff Personnel & Payroll",
+            "href": "https://www.eemb.ucsb.edu/support/administration/personnel"
+          },
+          {
+            "text": "805.893.2974",
+            "href": "tel:+18058932974"
+          },
+          {
+            "text": "info@eemb.ucsb.edu",
+            "href": "mailto:info@eemb.ucsb.edu"
+          },
+          {
+            "text": "Jobs",
+            "href": "https://www.eemb.ucsb.edu/jobs"
+          },
+          {
+            "text": "Visit EEMB",
+            "href": "https://www.eemb.ucsb.edu/visiting"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Shipping / Receiving",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Information",
+            "href": "https://www.eemb.ucsb.edu/info"
+          },
+          {
+            "text": "Terms of Use",
+            "href": "http://www.policy.ucsb.edu/terms-of-use"
+          },
+          {
+            "text": "Privacy",
+            "href": "http://www.policy.ucsb.edu/privacy-notification"
+          },
+          {
+            "text": "Login",
+            "href": "https://www.eemb.ucsb.edu/user/login"
+          }
+        ],
+        "emails": [
+          "info@eemb.ucsb.edu"
+        ],
+        "phones": [
+          "805.893.2974"
+        ],
+        "lists": [
+          {
+            "type": "ul",
+            "items": [
+              "About",
+              "People",
+              "Research",
+              "Academics",
+              "Biology Undergraduate Program",
+              "Graduate Program",
+              "News",
+              "Events",
+              "Support",
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping",
+              "Give"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Biology Undergraduate Program",
+              "Graduate Program"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "805.893.2974",
+              "info@eemb.ucsb.edu",
+              "Jobs",
+              "Visit EEMB"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Shipping / Receiving"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Information",
+              "Terms of Use",
+              "Privacy",
+              "Login"
+            ]
+          }
+        ],
+        "paragraphs": [
+          "Administrative staff provides departmental financial management and business operations in support of faculty, graduate and undergraduate students, researchers, visitors and other staff.",
+          "Academic Business Officer\nAndrea Jorgensen\namjorgen@ucsb.edu",
+          "Academic Personnel\nRosa Vasquez\nrosavasquez@ucsb.edu",
+          "Departmental Assistant\nDanielle Perez\ndcperez@ucsb.edu",
+          "Director of Finance\nHaley Martin\nhaleymartin@ucsb.edu",
+          "Staff Graduate Advisor\nMengshu Ye\nmengshuye@ucsb.edu",
+          "Undergraduate Advisor\nEllery Wilkie\newilkie@lifesci.ucsb.edu",
+          "Ecology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\nSanta Barbara, CA 93106-9620",
+          "Ecology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\n© 2025 Regents of the University of California"
+        ]
+      }
+    },
+    {
+      "name": "Conference Rooms",
+      "url": "https://www.eemb.ucsb.edu/support/conference-room-reservations",
+      "status": 404,
+      "error": "Page not found"
+    },
+    {
+      "name": "Research Services",
+      "url": "https://www.eemb.ucsb.edu/support/research-services",
+      "status": 404,
+      "error": "Page not found"
+    },
+    {
+      "name": "Technical Support",
+      "url": "https://www.eemb.ucsb.edu/support/technical-support",
+      "status": 404,
+      "error": "Page not found"
+    },
+    {
+      "name": "Campus Resources",
+      "url": "https://www.eemb.ucsb.edu/support/campus-resources",
+      "status": 200,
+      "screenshot": "/Users/adrianstiermbp2023/eemb-website-redesign-2025-2026/docs/support-scrape-results/screenshots/campus-resources.png",
+      "data": {
+        "fullText": "Skip to main content\nMain navigation\nAbout\nPeople\nResearch\nAcademics \nNews\nEvents\nSupport \nGive\nCampus Resources\nSupport Services Menu\nSupport Services\nAdministration\nRoom Reservations\nResearch Services\nTechnical Support\nCampus Resources\nShipping\nHate Crimes and Bias Incidents\nSexual Violence, Harassment, and Discrimination\nZoombombing\nSupport Resources\nContact Us\n 805.893.2974\n info@eemb.ucsb.edu\n Jobs\n Visit EEMB\nSupport Services\n Administration\n Room Reservations\n Research Services\nTechnical Support\nShipping / Receiving\nWebsite\n Information\n Terms of Use\n Privacy\n Login\n  \n\nEcology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\n© 2025 Regents of the University of California",
+        "headings": [
+          {
+            "level": "H2",
+            "text": "Main navigation"
+          },
+          {
+            "level": "H1",
+            "text": "Campus Resources"
+          },
+          {
+            "level": "H2",
+            "text": "Support Services Menu"
+          },
+          {
+            "level": "H3",
+            "text": "Office of Title IX/Sexual Harassment Policy Compliance"
+          },
+          {
+            "level": "H3",
+            "text": "Campus Advocacy Resources and Education (CARE)"
+          },
+          {
+            "level": "H3",
+            "text": "Ethics Point Whistle Blower Hotline"
+          },
+          {
+            "level": "H3",
+            "text": "Counseling and Psychological Services (CAPS)"
+          },
+          {
+            "level": "H3",
+            "text": "The Office of Ombuds"
+          },
+          {
+            "level": "H3",
+            "text": "Equal Opportunity and Discrimination Prevention Office"
+          },
+          {
+            "level": "H3",
+            "text": "Multicultural Center (MCC)"
+          },
+          {
+            "level": "H3",
+            "text": "Office of International Students"
+          },
+          {
+            "level": "H3",
+            "text": "Resouce Center for Sexual and Gender Diversity"
+          },
+          {
+            "level": "H3",
+            "text": "Women's Center"
+          },
+          {
+            "level": "H3",
+            "text": "Disabled Students Program"
+          },
+          {
+            "level": "H3",
+            "text": "Associated Students Legal Resource Center"
+          },
+          {
+            "level": "H3",
+            "text": "UCSB Police Department"
+          },
+          {
+            "level": "H3",
+            "text": "Graduate Division Diversity Resources"
+          },
+          {
+            "level": "H3",
+            "text": "Distressed Students Response Protocol"
+          },
+          {
+            "level": "H3",
+            "text": "UCSB Doxing Guide"
+          },
+          {
+            "level": "H3",
+            "text": "Dream Scholars/Undocumented Student Services"
+          },
+          {
+            "level": "H3",
+            "text": "Academic & Staff Assistance Program (ASAP)"
+          },
+          {
+            "level": "H3",
+            "text": "Title iX Advocacy Liaison in the Resource Center for Sexual & Gender Diversity (RCSGD)"
+          },
+          {
+            "level": "H2",
+            "text": "Contact Us"
+          },
+          {
+            "level": "H2",
+            "text": "Support Services"
+          },
+          {
+            "level": "H2",
+            "text": "Website"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to main content",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources#main-content"
+          },
+          {
+            "text": "About",
+            "href": "https://www.eemb.ucsb.edu/about"
+          },
+          {
+            "text": "People",
+            "href": "https://www.eemb.ucsb.edu/people"
+          },
+          {
+            "text": "Research",
+            "href": "https://www.eemb.ucsb.edu/research"
+          },
+          {
+            "text": "Academics",
+            "href": "https://www.eemb.ucsb.edu/academics"
+          },
+          {
+            "text": "Biology Undergraduate Program",
+            "href": "https://undergrad.biology.ucsb.edu/"
+          },
+          {
+            "text": "Graduate Program",
+            "href": "https://www.eemb.ucsb.edu/academics/graduate"
+          },
+          {
+            "text": "News",
+            "href": "https://www.eemb.ucsb.edu/news"
+          },
+          {
+            "text": "Events",
+            "href": "https://www.eemb.ucsb.edu/events"
+          },
+          {
+            "text": "Support",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Shipping",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Give",
+            "href": "https://www.eemb.ucsb.edu/give"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Campus Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources"
+          },
+          {
+            "text": "Shipping",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Hate Crimes and Bias Incidents",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources#"
+          },
+          {
+            "text": "UCSB Incident Report Form",
+            "href": "https://ucsb-advocate.symplicity.com/public_report/index.php/pid275871?"
+          },
+          {
+            "text": "UC Online Report Form",
+            "href": "https://ucsystems.ethicspointvp.com/custom/ucs_ccc/default.asp"
+          },
+          {
+            "text": "Sexual Violence, Harassment, and Discrimination",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources#"
+          },
+          {
+            "text": "Title IX / Sexual Harassment",
+            "href": "https://titleix.ucsb.edu/"
+          },
+          {
+            "text": "CARE Website",
+            "href": "http://wgse.sa.ucsb.edu/care/"
+          },
+          {
+            "text": "CAPS Website",
+            "href": "https://caps.sa.ucsb.edu/"
+          },
+          {
+            "text": "RCSGD Confidential Resource",
+            "href": "http://rcsgd.sa.ucsb.edu/resources/rcsgd-confidential-resource"
+          },
+          {
+            "text": "Zoombombing",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources#"
+          },
+          {
+            "text": "UCSB Information Technology",
+            "href": "https://www.it.ucsb.edu/increase-your-zoom-security-avoid-and-report-zoombombing"
+          },
+          {
+            "text": "Support Resources",
+            "href": "https://www.eemb.ucsb.edu/support/campus-resources#"
+          },
+          {
+            "text": "Office of Title IX/Sexual Harassment Policy Compliance",
+            "href": "https://titleix.ucsb.edu/"
+          },
+          {
+            "text": "Campus Advocacy Resources and Education (CARE)",
+            "href": "http://wgse.sa.ucsb.edu/care/"
+          },
+          {
+            "text": "Ethics Point Whistle Blower Hotline",
+            "href": "https://secure.ethicspoint.com/domain/media/en/gui/23531/index.html"
+          },
+          {
+            "text": "Counseling and Psychological Services (CAPS",
+            "href": "https://caps.sa.ucsb.edu/"
+          },
+          {
+            "text": "The Office of Ombuds",
+            "href": "https://ombuds.ucsb.edu/"
+          },
+          {
+            "text": "Equal Opportunity and Discrimination Prevention Office",
+            "href": "https://eodp.ucsb.edu/discrimination"
+          },
+          {
+            "text": "Multicultural Center (MCC)",
+            "href": "https://mcc.sa.ucsb.edu/"
+          },
+          {
+            "text": "Office of International Students",
+            "href": "https://oiss.ucsb.edu/"
+          },
+          {
+            "text": "Resouce Center for Sexual and Gender Diversity",
+            "href": "https://rcsgd.sa.ucsb.edu/"
+          },
+          {
+            "text": "Women's Center",
+            "href": "http://wgse.sa.ucsb.edu/WomensCenter/home"
+          },
+          {
+            "text": "Disabled Students Program",
+            "href": "https://dsp.sa.ucsb.edu/"
+          },
+          {
+            "text": "Associated Students Legal Resource Center",
+            "href": "https://legal.as.ucsb.edu/"
+          },
+          {
+            "text": "UCSB Police Department",
+            "href": "https://www.police.ucsb.edu/"
+          },
+          {
+            "text": "Graduate Division Diversity Resources",
+            "href": "https://www.graddiv.ucsb.edu/admissions/diversity/diversity-resources-for-graduate-students"
+          },
+          {
+            "text": "Distressed Students Response Protocol",
+            "href": "https://www.sa.ucsb.edu/responding-to-distressed-students/protocol"
+          },
+          {
+            "text": "UCSB Doxing Guide",
+            "href": "http://studentlife.sa.ucsb.edu/docs/default-source/campusclimateinclusion/ucsb-doxing-guide.pdf?sfvrsn=79483782_2"
+          },
+          {
+            "text": "Dream Scholars/Undocumented Student Services",
+            "href": "http://www.sa.ucsb.edu/DreamScholars/"
+          },
+          {
+            "text": "Academic & Staff Assistance Program (ASAP)",
+            "href": "https://www.hr.ucsb.edu/asap"
+          },
+          {
+            "text": "Title iX Advocacy Liaison in the Resource Center for Sexual & Gender Diversity (RCSGD)",
+            "href": "http://rcsgd.sa.ucsb.edu/resources/rcsgd-confidential-resource"
+          },
+          {
+            "text": "805.893.2974",
+            "href": "tel:+18058932974"
+          },
+          {
+            "text": "info@eemb.ucsb.edu",
+            "href": "mailto:info@eemb.ucsb.edu"
+          },
+          {
+            "text": "Jobs",
+            "href": "https://www.eemb.ucsb.edu/jobs"
+          },
+          {
+            "text": "Visit EEMB",
+            "href": "https://www.eemb.ucsb.edu/visiting"
+          },
+          {
+            "text": "Support Services",
+            "href": "https://www.eemb.ucsb.edu/support"
+          },
+          {
+            "text": "Administration",
+            "href": "https://www.eemb.ucsb.edu/support/administration"
+          },
+          {
+            "text": "Room Reservations",
+            "href": "https://www.eemb.ucsb.edu/support/reservations"
+          },
+          {
+            "text": "Research Services",
+            "href": "https://www.eemb.ucsb.edu/support/research"
+          },
+          {
+            "text": "Technical Support",
+            "href": "https://www.eemb.ucsb.edu/support/technical"
+          },
+          {
+            "text": "Shipping / Receiving",
+            "href": "https://www.eemb.ucsb.edu/support/shipping"
+          },
+          {
+            "text": "Information",
+            "href": "https://www.eemb.ucsb.edu/info"
+          },
+          {
+            "text": "Terms of Use",
+            "href": "http://www.policy.ucsb.edu/terms-of-use"
+          },
+          {
+            "text": "Privacy",
+            "href": "http://www.policy.ucsb.edu/privacy-notification"
+          },
+          {
+            "text": "Login",
+            "href": "https://www.eemb.ucsb.edu/user/login"
+          }
+        ],
+        "emails": [
+          "info@eemb.ucsb.edu"
+        ],
+        "phones": [
+          "805.893.2974"
+        ],
+        "lists": [
+          {
+            "type": "ul",
+            "items": [
+              "About",
+              "People",
+              "Research",
+              "Academics",
+              "Biology Undergraduate Program",
+              "Graduate Program",
+              "News",
+              "Events",
+              "Support",
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping",
+              "Give"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Biology Undergraduate Program",
+              "Graduate Program"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Support Services",
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Campus Resources",
+              "Shipping"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "805.893.2974",
+              "info@eemb.ucsb.edu",
+              "Jobs",
+              "Visit EEMB"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Administration",
+              "Room Reservations",
+              "Research Services",
+              "Technical Support",
+              "Shipping / Receiving"
+            ]
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Information",
+              "Terms of Use",
+              "Privacy",
+              "Login"
+            ]
+          }
+        ],
+        "paragraphs": [
+          "Hate crimes, hate incidents, and incidents of bias should be reported to the Bias Incident Response Team through the UC Online Report Form (this is not a police report) or the Hate Incident Response Coordinator at 805-893-3596.",
+          "When you report an incident, the Bias Incident Response Team will present you with a variety of options over which you will have decision-making authority. Reporting a possible hate crime or bias incident does not commit you to a certain chain of action, the Bias Incident Response Team will support you in organizing whatever response you choose. You can report violations of federal/state law or UC policy confidentially, and anonymously if you choose, to the UC Ethics Point Whistle Blower Hotline (800) 403-4744.",
+          "Sexual violence, sexual harassment, and acts of discrimination related to gender and sexual identity should be reported to Campus Police (9-911) or 911 if the victim is or was in danger. Once the student is in a safe situation, they should report sexual violence, sexual harassment, and acts of discrimination related to gender and sexual identity via an online form to the Office of Title IX/Sexual Harassment Policy Compliance or at 805-893-2701. Reports to the Office of Title IX/Sexual Harassment Policy Compliance are not confidential, and the content may need to be reported to law enforcement if the student is in danger or a crime has been committed. Faculty and staff, including TAs when acting in that capacity, are mandated reporters of such acts.",
+          "Incidents of sexual violence and sexual harassment may be discussed confidentially with the Campus Advocacy Resources and Education (CARE) office at 805-893-4613 or Counseling and Psychological Services (CAPS) at 805-893-4411, or the Resource Center for Sexual & Gender Diversity (RCSGD) at 805-894-5847.",
+          "Incidents of Zoombombing, when an uninvited party joins a Zoom session to cause disruption, should be reported to UCSB Police at 805-893-3446 and a report should be filed with the Security Operations Center (SOC) at security@ucsb.edu.",
+          "Resources for protecting zoom meetings may be found through UCSB Information Technology.",
+          "Phone: +1-805-893-2701",
+          "Resources for sexual assault, abusive relationships, and stalking, can anonymously report acts of sexual violence\n\tPhone: +1-805-893-3778",
+          "Formal reporting option online or by phone for violations of federal/state law or UC policy (confidential, optionally anonymous)\n\tPhone: +1-800-403-4744",
+          "Includes 24/7 counseling\n\t*A report made to this office does not constitute official notice to the University about problems or policy violations.\n\tPhone: +1-805-893-4411",
+          "Confidential consultation services for faculty, staff, students, parents, or persons with campus related concerns addressing workplace issues, interpersonal conflict, academic and policy concerns, and more.\n\t*A report made to this office does not constitute official notice to the University about problems or policy violations. \n\tPhone: +1-805-893-3285",
+          "Responds to concerns from faculty and staff regarding behaviors that may constitute discrimination as covered by University policies. They offer training related to discrimination, equity and potential impact of discrimination upon academic and employment environments.\n\tPhone: +1-805-893-2701",
+          "The MCC strive to \"facilitate the retention of students of color and combat institutional racism, sexism, classism, homophobia, transphobia, and the many other oppressive structures that exist on our campus and in general\".",
+          "OISS provides services and advising to international students and scholars, as well as the departments that support them.",
+          "UCSB's LGBTQIA+ Center.\n\tPhone: +1-805-893-5847",
+          "Uses a feminist approach to provide support, advocacy, resources and education to the UCSB community.",
+          "Serves as the campus liaison regarding issues and regulations related to students with disabilities.",
+          "Consultations with Center attorneys on legal matters are confidential; the attorneys cannot represent students, but can advise them.",
+          "Phone: +1-805-893-3446 (911 in an emergency)",
+          "List of campus resources, cultural centers, and student organizations.",
+          "Instructions and resources for responding to incidents of hate, violence, potential violence, hazing, interpersonal violence or sexual assault. Resources for mental health, substance abuse, and disability needs.",
+          "For recommendations on protecting yourself from online harassment and doxing",
+          "At UC Santa Barbara, Undocumented Student Services (USS) is committed to fostering a safe, nurturing, and supportive environment for prospective and current undocumented students, students with mixed-immigration status families, and students from refugee backgrounds.",
+          "The UCSB Academic & Staff Assistance Program (ASAP) supports the health and well-being of faculty, staff, and family members. They offer confidential short-term counseling, consultation, wellness workshops, and assistance with threat management.\n\tPhone: +1-805-893-3318",
+          "A confidential resource for UCSB students, faculty, and staff who have experienced sexual violence and/or sexual harassment (SVSH).\n\tPhone: +1-805-894-5847",
+          "Ecology, Evolution, and Marine Biology\nUniversity of California, Santa Barbara\n© 2025 Regents of the University of California"
+        ]
+      }
+    },
+    {
+      "name": "Shipping",
+      "url": "https://www.eemb.ucsb.edu/support/shipping-receiving",
+      "status": 404,
+      "error": "Page not found"
+    }
+  ]
+}

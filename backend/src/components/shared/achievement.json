@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_shared_achievements",
+  "info": {
+    "displayName": "Achievement",
+    "icon": "trophy",
+    "description": "Award or achievement"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "year": {
+      "type": "integer",
+      "min": 1900,
+      "max": 2030
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "organization": {
+      "type": "string",
+      "maxLength": 200
+    }
+  }
+}

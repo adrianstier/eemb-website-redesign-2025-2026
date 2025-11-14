@@ -1,0 +1,42 @@
+{
+  "collectionName": "components_shared_dei_resources",
+  "info": {
+    "displayName": "DEI Resource",
+    "icon": "book",
+    "description": "DEI resource or document"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "resourceType": {
+      "type": "enumeration",
+      "enum": [
+        "Document",
+        "Website",
+        "Video",
+        "Training",
+        "Policy",
+        "Report",
+        "Other"
+      ]
+    },
+    "url": {
+      "type": "string",
+      "regex": "^https?://.*"
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["files"]
+    }
+  }
+}

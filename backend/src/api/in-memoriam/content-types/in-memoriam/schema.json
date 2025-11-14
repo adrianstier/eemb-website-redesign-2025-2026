@@ -1,0 +1,94 @@
+{
+  "kind": "collectionType",
+  "collectionName": "in_memoriams",
+  "info": {
+    "singularName": "in-memoriam",
+    "pluralName": "in-memoriams",
+    "displayName": "In Memoriam",
+    "description": "Memorial pages for deceased faculty and community members"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "birthDate": {
+      "type": "date"
+    },
+    "passingDate": {
+      "type": "date",
+      "required": true
+    },
+    "profileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "biography": {
+      "type": "richtext",
+      "required": true,
+      "maxLength": 10000
+    },
+    "academicContributions": {
+      "type": "richtext",
+      "maxLength": 5000
+    },
+    "personalRemembrance": {
+      "type": "richtext",
+      "maxLength": 5000
+    },
+    "yearsAtEEMB": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "researchAreas": {
+      "type": "json",
+      "description": "Research areas and specializations"
+    },
+    "majorAchievements": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.achievement"
+    },
+    "quotes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.memorial-quote"
+    },
+    "externalLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.external-link"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature on main memorial page"
+    },
+    "orderIndex": {
+      "type": "integer",
+      "description": "Display order on memorial page"
+    }
+  }
+}

@@ -1,0 +1,123 @@
+# Pre-commit hooks for EEMB Website
+# Ensures code quality and consistency before commits
+
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Python hooks
+  - repo: https://github.com/psf/black
+    rev: 23.12.0
+    hooks:
+      - id: black
+        language_version: python3.11
+        files: '\.(py|pyi)$'
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        args: ['--max-line-length=120', '--ignore=E203,W503']
+        files: '\.py$'
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ['--profile', 'black']
+        files: '\.py$'
+
+  # JavaScript/TypeScript hooks
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.56.0
+    hooks:
+      - id: eslint
+        files: '\.(js|jsx|ts|tsx)$'
+        types: [file]
+        additional_dependencies:
+          - eslint@8.56.0
+          - eslint-config-next@14.0.0
+          - '@typescript-eslint/parser@6.0.0'
+          - '@typescript-eslint/eslint-plugin@6.0.0'
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        files: '\.(js|jsx|ts|tsx|css|scss|json|md|yml|yaml)$'
+        exclude: '^(backend/build/|frontend/.next/|node_modules/)'
+
+  # Security checks
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package-lock.json
+
+  # Markdown
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        args: ['--fix']
+        exclude: '^(node_modules/|.next/)'
+
+  # Docker
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        args: ['--ignore', 'DL3008', '--ignore', 'DL3009']
+
+  # Commit message
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+# Custom local hooks
+  - repo: local
+    hooks:
+      - id: no-console-log
+        name: Check for console.log statements
+        entry: 'console\.log'
+        language: pygrep
+        files: '\.(js|jsx|ts|tsx)$'
+        exclude: '^(scripts/|tests/|.*\.test\.(js|jsx|ts|tsx)$)'
+
+      - id: no-todos
+        name: Check for TODO comments
+        entry: '(TODO|FIXME|HACK|XXX):'
+        language: pygrep
+        types: [text]
+        exclude: '^(.pre-commit-config.yaml|TODO.md)$'
+
+      - id: env-vars-check
+        name: Check for hardcoded secrets
+        entry: '(api_key|api_secret|aws_access|aws_secret|apikey|clientsecret|client_secret|DB_PASSWORD|password)'
+        language: pygrep
+        types: [text]
+        exclude: '^(\.env\.example|\.env\.development|\.env\.test)$'
+
+      - id: test-runner
+        name: Run tests before commit
+        entry: bash -c 'cd frontend && npm test -- --watchAll=false || true'
+        language: system
+        pass_filenames: false
+        files: '\.(js|jsx|ts|tsx)$'
+        stages: [commit]

@@ -1,0 +1,113 @@
+{
+  "kind": "collectionType",
+  "collectionName": "publications",
+  "info": {
+    "singularName": "publication",
+    "pluralName": "publications",
+    "displayName": "Publication",
+    "description": "Research publications"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 500
+    },
+    "authors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::faculty.faculty",
+      "mappedBy": "publications"
+    },
+    "authorString": {
+      "type": "text",
+      "description": "Full author list as it appears in publication"
+    },
+    "publicationType": {
+      "type": "enumeration",
+      "enum": [
+        "Journal Article",
+        "Book",
+        "Book Chapter",
+        "Conference Paper",
+        "Preprint",
+        "Thesis",
+        "Report",
+        "Patent",
+        "Dataset"
+      ],
+      "required": true
+    },
+    "journal": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "year": {
+      "type": "integer",
+      "required": true,
+      "min": 1900,
+      "max": 2030
+    },
+    "volume": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "issue": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "pages": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "doi": {
+      "type": "string",
+      "unique": true
+    },
+    "abstract": {
+      "type": "text",
+      "maxLength": 5000
+    },
+    "keywords": {
+      "type": "json",
+      "description": "Publication keywords"
+    },
+    "pdfUrl": {
+      "type": "string",
+      "regex": "^https?://.*"
+    },
+    "pdfFile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["files"]
+    },
+    "externalUrl": {
+      "type": "string",
+      "regex": "^https?://.*"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "openAccess": {
+      "type": "boolean",
+      "default": false
+    },
+    "impactFactor": {
+      "type": "decimal"
+    },
+    "citations": {
+      "type": "integer",
+      "min": 0
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    }
+  }
+}

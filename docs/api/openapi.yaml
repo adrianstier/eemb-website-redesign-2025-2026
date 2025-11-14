@@ -1,0 +1,931 @@
+openapi: 3.0.0
+info:
+  title: EEMB Website API
+  description: |
+    RESTful API for the UC Santa Barbara Ecology, Evolution, and Marine Biology Department website.
+    This API provides access to faculty, alumni, research, news, and event data.
+  version: 1.0.0
+  contact:
+    name: EEMB IT Support
+    email: eemb-it@ucsb.edu
+    url: https://www.eemb.ucsb.edu/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:1337/api
+    description: Development server
+  - url: https://api-staging.eemb.ucsb.edu/api
+    description: Staging server
+  - url: https://api.eemb.ucsb.edu/api
+    description: Production server
+
+tags:
+  - name: Faculty
+    description: Faculty member information and profiles
+  - name: Alumni
+    description: Alumni directory and spotlights
+  - name: Research
+    description: Research areas and projects
+  - name: News
+    description: News articles and blog posts
+  - name: Events
+    description: Department events and seminars
+  - name: Courses
+    description: Course catalog and information
+  - name: Auth
+    description: Authentication endpoints
+  - name: Media
+    description: Media upload and management
+  - name: Search
+    description: Site-wide search functionality
+
+paths:
+  # Faculty Endpoints
+  /faculties:
+    get:
+      tags:
+        - Faculty
+      summary: List all faculty members
+      description: Returns a paginated list of faculty members with optional filtering
+      parameters:
+        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/Sort'
+        - name: filters[active]
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active status
+        - name: filters[research_area]
+          in: query
+          schema:
+            type: string
+          description: Filter by research area
+        - name: filters[department]
+          in: query
+          schema:
+            type: string
+          description: Filter by department
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Faculty'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+    post:
+      tags:
+        - Faculty
+      summary: Create a new faculty member
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyInput'
+      responses:
+        201:
+          description: Faculty member created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+
+  /faculties/{id}:
+    get:
+      tags:
+        - Faculty
+      summary: Get a faculty member by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: populate
+          in: query
+          schema:
+            type: string
+          description: Relations to populate (e.g., "publications,courses")
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Faculty
+      summary: Update a faculty member
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyInput'
+      responses:
+        200:
+          description: Faculty member updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Faculty
+      summary: Delete a faculty member
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Faculty member deleted
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  # Alumni Endpoints
+  /alumnis:
+    get:
+      tags:
+        - Alumni
+      summary: List all alumni
+      parameters:
+        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/Sort'
+        - name: filters[graduation_year]
+          in: query
+          schema:
+            type: integer
+          description: Filter by graduation year
+        - name: filters[degree]
+          in: query
+          schema:
+            type: string
+            enum: [BA, BS, MS, PhD]
+          description: Filter by degree type
+        - name: filters[featured]
+          in: query
+          schema:
+            type: boolean
+          description: Filter featured alumni only
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Alumni'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  # News Endpoints
+  /articles:
+    get:
+      tags:
+        - News
+      summary: List all news articles
+      parameters:
+        - $ref: '#/components/parameters/Pagination'
+        - $ref: '#/components/parameters/Sort'
+        - name: filters[category]
+          in: query
+          schema:
+            type: string
+          description: Filter by category
+        - name: filters[published]
+          in: query
+          schema:
+            type: boolean
+          description: Filter by published status
+        - name: filters[featured]
+          in: query
+          schema:
+            type: boolean
+          description: Filter featured articles
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  # Events Endpoints
+  /events:
+    get:
+      tags:
+        - Events
+      summary: List all events
+      parameters:
+        - $ref: '#/components/parameters/Pagination'
+        - name: filters[start_date][$gte]
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Events starting after this date
+        - name: filters[end_date][$lte]
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Events ending before this date
+        - name: filters[type]
+          in: query
+          schema:
+            type: string
+            enum: [seminar, workshop, conference, defense, social]
+          description: Filter by event type
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  # Search Endpoint
+  /search:
+    get:
+      tags:
+        - Search
+      summary: Search across all content
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query
+        - name: type
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [faculty, alumni, news, events, courses, pages]
+          description: Content types to search
+        - $ref: '#/components/parameters/Pagination'
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SearchResult'
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      query:
+                        type: string
+                      took:
+                        type: integer
+                        description: Search time in milliseconds
+
+  # Authentication Endpoints
+  /auth/local:
+    post:
+      tags:
+        - Auth
+      summary: Login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - identifier
+                - password
+              properties:
+                identifier:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        200:
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jwt:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        400:
+          $ref: '#/components/responses/BadRequest'
+
+  /auth/local/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+      responses:
+        200:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jwt:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        400:
+          $ref: '#/components/responses/BadRequest'
+
+  # Media Upload
+  /upload:
+    post:
+      tags:
+        - Media
+      summary: Upload media files
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                ref:
+                  type: string
+                  description: Reference to content type
+                refId:
+                  type: string
+                  description: ID of the related content
+                field:
+                  type: string
+                  description: Field name for the upload
+      responses:
+        200:
+          description: Files uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Media'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        413:
+          description: File too large
+
+# Components
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    Pagination:
+      name: pagination
+      in: query
+      schema:
+        type: object
+        properties:
+          page:
+            type: integer
+            minimum: 1
+            default: 1
+          pageSize:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+
+    Sort:
+      name: sort
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: Sort fields (use prefix '-' for descending)
+      example: ["-created_at", "title"]
+
+  schemas:
+    # Faculty Schema
+    Faculty:
+      type: object
+      properties:
+        id:
+          type: integer
+        attributes:
+          type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            title:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            office:
+              type: string
+            bio:
+              type: string
+            research_interests:
+              type: array
+              items:
+                type: string
+            education:
+              type: array
+              items:
+                type: object
+                properties:
+                  degree:
+                    type: string
+                  institution:
+                    type: string
+                  year:
+                    type: integer
+            website:
+              type: string
+              format: uri
+            image:
+              $ref: '#/components/schemas/Media'
+            publications:
+              type: array
+              items:
+                $ref: '#/components/schemas/Publication'
+            active:
+              type: boolean
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+
+    FacultyInput:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+            - first_name
+            - last_name
+            - email
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            title:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            office:
+              type: string
+            bio:
+              type: string
+            research_interests:
+              type: array
+              items:
+                type: string
+            active:
+              type: boolean
+
+    # Alumni Schema
+    Alumni:
+      type: object
+      properties:
+        id:
+          type: integer
+        attributes:
+          type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            graduation_year:
+              type: integer
+            degree:
+              type: string
+              enum: [BA, BS, MS, PhD]
+            current_position:
+              type: string
+            current_organization:
+              type: string
+            bio:
+              type: string
+            achievements:
+              type: array
+              items:
+                type: string
+            featured:
+              type: boolean
+            spotlight_date:
+              type: string
+              format: date
+            image:
+              $ref: '#/components/schemas/Media'
+            linkedin:
+              type: string
+              format: uri
+            email:
+              type: string
+              format: email
+            privacy_settings:
+              type: object
+              properties:
+                show_email:
+                  type: boolean
+                show_position:
+                  type: boolean
+                searchable:
+                  type: boolean
+
+    # Article Schema
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+        attributes:
+          type: object
+          properties:
+            title:
+              type: string
+            slug:
+              type: string
+            excerpt:
+              type: string
+            content:
+              type: string
+            category:
+              type: string
+            tags:
+              type: array
+              items:
+                type: string
+            author:
+              $ref: '#/components/schemas/User'
+            featured_image:
+              $ref: '#/components/schemas/Media'
+            published_at:
+              type: string
+              format: date-time
+            featured:
+              type: boolean
+            views:
+              type: integer
+
+    # Event Schema
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        attributes:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            type:
+              type: string
+              enum: [seminar, workshop, conference, defense, social]
+            start_date:
+              type: string
+              format: date-time
+            end_date:
+              type: string
+              format: date-time
+            location:
+              type: string
+            virtual_link:
+              type: string
+              format: uri
+            speaker:
+              type: string
+            speaker_affiliation:
+              type: string
+            registration_required:
+              type: boolean
+            registration_link:
+              type: string
+              format: uri
+            image:
+              $ref: '#/components/schemas/Media'
+
+    # Publication Schema
+    Publication:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        authors:
+          type: array
+          items:
+            type: string
+        journal:
+          type: string
+        year:
+          type: integer
+        doi:
+          type: string
+        url:
+          type: string
+          format: uri
+
+    # Media Schema
+    Media:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+          format: uri
+        alternativeText:
+          type: string
+        caption:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        formats:
+          type: object
+          properties:
+            thumbnail:
+              $ref: '#/components/schemas/MediaFormat'
+            small:
+              $ref: '#/components/schemas/MediaFormat'
+            medium:
+              $ref: '#/components/schemas/MediaFormat'
+            large:
+              $ref: '#/components/schemas/MediaFormat'
+
+    MediaFormat:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
+        size:
+          type: number
+
+    # User Schema
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        provider:
+          type: string
+        confirmed:
+          type: boolean
+        blocked:
+          type: boolean
+        role:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            description:
+              type: string
+
+    # Search Result Schema
+    SearchResult:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: integer
+        title:
+          type: string
+        excerpt:
+          type: string
+        url:
+          type: string
+        highlight:
+          type: string
+          description: Search term highlighted in context
+        score:
+          type: number
+          description: Relevance score
+
+    # Pagination Meta
+    PaginationMeta:
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+            pageSize:
+              type: integer
+            pageCount:
+              type: integer
+            total:
+              type: integer
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  name:
+                    type: string
+                    example: ValidationError
+                  message:
+                    type: string
+                  details:
+                    type: object
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 401
+                  name:
+                    type: string
+                    example: UnauthorizedError
+                  message:
+                    type: string
+                    example: Missing or invalid authentication token
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 403
+                  name:
+                    type: string
+                    example: ForbiddenError
+                  message:
+                    type: string
+                    example: Insufficient permissions
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  name:
+                    type: string
+                    example: NotFoundError
+                  message:
+                    type: string
+                    example: Resource not found

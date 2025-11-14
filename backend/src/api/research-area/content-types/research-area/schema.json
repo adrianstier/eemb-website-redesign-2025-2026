@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "research_areas",
+  "info": {
+    "singularName": "research-area",
+    "pluralName": "research-areas",
+    "displayName": "Research Area",
+    "description": "Research areas and specializations"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 100
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 1000
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Ecology",
+        "Evolution",
+        "Marine Biology",
+        "Molecular Biology",
+        "Conservation",
+        "Climate Science",
+        "Microbiology",
+        "Genomics",
+        "Physiology",
+        "Biodiversity",
+        "Other"
+      ]
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "faculty": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::faculty.faculty",
+      "mappedBy": "researchAreas"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "orderIndex": {
+      "type": "integer",
+      "description": "Display order"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_shared_educations",
+  "info": {
+    "displayName": "Education",
+    "icon": "graduation-cap",
+    "description": "Educational background"
+  },
+  "options": {},
+  "attributes": {
+    "degree": {
+      "type": "string",
+      "required": true
+    },
+    "field": {
+      "type": "string"
+    },
+    "institution": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "integer",
+      "min": 1900,
+      "max": 2030
+    },
+    "thesis": {
+      "type": "string"
+    },
+    "advisor": {
+      "type": "string"
+    }
+  }
+}

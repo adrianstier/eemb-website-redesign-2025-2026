@@ -1,0 +1,113 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news_articles",
+  "info": {
+    "singularName": "news-article",
+    "pluralName": "news-articles",
+    "displayName": "News Article",
+    "description": "Good news, achievements, and department updates"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "subtitle": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Faculty Achievement",
+        "Student Achievement",
+        "Alumni Success",
+        "Research Breakthrough",
+        "Grant Award",
+        "Department News",
+        "Event",
+        "Publication",
+        "Media Coverage",
+        "Partnership"
+      ],
+      "required": true
+    },
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "publishDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "author": {
+      "type": "string",
+      "default": "EEMB Communications"
+    },
+    "content": {
+      "type": "richtext",
+      "required": true,
+      "maxLength": 15000
+    },
+    "excerpt": {
+      "type": "text",
+      "required": true,
+      "maxLength": 500
+    },
+    "relatedFaculty": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::faculty.faculty"
+    },
+    "relatedAlumni": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::alumni-profile.alumni-profile"
+    },
+    "externalLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.external-link"
+    },
+    "tags": {
+      "type": "json",
+      "description": "Tags for categorization and search"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pin to top of news feed"
+    },
+    "relatedArticles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::news-article.news-article"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
+    }
+  }
+}

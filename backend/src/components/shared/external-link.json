@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_shared_external_links",
+  "info": {
+    "displayName": "External Link",
+    "icon": "link",
+    "description": "External link with label"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "url": {
+      "type": "string",
+      "required": true,
+      "regex": "^https?://.*"
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

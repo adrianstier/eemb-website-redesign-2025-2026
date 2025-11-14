@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_committee_members",
+  "info": {
+    "displayName": "Committee Member",
+    "icon": "user-group",
+    "description": "DEI committee member"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 200
+    },
+    "role": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "email": {
+      "type": "email"
+    },
+    "facultyMember": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::faculty.faculty"
+    }
+  }
+}

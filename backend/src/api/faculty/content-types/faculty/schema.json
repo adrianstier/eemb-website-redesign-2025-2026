@@ -1,0 +1,142 @@
+{
+  "kind": "collectionType",
+  "collectionName": "faculties",
+  "info": {
+    "singularName": "faculty",
+    "pluralName": "faculties",
+    "displayName": "Faculty",
+    "description": "Current faculty members"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "title": {
+      "type": "enumeration",
+      "enum": [
+        "Professor",
+        "Associate Professor",
+        "Assistant Professor",
+        "Professor Emeritus",
+        "Distinguished Professor",
+        "Research Professor",
+        "Lecturer",
+        "Teaching Professor"
+      ],
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "office": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "profileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "bio": {
+      "type": "richtext",
+      "maxLength": 5000
+    },
+    "shortBio": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "researchInterests": {
+      "type": "json",
+      "description": "Array of research interests"
+    },
+    "education": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.education"
+    },
+    "publications": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::publication.publication",
+      "inversedBy": "authors"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "instructor"
+    },
+    "labWebsite": {
+      "type": "string",
+      "regex": "^https?://.*"
+    },
+    "googleScholar": {
+      "type": "string"
+    },
+    "orcid": {
+      "type": "string",
+      "regex": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[X\\d]$"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "fullName"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "department": {
+      "type": "enumeration",
+      "enum": [
+        "EEMB",
+        "MCDB",
+        "Joint Appointment"
+      ],
+      "default": "EEMB"
+    },
+    "researchAreas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::research-area.research-area",
+      "inversedBy": "faculty"
+    },
+    "joinedYear": {
+      "type": "integer",
+      "min": 1960,
+      "max": 2030
+    },
+    "officeHours": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

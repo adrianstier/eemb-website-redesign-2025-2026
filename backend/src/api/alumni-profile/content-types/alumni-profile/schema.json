@@ -1,0 +1,114 @@
+{
+  "kind": "collectionType",
+  "collectionName": "alumni_profiles",
+  "info": {
+    "singularName": "alumni-profile",
+    "pluralName": "alumni-profiles",
+    "displayName": "Alumni",
+    "description": "Alumni directory with privacy controls"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "lastName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "graduationYear": {
+      "type": "integer",
+      "required": true,
+      "min": 1960,
+      "max": 2030
+    },
+    "degree": {
+      "type": "enumeration",
+      "enum": ["BS", "BA", "MS", "MA", "PhD"],
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "private": true
+    },
+    "profileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "currentPosition": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "currentEmployer": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "location": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "bio": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "linkedIn": {
+      "type": "string",
+      "regex": "^https://www\\.linkedin\\.com/.*"
+    },
+    "website": {
+      "type": "string",
+      "regex": "^https?://.*"
+    },
+    "privacySettings": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.privacy-settings",
+      "required": true
+    },
+    "spotlight": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::alumni-spotlight.alumni-spotlight",
+      "mappedBy": "alumni"
+    },
+    "mentorAvailable": {
+      "type": "boolean",
+      "default": false
+    },
+    "mentorAreas": {
+      "type": "json",
+      "description": "Areas available for mentoring"
+    },
+    "classNotes": {
+      "type": "richtext",
+      "maxLength": 1000
+    },
+    "achievements": {
+      "type": "json",
+      "description": "Notable achievements and awards"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "fullName"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false,
+      "private": true
+    },
+    "lastUpdated": {
+      "type": "datetime"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "kind": "singleType",
+  "collectionName": "dei_contents",
+  "info": {
+    "singularName": "dei-content",
+    "pluralName": "dei-contents",
+    "displayName": "DEI Content",
+    "description": "Diversity, Equity, and Inclusion content"
+  },
+  "options": {
+    "draftAndPublish": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Diversity, Equity & Inclusion",
+      "required": true
+    },
+    "missionStatement": {
+      "type": "richtext",
+      "required": true,
+      "maxLength": 3000
+    },
+    "commitmentMessage": {
+      "type": "richtext",
+      "maxLength": 3000
+    },
+    "committeeMembers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.committee-member"
+    },
+    "coChairs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faculty.faculty"
+    },
+    "initiatives": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.dei-initiative"
+    },
+    "resources": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.dei-resource"
+    },
+    "micrositeLink": {
+      "type": "string",
+      "regex": "^https?://.*",
+      "description": "Link to DEI microsite"
+    },
+    "contactEmail": {
+      "type": "email"
+    },
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "lastUpdated": {
+      "type": "date"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
+    }
+  }
+}
