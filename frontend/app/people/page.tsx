@@ -21,10 +21,13 @@ interface Person {
     active: boolean
     department?: string
     photo_url?: string
+    labWebsite?: string
+    googleScholar?: string
+    orcid?: string
   }
 }
 
-type CategoryTab = 'all' | 'faculty' | 'adjunct' | 'emeriti' | 'lecturers' | 'staff' | 'students'
+type CategoryTab = 'all' | 'faculty' | 'researchers' | 'adjunct' | 'emeriti' | 'lecturers' | 'staff' | 'students'
 type SortOption = 'name-asc' | 'name-desc' | 'recent'
 
 export default function PeoplePage() {
@@ -74,49 +77,51 @@ export default function PeoplePage() {
     }
   }
 
-  const getCurrentPeople = () => {
-    if (activeCategory === 'all') {
-      return [...faculty, ...staff, ...students]
-    }
-
-    switch (activeCategory) {
-      case 'faculty':
-        // Regular faculty: Professor, Associate Professor, Assistant Professor, Distinguished Professor
-        return faculty.filter(person => {
-          const title = person.attributes.title?.toLowerCase() || ''
-          return !title.includes('emeritus') &&
-                 !title.includes('lecturer') &&
-                 !title.includes('adjunct') &&
-                 (title.includes('professor') || title.includes('research'))
-        })
-      case 'adjunct':
-        // Adjunct faculty - check title contains adjunct
-        return faculty.filter(person =>
-          person.attributes.title?.toLowerCase().includes('adjunct')
-        )
-      case 'emeriti':
-        // Emeriti faculty - check title contains emeritus
-        return faculty.filter(person =>
-          person.attributes.title?.toLowerCase().includes('emeritus')
-        )
-      case 'lecturers':
-        // Lecturers and Teaching Professors
-        return faculty.filter(person => {
-          const title = person.attributes.title?.toLowerCase() || ''
-          return title.includes('lecturer') || title.includes('teaching professor')
-        })
-      case 'staff':
-        return staff
-      case 'students':
-        return students
-      default:
-        return []
-    }
-  }
-
   // Memoized filtered and sorted people
   const filteredAndSortedPeople = useMemo(() => {
-    let people = getCurrentPeople()
+    // Get people based on active category
+    let people: Person[] = []
+
+    if (activeCategory === 'all') {
+      people = [...faculty, ...staff, ...students]
+    } else if (activeCategory === 'faculty') {
+      // Regular faculty: Professor, Associate Professor, Assistant Professor, Distinguished Professor
+      // Excludes: Research Professors, Emeriti, Lecturers, Adjuncts
+      people = faculty.filter(person => {
+        const title = person.attributes.title?.toLowerCase() || ''
+        return !title.includes('emeritus') &&
+               !title.includes('lecturer') &&
+               !title.includes('adjunct') &&
+               !title.includes('research') &&
+               title.includes('professor')
+      })
+    } else if (activeCategory === 'researchers') {
+      // Research faculty: Research Professor, Research Biologist
+      people = faculty.filter(person => {
+        const title = person.attributes.title?.toLowerCase() || ''
+        return title.includes('research professor') || title.includes('research biologist')
+      })
+    } else if (activeCategory === 'adjunct') {
+      // Adjunct faculty
+      people = faculty.filter(person =>
+        person.attributes.title?.toLowerCase().includes('adjunct')
+      )
+    } else if (activeCategory === 'emeriti') {
+      // Emeriti faculty
+      people = faculty.filter(person =>
+        person.attributes.title?.toLowerCase().includes('emeritus')
+      )
+    } else if (activeCategory === 'lecturers') {
+      // Lecturers and Teaching Professors
+      people = faculty.filter(person => {
+        const title = person.attributes.title?.toLowerCase() || ''
+        return title.includes('lecturer') || title.includes('teaching professor')
+      })
+    } else if (activeCategory === 'staff') {
+      people = staff
+    } else if (activeCategory === 'students') {
+      people = students
+    }
 
     // Filter by search term
     if (searchTerm) {
@@ -176,129 +181,132 @@ export default function PeoplePage() {
     return (
       <article
         key={person.id}
-        className="bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
+        className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors group"
         role="article"
-        aria-label={`${person.attributes.fullName} profile`}
+        aria-label={`${person.attributes.fullName} contact`}
       >
-        <div className="p-6">
-          {/* Person Image */}
-          <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden bg-gradient-to-br from-ocean-light via-ocean-teal to-ocean-mid shadow-lg">
+        <div className="py-2 px-3 flex items-center gap-3">
+          {/* Tiny avatar - 40px */}
+          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-ocean-light to-ocean-teal flex-shrink-0">
             {person.attributes.photo_url && !hasImageError ? (
               <img
                 src={person.attributes.photo_url.startsWith('http')
                   ? person.attributes.photo_url
                   : `http://localhost:1337${person.attributes.photo_url}`}
-                alt={`${person.attributes.fullName} profile photo`}
+                alt={person.attributes.fullName}
                 className="w-full h-full object-cover"
                 loading="lazy"
                 onError={() => handleImageError(person.id)}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-white text-3xl font-bold drop-shadow-lg">
+                <span className="text-white text-sm font-bold">
                   {getInitials(person)}
                 </span>
               </div>
             )}
           </div>
 
-          {/* Person Info */}
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-900 mb-1 hover:text-ocean-deep transition">
+          {/* Name - 30% width */}
+          <div className="flex-shrink-0" style={{ width: '30%' }}>
+            <h3 className="text-sm font-semibold text-gray-900 truncate">
               {person.attributes.fullName}
             </h3>
+          </div>
 
+          {/* Title - 25% width */}
+          <div className="flex-shrink-0 hidden md:block" style={{ width: '25%' }}>
             {person.attributes.title && (
-              <p className="text-sm text-ocean-mid font-medium mb-3 px-3 py-1 bg-ocean-50 rounded-full inline-block">
+              <p className="text-xs text-gray-600 truncate">
                 {person.attributes.title}
               </p>
             )}
-
             {person.attributes.degreeProgram && (
-              <p className="text-sm text-ocean-mid font-medium mb-3 px-3 py-1 bg-ocean-50 rounded-full inline-block">
+              <p className="text-xs text-gray-600 truncate">
                 {person.attributes.degreeProgram} Student
               </p>
             )}
+          </div>
 
-            {/* Contact Info */}
-            <div className="space-y-2 text-sm text-gray-600 mb-4 mt-4">
-              {person.attributes.email && (
-                <div className="flex items-center justify-center gap-2 group">
-                  <svg className="w-4 h-4 flex-shrink-0 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  <a
-                    href={`mailto:${person.attributes.email}`}
-                    className="hover:text-ocean-deep hover:underline transition break-all"
-                    aria-label={`Email ${person.attributes.fullName}`}
-                  >
-                    {person.attributes.email}
-                  </a>
-                </div>
-              )}
-              {person.attributes.phone && (
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4 flex-shrink-0 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  <a href={`tel:${person.attributes.phone}`} className="hover:text-ocean-deep hover:underline transition">
-                    {person.attributes.phone}
-                  </a>
-                </div>
-              )}
-              {person.attributes.office && (
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4 flex-shrink-0 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                  <span>{person.attributes.office}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Bio */}
-            {person.attributes.shortBio && (
-              <p className="text-sm text-gray-600 mb-4 line-clamp-3 text-left px-2 leading-relaxed">
-                {person.attributes.shortBio}
-              </p>
-            )}
-
-            {/* Research Interests */}
-            {person.attributes.researchInterests && person.attributes.researchInterests.length > 0 && (
-              <div className="mb-4">
-                <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Research Interests</p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {person.attributes.researchInterests.slice(0, 4).map((interest, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-gradient-to-r from-ocean-light to-ocean-teal bg-opacity-10 text-ocean-deep text-xs rounded-full font-medium border border-ocean-200 hover:border-ocean-teal transition"
-                    >
-                      {interest}
-                    </span>
-                  ))}
-                  {person.attributes.researchInterests.length > 4 && (
-                    <span className="px-3 py-1 text-ocean-mid text-xs rounded-full font-medium">
-                      +{person.attributes.researchInterests.length - 4} more
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* View Profile Button - Only for faculty with slugs */}
-            {['all', 'faculty', 'adjunct', 'emeriti', 'lecturers'].includes(activeCategory) && person.attributes.slug && (
-              <Link
-                href={`/people/faculty/${person.attributes.slug}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-ocean-mid to-ocean-deep text-white rounded-lg hover:from-ocean-deep hover:to-ocean-blue transition-all shadow-md hover:shadow-lg transform hover:scale-105"
-                aria-label={`View full profile of ${person.attributes.fullName}`}
+          {/* Email - 25% width */}
+          <div className="flex-shrink-0 hidden lg:block" style={{ width: '25%' }}>
+            {person.attributes.email && (
+              <a
+                href={`mailto:${person.attributes.email}`}
+                className="text-xs text-ocean-teal hover:text-ocean-deep hover:underline truncate block"
               >
-                <span>View Full Profile</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
+                {person.attributes.email}
+              </a>
             )}
           </div>
+
+          {/* Office - flexible */}
+          <div className="flex-grow min-w-0 hidden xl:block">
+            {person.attributes.office && (
+              <p className="text-xs text-gray-500 truncate">
+                {person.attributes.office}
+              </p>
+            )}
+          </div>
+
+          {/* Social/Academic Links */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {person.attributes.labWebsite && (
+              <a
+                href={person.attributes.labWebsite}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-ocean-teal transition-colors"
+                aria-label={`${person.attributes.fullName}'s lab website`}
+                title="Lab Website"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+              </a>
+            )}
+            {person.attributes.googleScholar && (
+              <a
+                href={person.attributes.googleScholar}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-ocean-teal transition-colors"
+                aria-label={`${person.attributes.fullName}'s Google Scholar profile`}
+                title="Google Scholar"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0L9 6h6l-3-6zm0 7.5L9.5 13h5L12 7.5zm5.2 5.5H6.8l2.6 4.5h5.2l2.6-4.5zm-1.7 6.5H8.5L12 24l3.5-4.5z"/>
+                </svg>
+              </a>
+            )}
+            {person.attributes.orcid && (
+              <a
+                href={`https://orcid.org/${person.attributes.orcid}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-ocean-teal transition-colors"
+                aria-label={`${person.attributes.fullName}'s ORCID profile`}
+                title="ORCID"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c2.359 0 3.925-1.531 3.925-3.722 0-2.219-1.594-3.722-3.925-3.722h-2.297z"/>
+                </svg>
+              </a>
+            )}
+          </div>
+
+          {/* Link icon */}
+          {person.attributes.slug && (
+            <Link
+              href={`/people/faculty/${person.attributes.slug}`}
+              className="flex-shrink-0 text-ocean-teal hover:text-ocean-deep transition-colors"
+              aria-label={`View ${person.attributes.fullName}'s profile`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          )}
         </div>
       </article>
     )
@@ -323,13 +331,20 @@ export default function PeoplePage() {
       case 'all':
         return faculty.length + staff.length + students.length
       case 'faculty':
-        // Count regular faculty (excluding adjunct, emeriti, lecturers)
+        // Count regular faculty (excluding adjunct, emeriti, lecturers, research professors)
         return faculty.filter(person => {
           const title = person.attributes.title?.toLowerCase() || ''
           return !title.includes('emeritus') &&
                  !title.includes('lecturer') &&
                  !title.includes('adjunct') &&
-                 (title.includes('professor') || title.includes('research'))
+                 !title.includes('research') &&
+                 title.includes('professor')
+        }).length
+      case 'researchers':
+        // Count research faculty
+        return faculty.filter(person => {
+          const title = person.attributes.title?.toLowerCase() || ''
+          return title.includes('research professor') || title.includes('research biologist')
         }).length
       case 'adjunct':
         return faculty.filter(person =>
@@ -377,14 +392,15 @@ export default function PeoplePage() {
       </section>
 
       {/* Category Tabs & Controls */}
-      <section className="bg-white shadow-md sticky top-0 z-20 border-b border-gray-200">
+      <section className="bg-white border-b-2 border-gray-200 sticky top-0 z-20 shadow-sm">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between py-6">
-            {/* Tabs */}
-            <div className="flex flex-wrap gap-2" role="tablist" aria-label="People categories">
+          <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+            {/* Tabs - Clean horizontal tab bar */}
+            <div className="flex overflow-x-auto" role="tablist" aria-label="People categories">
               {([
                 { key: 'all', label: 'Full Directory' },
                 { key: 'faculty', label: 'Faculty' },
+                { key: 'researchers', label: 'Researchers' },
                 { key: 'adjunct', label: 'Adjunct' },
                 { key: 'emeriti', label: 'Emeriti' },
                 { key: 'lecturers', label: 'Lecturers' },
@@ -400,13 +416,18 @@ export default function PeoplePage() {
                   role="tab"
                   aria-selected={activeCategory === key}
                   aria-controls={`${key}-panel`}
-                  className={`px-4 py-2 md:px-6 md:py-3 rounded-lg font-semibold transition-all text-sm md:text-base ${
+                  className={`relative px-5 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
                     activeCategory === key
-                      ? 'bg-gradient-to-r from-ocean-teal to-ocean-blue text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-200'
+                      ? 'text-ocean-teal border-ocean-teal'
+                      : 'text-gray-600 border-transparent hover:text-gray-900 hover:border-gray-300'
                   }`}
                 >
-                  {label} ({getCategoryCount(key)})
+                  {label}
+                  <span className={`ml-2 text-xs ${
+                    activeCategory === key ? 'text-ocean-teal/70' : 'text-gray-400'
+                  }`}>
+                    ({getCategoryCount(key)})
+                  </span>
                 </button>
               ))}
             </div>
@@ -492,105 +513,137 @@ export default function PeoplePage() {
             </div>
           ) : (
             <>
-              {/* Results Info */}
-              <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                  {activeCategory === 'all' && (
-                    <p className="text-gray-700 font-medium">
-                      Showing all {filteredAndSortedPeople.length} {filteredAndSortedPeople.length === 1 ? 'person' : 'people'}
-                      {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                    </p>
-                  )}
-                  {activeCategory === 'faculty' && (
-                    <div className="space-y-1">
-                      <p className="text-gray-700 font-medium">
-                        {filteredAndSortedPeople.length} {filteredAndSortedPeople.length === 1 ? 'faculty member' : 'faculty members'}
-                        {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                      </p>
-                      <p className="text-gray-600 text-sm max-w-2xl">
-                        Our faculty members are internationally recognized researchers and educators in ecology, evolution, and marine biology.
-                      </p>
-                    </div>
-                  )}
-                  {activeCategory === 'adjunct' && (
-                    <div className="space-y-1">
-                      <p className="text-gray-700 font-medium">
-                        {filteredAndSortedPeople.length} adjunct {filteredAndSortedPeople.length === 1 ? 'faculty member' : 'faculty members'}
-                        {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                      </p>
-                      <p className="text-gray-600 text-sm max-w-2xl">
-                        Adjunct faculty contribute expertise and teaching to our department.
-                      </p>
-                    </div>
-                  )}
-                  {activeCategory === 'emeriti' && (
-                    <div className="space-y-1">
-                      <p className="text-gray-700 font-medium">
-                        {filteredAndSortedPeople.length} {filteredAndSortedPeople.length === 1 ? 'emeritus professor' : 'emeriti professors'}
-                        {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                      </p>
-                      <p className="text-gray-600 text-sm max-w-2xl">
-                        Our emeriti faculty have made lasting contributions to the department and continue to inspire future generations.
-                      </p>
-                    </div>
-                  )}
-                  {activeCategory === 'lecturers' && (
-                    <div className="space-y-1">
-                      <p className="text-gray-700 font-medium">
-                        {filteredAndSortedPeople.length} {filteredAndSortedPeople.length === 1 ? 'lecturer' : 'lecturers'}
-                        {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                      </p>
-                      <p className="text-gray-600 text-sm max-w-2xl">
-                        Our lecturers and teaching professors are dedicated to excellence in undergraduate and graduate education.
-                      </p>
-                    </div>
-                  )}
-                  {activeCategory === 'staff' && (
-                    <div className="space-y-1">
-                      <p className="text-gray-700 font-medium">
-                        {filteredAndSortedPeople.length} {filteredAndSortedPeople.length === 1 ? 'staff member' : 'staff members'}
-                        {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                      </p>
-                      <p className="text-gray-600 text-sm max-w-2xl">
-                        Our dedicated staff members provide essential support for research, teaching, and department operations.
-                      </p>
-                    </div>
-                  )}
-                  {activeCategory === 'students' && (
-                    <div className="space-y-1">
-                      <p className="text-gray-700 font-medium">
-                        {filteredAndSortedPeople.length} {filteredAndSortedPeople.length === 1 ? 'graduate student' : 'graduate students'}
-                        {searchTerm && <span className="text-ocean-deep"> matching "{searchTerm}"</span>}
-                      </p>
-                      <p className="text-gray-600 text-sm max-w-2xl">
-                        Our graduate students are conducting cutting-edge research across diverse fields in ecology, evolution, and marine biology.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {searchTerm && filteredAndSortedPeople.length > 0 && (
-                  <button
-                    onClick={clearSearch}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-ocean-deep hover:text-ocean-blue border-2 border-ocean-light hover:border-ocean-mid rounded-lg transition"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Clear Search
-                  </button>
-                )}
-              </div>
-
-              {/* Grid */}
+              {/* Table View for All / Grid for Categories */}
               {filteredAndSortedPeople.length > 0 ? (
-                <div
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                  role="list"
-                  aria-label={`${activeCategory} members`}
-                >
-                  {filteredAndSortedPeople.map((person) => renderPersonCard(person))}
-                </div>
+                activeCategory === 'all' ? (
+                  // Compact table view for full directory
+                  <div key="all-table" className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gradient-to-r from-ocean-teal to-ocean-blue text-white">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-sm font-semibold">Name</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold">Title/Role</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold hidden md:table-cell">Email</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Office</th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Phone</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold hidden xl:table-cell">Links</th>
+                            <th className="px-4 py-3 text-center text-sm font-semibold">Profile</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {filteredAndSortedPeople.map((person, index) => (
+                            <tr key={person.id} className={`hover:bg-ocean-light hover:bg-opacity-10 transition ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                              <td className="px-4 py-3">
+                                <div className="flex items-center gap-3">
+                                  {person.attributes.photo_url ? (
+                                    <img
+                                      src={person.attributes.photo_url}
+                                      alt={person.attributes.fullName}
+                                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).style.display = 'none';
+                                      }}
+                                    />
+                                  ) : (
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ocean-teal to-ocean-blue flex items-center justify-center flex-shrink-0">
+                                      <span className="text-white text-sm font-bold">
+                                        {getInitials(person)}
+                                      </span>
+                                    </div>
+                                  )}
+                                  <span className="font-medium text-gray-900">{person.attributes.fullName}</span>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 text-sm text-gray-700">
+                                {person.attributes.title || person.attributes.degreeProgram ? `${person.attributes.degreeProgram || ''} ${person.attributes.degreeProgram ? 'Student' : person.attributes.title || ''}`.trim() : '—'}
+                              </td>
+                              <td className="px-4 py-3 text-sm hidden md:table-cell">
+                                {person.attributes.email ? (
+                                  <a href={`mailto:${person.attributes.email}`} className="text-ocean-teal hover:text-ocean-deep hover:underline">
+                                    {person.attributes.email}
+                                  </a>
+                                ) : '—'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-gray-600 hidden lg:table-cell">
+                                {person.attributes.office || '—'}
+                              </td>
+                              <td className="px-4 py-3 text-sm text-gray-600 hidden lg:table-cell">
+                                {person.attributes.phone || '—'}
+                              </td>
+                              <td className="px-4 py-3 text-center hidden xl:table-cell">
+                                <div className="flex items-center justify-center gap-2">
+                                  {person.attributes.labWebsite && (
+                                    <a
+                                      href={person.attributes.labWebsite}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-gray-400 hover:text-ocean-teal transition-colors"
+                                      aria-label={`${person.attributes.fullName}'s lab website`}
+                                      title="Lab Website"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                                      </svg>
+                                    </a>
+                                  )}
+                                  {person.attributes.googleScholar && (
+                                    <a
+                                      href={person.attributes.googleScholar}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-gray-400 hover:text-ocean-teal transition-colors"
+                                      aria-label={`${person.attributes.fullName}'s Google Scholar profile`}
+                                      title="Google Scholar"
+                                    >
+                                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 0L9 6h6l-3-6zm0 7.5L9.5 13h5L12 7.5zm5.2 5.5H6.8l2.6 4.5h5.2l2.6-4.5zm-1.7 6.5H8.5L12 24l3.5-4.5z"/>
+                                      </svg>
+                                    </a>
+                                  )}
+                                  {person.attributes.orcid && (
+                                    <a
+                                      href={`https://orcid.org/${person.attributes.orcid}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-gray-400 hover:text-ocean-teal transition-colors"
+                                      aria-label={`${person.attributes.fullName}'s ORCID profile`}
+                                      title="ORCID"
+                                    >
+                                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c2.359 0 3.925-1.531 3.925-3.722 0-2.219-1.594-3.722-3.925-3.722h-2.297z"/>
+                                      </svg>
+                                    </a>
+                                  )}
+                                  {!person.attributes.labWebsite && !person.attributes.googleScholar && !person.attributes.orcid && (
+                                    <span className="text-gray-400 text-sm">—</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                {person.attributes.slug ? (
+                                  <Link
+                                    href={`/people/faculty/${person.attributes.slug}`}
+                                    className="inline-flex items-center justify-center px-3 py-1.5 bg-ocean-teal hover:bg-ocean-blue text-white text-sm font-medium rounded transition"
+                                  >
+                                    View
+                                  </Link>
+                                ) : (
+                                  <span className="text-gray-400 text-sm">—</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ) : (
+                  // Directory View - List format (phone book style)
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                    {filteredAndSortedPeople.map((person) => renderPersonCard(person))}
+                  </div>
+                )
               ) : (
                 <div className="text-center py-20">
                   <div className="max-w-md mx-auto">

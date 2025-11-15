@@ -1,0 +1,605 @@
+{
+  "timestamp": "2025-11-15T17:03:52.183Z",
+  "summary": {
+    "totalLinks": 98,
+    "goodLinks": 76,
+    "brokenLinks": 8,
+    "suspiciousLinks": 14,
+    "missingScreenshots": 1,
+    "verifiedWithScreenshots": 75
+  },
+  "issues": [
+    {
+      "faculty": "Carla D'Antonio",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=I7C2Hz0AAAAJ&hl=en&oi=ao",
+      "issue": "HTTP 404"
+    },
+    {
+      "faculty": "Halley Froehlich",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=072ktIQAAAAJ",
+      "issue": "HTTP 404"
+    },
+    {
+      "faculty": "Scott Hodges",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=1Fr1vakAAAAJ",
+      "issue": "HTTP 404"
+    },
+    {
+      "faculty": "Holly Moeller",
+      "type": "labWebsite",
+      "url": "https://moellerlab.eemb.ucsb.edu/",
+      "issue": "getaddrinfo ENOTFOUND moellerlab.eemb.ucsb.edu"
+    },
+    {
+      "faculty": "Adrian Stier",
+      "type": "labWebsite",
+      "url": "https://stierlab.eemb.ucsb.edu/",
+      "issue": "getaddrinfo ENOTFOUND stierlab.eemb.ucsb.edu"
+    },
+    {
+      "faculty": "Samuel Sweet",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=t07iyOAAAAAJ",
+      "issue": "HTTP 404"
+    },
+    {
+      "faculty": "William Rice",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=OtbhlmIAAAAJ&hl=en",
+      "issue": "HTTP 404"
+    },
+    {
+      "faculty": "Russell Schmitt",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=sFIZSUYAAAAJ&hl=en&oi=ao",
+      "issue": "HTTP 404"
+    }
+  ],
+  "warnings": [
+    {
+      "faculty": "Carla D'Antonio",
+      "type": "labWebsite",
+      "url": "https://www.example.com/carla-dantonio",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Thomas Even",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Scott Hodges",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Anna James",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Armand  Kuris",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "John Latto",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Sally MacIntyre",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Nick Nidzieko",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Joel Rothman",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Joel Sharbrough",
+      "type": "labWebsite",
+      "url": "http://sharbroughlab.com/",
+      "issue": "Screenshot missing"
+    },
+    {
+      "faculty": "Jackie Shay",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Samuel Sweet",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Audrey Thellman",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Thomas Turner",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    },
+    {
+      "faculty": "Yong Zhou",
+      "type": "labWebsite",
+      "url": "http://www.policy.ucsb.edu/terms-of-use",
+      "issue": "Suspicious URL (policy page or placeholder)"
+    }
+  ],
+  "verified": [
+    {
+      "faculty": "Leander Anderegg",
+      "type": "labWebsite",
+      "url": "https://anderegglab.eemb.ucsb.edu",
+      "status": "verified"
+    },
+    {
+      "faculty": "Leander Anderegg",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?hl=en&user=juJKdAgAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Leander Anderegg",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0001-2345-6789",
+      "status": "verified"
+    },
+    {
+      "faculty": "Cherie Briggs",
+      "type": "labWebsite",
+      "url": "https://briggslab.eemb.ucsb.edu/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Cherie Briggs",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=q0xdxtsAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Cherie Briggs",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-5059-6857",
+      "status": "verified"
+    },
+    {
+      "faculty": "Deron Burkepile",
+      "type": "labWebsite",
+      "url": "https://labs.eemb.ucsb.edu/burkepile/deron/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Deron Burkepile",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=lOhiBXAAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Deron Burkepile",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-0427-0484",
+      "status": "verified"
+    },
+    {
+      "faculty": "Carla D'Antonio",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0001-2345-6792",
+      "status": "verified"
+    },
+    {
+      "faculty": "Thomas Even",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=SAMPLE123",
+      "status": "verified"
+    },
+    {
+      "faculty": "Thomas Even",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0001-2345-6793",
+      "status": "verified"
+    },
+    {
+      "faculty": "Halley Froehlich",
+      "type": "labWebsite",
+      "url": "https://froehlichlab.eemb.ucsb.edu",
+      "status": "verified"
+    },
+    {
+      "faculty": "Halley Froehlich",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-5194-3019",
+      "status": "verified"
+    },
+    {
+      "faculty": "Gretchen Hofmann",
+      "type": "labWebsite",
+      "url": "http://www.hofmannlab.com",
+      "status": "verified"
+    },
+    {
+      "faculty": "Gretchen Hofmann",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=-PWYRzIAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Gretchen Hofmann",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0003-3201-2138",
+      "status": "verified"
+    },
+    {
+      "faculty": "Débora Iglesias-Rodriguez",
+      "type": "labWebsite",
+      "url": "https://labs.eemb.ucsb.edu/iglesias-rodriguez/debora/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Armand  Kuris",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=Fx4qe20AAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Sally MacIntyre",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=GPlRHI8AAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Sally MacIntyre",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-3695-2592",
+      "status": "verified"
+    },
+    {
+      "faculty": "Jesús Martínez-Gómez",
+      "type": "labWebsite",
+      "url": "https://www.martinezgomezlab.com/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Susan J. Mazer",
+      "type": "labWebsite",
+      "url": "https://labs.eemb.ucsb.edu/mazer/susan/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Susan J. Mazer",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=qbamjFYAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Douglas McCauley",
+      "type": "labWebsite",
+      "url": "https://labs.eemb.ucsb.edu/mccauley/doug/index.html",
+      "status": "verified"
+    },
+    {
+      "faculty": "Douglas McCauley",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=HYXM3_sAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Douglas McCauley",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0003-1917-5848",
+      "status": "verified"
+    },
+    {
+      "faculty": "Holly Moeller",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=hcuuM8gAAAAJ&hl=en&oi=ao",
+      "status": "verified"
+    },
+    {
+      "faculty": "Holly Moeller",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-5014-4743",
+      "status": "verified"
+    },
+    {
+      "faculty": "Todd Oakley",
+      "type": "labWebsite",
+      "url": "https://labs.eemb.ucsb.edu/oakley/todd/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Todd Oakley",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=kztqPjYAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Todd Oakley",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-6831-6204",
+      "status": "verified"
+    },
+    {
+      "faculty": "Ryoko Oono",
+      "type": "labWebsite",
+      "url": "https://labs.eemb.ucsb.edu/oono/ryoko/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Ryoko Oono",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=GaabAg8AAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Stephen Proulx",
+      "type": "labWebsite",
+      "url": "https://proulx-lab.eemb.ucsb.edu/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Stephen Proulx",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=5y_dK0oAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Stephen Proulx",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-5157-7463",
+      "status": "verified"
+    },
+    {
+      "faculty": "Joel Rothman",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=8enm19QAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Alyson Santoro",
+      "type": "labWebsite",
+      "url": "https://santorolab.eemb.ucsb.edu/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Alyson Santoro",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=TsZjKA4AAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Alyson Santoro",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0003-2503-8219",
+      "status": "verified"
+    },
+    {
+      "faculty": "Joshua Schimel",
+      "type": "labWebsite",
+      "url": "https://schimel-lab.eemb.ucsb.edu/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Joshua Schimel",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=uzDaznAAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Joshua Schimel",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-7155-4279",
+      "status": "verified"
+    },
+    {
+      "faculty": "Joel Sharbrough",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=vmA6JvMAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Jackie Shay",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=CxJk0XIAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Adrian Stier",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=bxbOvMgAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Adrian Stier",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-2435-497X",
+      "status": "verified"
+    },
+    {
+      "faculty": "Andrew Thurber",
+      "type": "labWebsite",
+      "url": "https://vegathurberlab.wixsite.com/microbiology",
+      "status": "verified"
+    },
+    {
+      "faculty": "Andrew Thurber",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=DbOlPUAAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Thomas Turner",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=-JrND60AAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Rebecca Vega Thurber",
+      "type": "labWebsite",
+      "url": "https://vegathurberlab.wixsite.com/microbiology",
+      "status": "verified"
+    },
+    {
+      "faculty": "Lizzy Wilbanks",
+      "type": "labWebsite",
+      "url": "https://www.wilbankslab.org",
+      "status": "verified"
+    },
+    {
+      "faculty": "Lizzy Wilbanks",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=9Jcd7mcAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Soojin Yi",
+      "type": "labWebsite",
+      "url": "https://yilab.eemb.ucsb.edu/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Hillary Young",
+      "type": "labWebsite",
+      "url": "https://young-lab.eemb.ucsb.edu/",
+      "status": "verified"
+    },
+    {
+      "faculty": "Hillary Young",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=X-2BjW4AAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Hillary Young",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-9294-7209",
+      "status": "verified"
+    },
+    {
+      "faculty": "Yong Zhou",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=4FV9K4wAAAAJ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Alice Alldredge",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=SG5c300AAAAJ&hl=en&oi=ao",
+      "status": "verified"
+    },
+    {
+      "faculty": "Mark Brzezinski",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=NgJPuK8AAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Craig Carlson",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=4Td-fJUAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Jenn Caselle",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=jl4z9RcAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Jenn Caselle",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-8433-7998",
+      "status": "verified"
+    },
+    {
+      "faculty": "James Childress",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?hl=en&view_op=list_works&gmla=AGd7smHsKxaF",
+      "status": "verified"
+    },
+    {
+      "faculty": "John Damuth",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=_nvB_TkAAAAJ&hl=en&oi=ao ",
+      "status": "verified"
+    },
+    {
+      "faculty": "Steve Gaines",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=L_VT3-cAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Steve Gaines",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0003-2812-8917",
+      "status": "verified"
+    },
+    {
+      "faculty": "Sally Holbrook",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=LtUBsnwAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Sally Holbrook",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0002-8433-8831",
+      "status": "verified"
+    },
+    {
+      "faculty": "Kevin Lafferty",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=6pj0cygAAAAJ&hl=en&oi=sra",
+      "status": "verified"
+    },
+    {
+      "faculty": "Kevin Lafferty",
+      "type": "orcid",
+      "url": "https://orcid.org/0000-0001-9185-4548",
+      "status": "verified"
+    },
+    {
+      "faculty": "John M. Melack",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=Vvo98qYAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Roger Nisbet",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=l_9TshUAAAAJ&hl=en",
+      "status": "verified"
+    },
+    {
+      "faculty": "Robert Warner",
+      "type": "googleScholar",
+      "url": "https://scholar.google.com/citations?user=EnWAN9gAAAAJ&hl=en",
+      "status": "verified"
+    }
+  ]
+}

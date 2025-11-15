@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Deron Burkepile",
+    "orcidId": "0000-0002-0427-0484",
+    "websites": [],
+    "researcherUrls": [],
+    "keywords": [],
+    "otherNames": [],
+    "externalIds": []
+  },
+  {
+    "name": "Alyson Santoro",
+    "orcidId": "0000-0003-2503-8219",
+    "websites": [],
+    "researcherUrls": [],
+    "keywords": [],
+    "otherNames": [],
+    "externalIds": [
+      {
+        "type": "ResearcherID",
+        "value": "E-5686-2013",
+        "url": "http://www.researcherid.com/rid/E-5686-2013"
+      },
+      {
+        "type": "Loop profile",
+        "value": "36755",
+        "url": "http://loop.frontiersin.org/people/36755/overview?referrer=orcid_profile"
+      },
+      {
+        "type": "Scopus Author ID",
+        "value": "8909326800",
+        "url": "http://www.scopus.com/inward/authorDetails.url?authorID=8909326800&partnerID=MN8TOARS"
+      }
+    ]
+  }
+]
