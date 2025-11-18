@@ -28,7 +28,7 @@ interface Person {
 }
 
 type CategoryTab = 'all' | 'faculty' | 'researchers' | 'adjunct' | 'emeriti' | 'lecturers' | 'staff' | 'students'
-type SortOption = 'name-asc' | 'name-desc' | 'recent'
+type SortOption = 'name-asc' | 'name-desc' | 'title-asc' | 'title-desc' | 'email-asc' | 'email-desc' | 'office-asc' | 'office-desc' | 'recent'
 
 export default function PeoplePage() {
   const [faculty, setFaculty] = useState<Person[]>([])
@@ -153,6 +153,40 @@ export default function PeoplePage() {
           b.attributes.lastName.localeCompare(a.attributes.lastName)
         )
         break
+      case 'title-asc':
+        people.sort((a, b) => {
+          const titleA = a.attributes.title || a.attributes.degreeProgram || ''
+          const titleB = b.attributes.title || b.attributes.degreeProgram || ''
+          return titleA.localeCompare(titleB)
+        })
+        break
+      case 'title-desc':
+        people.sort((a, b) => {
+          const titleA = a.attributes.title || a.attributes.degreeProgram || ''
+          const titleB = b.attributes.title || b.attributes.degreeProgram || ''
+          return titleB.localeCompare(titleA)
+        })
+        break
+      case 'email-asc':
+        people.sort((a, b) =>
+          (a.attributes.email || '').localeCompare(b.attributes.email || '')
+        )
+        break
+      case 'email-desc':
+        people.sort((a, b) =>
+          (b.attributes.email || '').localeCompare(a.attributes.email || '')
+        )
+        break
+      case 'office-asc':
+        people.sort((a, b) =>
+          (a.attributes.office || '').localeCompare(b.attributes.office || '')
+        )
+        break
+      case 'office-desc':
+        people.sort((a, b) =>
+          (b.attributes.office || '').localeCompare(a.attributes.office || '')
+        )
+        break
       case 'recent':
         people.sort((a, b) => b.id - a.id)
         break
@@ -167,6 +201,33 @@ export default function PeoplePage() {
 
   const clearSearch = () => {
     setSearchTerm('')
+  }
+
+  const handleColumnSort = (column: 'name' | 'title' | 'email' | 'office') => {
+    // Toggle between ascending and descending
+    const currentSort = sortOption
+    if (currentSort === `${column}-asc`) {
+      setSortOption(`${column}-desc` as SortOption)
+    } else {
+      setSortOption(`${column}-asc` as SortOption)
+    }
+  }
+
+  const getSortIcon = (column: 'name' | 'title' | 'email' | 'office') => {
+    if (sortOption === `${column}-asc`) {
+      return (
+        <svg className="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+        </svg>
+      )
+    } else if (sortOption === `${column}-desc`) {
+      return (
+        <svg className="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      )
+    }
+    return null
   }
 
   const getInitials = (person: Person) => {
@@ -534,10 +595,34 @@ export default function PeoplePage() {
                       <table className="w-full">
                         <thead className="bg-gradient-to-r from-ocean-teal to-ocean-blue text-white">
                           <tr>
-                            <th className="px-4 py-3 text-left text-sm font-semibold">Name</th>
-                            <th className="px-4 py-3 text-left text-sm font-semibold">Title/Role</th>
-                            <th className="px-4 py-3 text-left text-sm font-semibold hidden md:table-cell">Email</th>
-                            <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Office</th>
+                            <th
+                              className="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
+                              onClick={() => handleColumnSort('name')}
+                              title="Click to sort by name"
+                            >
+                              Name{getSortIcon('name')}
+                            </th>
+                            <th
+                              className="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
+                              onClick={() => handleColumnSort('title')}
+                              title="Click to sort by title/role"
+                            >
+                              Title/Role{getSortIcon('title')}
+                            </th>
+                            <th
+                              className="px-4 py-3 text-left text-sm font-semibold hidden md:table-cell cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
+                              onClick={() => handleColumnSort('email')}
+                              title="Click to sort by email"
+                            >
+                              Email{getSortIcon('email')}
+                            </th>
+                            <th
+                              className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
+                              onClick={() => handleColumnSort('office')}
+                              title="Click to sort by office"
+                            >
+                              Office{getSortIcon('office')}
+                            </th>
                             <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Phone</th>
                           </tr>
                         </thead>
