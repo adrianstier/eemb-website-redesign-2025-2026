@@ -641,14 +641,14 @@ export default function PeoplePage() {
                             <tr key={`${person.id}-${person.attributes.email || index}`} className={`hover:bg-ocean-light hover:bg-opacity-10 transition ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                               <td className="px-4 py-3">
                                 <div className="flex items-center gap-3">
-                                  {person.attributes.photo_url ? (
+                                  {person.attributes.photo_url && !imageErrors.has(person.id) ? (
                                     <img
-                                      src={person.attributes.photo_url}
+                                      src={person.attributes.photo_url.startsWith('http')
+                                        ? person.attributes.photo_url
+                                        : `http://localhost:1337${person.attributes.photo_url}`}
                                       alt={person.attributes.fullName}
                                       className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                                      onError={(e) => {
-                                        (e.target as HTMLImageElement).style.display = 'none';
-                                      }}
+                                      onError={() => handleImageError(person.id)}
                                     />
                                   ) : (
                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ocean-teal to-ocean-blue flex items-center justify-center flex-shrink-0">
