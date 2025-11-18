@@ -276,7 +276,7 @@ export default function PeoplePage() {
         </h3>
 
         {/* Title - Fixed minimum height */}
-        <div className="min-h-[3rem] mb-4">
+        <div className="min-h-[3rem] mb-3">
           {person.attributes.title && (
             <p className="text-sm text-ocean-teal text-center font-medium">
               {person.attributes.title}
@@ -289,60 +289,84 @@ export default function PeoplePage() {
           )}
         </div>
 
-        {/* Short Bio or Research Summary */}
+        {/* One-line Research Summary */}
         {person.attributes.shortBio && (
           <div className="mb-4">
-            <p className="text-xs text-gray-600 line-clamp-3">
+            <p className="text-xs text-gray-600 text-center line-clamp-1 italic">
               {person.attributes.shortBio}
             </p>
           </div>
         )}
 
-        {/* Research Interests Tags */}
-        {person.attributes.researchInterests && person.attributes.researchInterests.length > 0 && (
-          <div className="mb-4">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Research Interests:</p>
-            <div className="flex flex-wrap gap-1.5">
-              {person.attributes.researchInterests.slice(0, 5).map((interest, idx) => (
-                <span key={idx} className="text-xs bg-ocean-light/20 text-ocean-deep px-2 py-1 rounded-md border border-ocean-light/30">
-                  {interest}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Contact Info - Consistent spacing */}
-        <div className="space-y-2 mb-4 flex-grow">
+        {/* Contact Icons with Hover Tooltips - Centered */}
+        <div className="flex items-center justify-center gap-3 mb-4 min-h-[2.5rem]">
           {person.attributes.email && (
-            <a
-              href={`mailto:${person.attributes.email}`}
-              className="flex items-center gap-2 text-xs text-gray-600 hover:text-ocean-deep transition-colors group/email"
-            >
-              <svg className="w-4 h-4 flex-shrink-0 text-gray-400 group-hover/email:text-ocean-teal transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span className="truncate">{person.attributes.email}</span>
-            </a>
+            <div className="relative group/contact">
+              <a
+                href={`mailto:${person.attributes.email}`}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-ocean-teal text-gray-500 hover:text-white transition-all"
+                aria-label="Email"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </a>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/contact:opacity-100 pointer-events-none transition-opacity z-10">
+                {person.attributes.email}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+              </div>
+            </div>
           )}
           {person.attributes.office && (
-            <div className="flex items-center gap-2 text-xs text-gray-600">
-              <svg className="w-4 h-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="truncate">{person.attributes.office}</span>
+            <div className="relative group/contact">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-ocean-teal text-gray-500 hover:text-white transition-all cursor-help">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/contact:opacity-100 pointer-events-none transition-opacity z-10">
+                {person.attributes.office}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+              </div>
             </div>
           )}
           {person.attributes.phone && (
-            <div className="flex items-center gap-2 text-xs text-gray-600">
-              <svg className="w-4 h-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span className="truncate">{person.attributes.phone}</span>
+            <div className="relative group/contact">
+              <a
+                href={`tel:${person.attributes.phone}`}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-ocean-teal text-gray-500 hover:text-white transition-all"
+                aria-label="Phone"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </a>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/contact:opacity-100 pointer-events-none transition-opacity z-10">
+                {person.attributes.phone}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+              </div>
             </div>
           )}
         </div>
+
+        {/* Research Interests - Compact, first 2 only */}
+        {person.attributes.researchInterests && person.attributes.researchInterests.length > 0 && (
+          <div className="mb-4 flex-grow">
+            <div className="flex flex-wrap justify-center gap-1.5">
+              {person.attributes.researchInterests.slice(0, 2).map((interest, idx) => (
+                <span key={idx} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
+                  {interest}
+                </span>
+              ))}
+              {person.attributes.researchInterests.length > 2 && (
+                <span className="text-xs text-gray-400 px-2 py-0.5">
+                  +{person.attributes.researchInterests.length - 2} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Social Links - Always render with fixed height */}
         <div className={`flex items-center justify-center gap-3 py-4 border-t border-gray-200 min-h-[4rem] ${!hasSocialLinks ? 'opacity-0' : ''}`}>
