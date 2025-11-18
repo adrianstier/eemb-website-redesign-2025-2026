@@ -177,137 +177,158 @@ export default function PeoplePage() {
 
   const renderPersonCard = (person: Person) => {
     const hasImageError = imageErrors.has(person.id)
+    const hasSocialLinks = person.attributes.labWebsite || person.attributes.googleScholar || person.attributes.orcid
 
     return (
       <article
         key={person.id}
-        className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors group"
+        className="bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 p-6 transition-all duration-200 group hover:-translate-y-1 flex flex-col"
         role="article"
         aria-label={`${person.attributes.fullName} contact`}
       >
-        <div className="py-2 px-3 flex items-center gap-3">
-          {/* Tiny avatar - 40px */}
-          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-ocean-light to-ocean-teal flex-shrink-0">
-            {person.attributes.photo_url && !hasImageError ? (
-              <img
-                src={person.attributes.photo_url.startsWith('http')
-                  ? person.attributes.photo_url
-                  : `http://localhost:1337${person.attributes.photo_url}`}
-                alt={person.attributes.fullName}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                onError={() => handleImageError(person.id)}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">
-                  {getInitials(person)}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Name - 30% width */}
-          <div className="flex-shrink-0" style={{ width: '30%' }}>
-            <h3 className="text-sm font-semibold text-gray-900 truncate">
-              {person.attributes.fullName}
-            </h3>
-          </div>
-
-          {/* Title - 25% width */}
-          <div className="flex-shrink-0 hidden md:block" style={{ width: '25%' }}>
-            {person.attributes.title && (
-              <p className="text-xs text-gray-600 truncate">
-                {person.attributes.title}
-              </p>
-            )}
-            {person.attributes.degreeProgram && (
-              <p className="text-xs text-gray-600 truncate">
-                {person.attributes.degreeProgram} Student
-              </p>
-            )}
-          </div>
-
-          {/* Email - 25% width */}
-          <div className="flex-shrink-0 hidden lg:block" style={{ width: '25%' }}>
-            {person.attributes.email && (
-              <a
-                href={`mailto:${person.attributes.email}`}
-                className="text-xs text-ocean-teal hover:text-ocean-deep hover:underline truncate block"
-              >
-                {person.attributes.email}
-              </a>
-            )}
-          </div>
-
-          {/* Office - flexible */}
-          <div className="flex-grow min-w-0 hidden xl:block">
-            {person.attributes.office && (
-              <p className="text-xs text-gray-500 truncate">
-                {person.attributes.office}
-              </p>
-            )}
-          </div>
-
-          {/* Social/Academic Links */}
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            {person.attributes.labWebsite && (
-              <a
-                href={person.attributes.labWebsite}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-ocean-teal transition-colors"
-                aria-label={`${person.attributes.fullName}'s lab website`}
-                title="Lab Website"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                </svg>
-              </a>
-            )}
-            {person.attributes.googleScholar && (
-              <a
-                href={person.attributes.googleScholar}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-ocean-teal transition-colors"
-                aria-label={`${person.attributes.fullName}'s Google Scholar profile`}
-                title="Google Scholar"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0L9 6h6l-3-6zm0 7.5L9.5 13h5L12 7.5zm5.2 5.5H6.8l2.6 4.5h5.2l2.6-4.5zm-1.7 6.5H8.5L12 24l3.5-4.5z"/>
-                </svg>
-              </a>
-            )}
-            {person.attributes.orcid && (
-              <a
-                href={`https://orcid.org/${person.attributes.orcid}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-ocean-teal transition-colors"
-                aria-label={`${person.attributes.fullName}'s ORCID profile`}
-                title="ORCID"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c2.359 0 3.925-1.531 3.925-3.722 0-2.219-1.594-3.722-3.925-3.722h-2.297z"/>
-                </svg>
-              </a>
-            )}
-          </div>
-
-          {/* Link icon */}
-          {person.attributes.slug && (
-            <Link
-              href={`/people/faculty/${person.attributes.slug}`}
-              className="flex-shrink-0 text-ocean-teal hover:text-ocean-deep transition-colors"
-              aria-label={`View ${person.attributes.fullName}'s profile`}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
+        {/* Avatar - Fixed size */}
+        <div className="relative w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gradient-to-br from-ocean-light to-ocean-teal shadow-md flex-shrink-0">
+          {person.attributes.photo_url && !hasImageError ? (
+            <img
+              src={person.attributes.photo_url.startsWith('http')
+                ? person.attributes.photo_url
+                : `http://localhost:1337${person.attributes.photo_url}`}
+              alt={person.attributes.fullName}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              onError={() => handleImageError(person.id)}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">
+                {getInitials(person)}
+              </span>
+            </div>
           )}
         </div>
+
+        {/* Name - Fixed height */}
+        <h3 className="text-base font-bold text-center mb-2 min-h-[2.5rem] flex items-center justify-center">
+          {person.attributes.slug ? (
+            <Link
+              href={`/people/faculty/${person.attributes.slug}`}
+              className="text-ocean-teal hover:text-ocean-deep transition-colors hover:underline"
+            >
+              {person.attributes.fullName}
+            </Link>
+          ) : (
+            <span className="text-gray-900">{person.attributes.fullName}</span>
+          )}
+        </h3>
+
+        {/* Title - Fixed minimum height */}
+        <div className="min-h-[3rem] mb-4">
+          {person.attributes.title && (
+            <p className="text-sm text-ocean-teal text-center font-medium">
+              {person.attributes.title}
+            </p>
+          )}
+          {person.attributes.degreeProgram && (
+            <p className="text-sm text-ocean-teal text-center font-medium">
+              {person.attributes.degreeProgram} Student
+            </p>
+          )}
+        </div>
+
+        {/* Contact Info - Consistent spacing */}
+        <div className="space-y-2 mb-4 flex-grow">
+          {person.attributes.email && (
+            <a
+              href={`mailto:${person.attributes.email}`}
+              className="flex items-center gap-2 text-xs text-gray-600 hover:text-ocean-deep transition-colors group/email"
+            >
+              <svg className="w-4 h-4 flex-shrink-0 text-gray-400 group-hover/email:text-ocean-teal transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span className="truncate">{person.attributes.email}</span>
+            </a>
+          )}
+          {person.attributes.office && (
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <svg className="w-4 h-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span className="truncate">{person.attributes.office}</span>
+            </div>
+          )}
+          {person.attributes.phone && (
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <svg className="w-4 h-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <span className="truncate">{person.attributes.phone}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Social Links - Always render with fixed height */}
+        <div className={`flex items-center justify-center gap-3 py-4 border-t border-gray-200 min-h-[4rem] ${!hasSocialLinks ? 'opacity-0' : ''}`}>
+          {person.attributes.labWebsite ? (
+            <a
+              href={person.attributes.labWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/link flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 hover:bg-ocean-teal text-gray-500 hover:text-white transition-all duration-200 hover:scale-110 hover:shadow-md"
+              aria-label={`${person.attributes.fullName}'s lab website`}
+              title="Lab Website"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+            </a>
+          ) : <div className="w-10 h-10"></div>}
+
+          {person.attributes.googleScholar ? (
+            <a
+              href={person.attributes.googleScholar}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/link flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 hover:bg-blue-600 text-gray-500 hover:text-white transition-all duration-200 hover:scale-110 hover:shadow-md"
+              aria-label={`${person.attributes.fullName}'s Google Scholar profile`}
+              title="Google Scholar"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 512 512">
+                <path d="M390.9 298.5c0 0 0 .1 .1 .1c9.2 19.4 14.4 41.1 14.4 64C405.3 445.1 338.5 512 256 512s-149.3-66.9-149.3-149.3c0-22.9 5.2-44.6 14.4-64h0c1.7-3.6 3.6-7.2 5.6-10.7c4.4-7.6 9.4-14.7 15-21.3c27.4-32.6 68.5-53.3 114.4-53.3c33.6 0 64.6 11.1 89.6 29.9c9.1 6.9 17.4 14.7 24.8 23.5c5.6 6.6 10.6 13.8 15 21.3c2 3.4 3.8 7 5.5 10.5zm26.4-18.8c-30.1-58.4-91-98.4-161.3-98.4s-131.2 40-161.3 98.4L0 202.7 256 0 512 202.7l-94.7 77.1z"/>
+              </svg>
+            </a>
+          ) : <div className="w-10 h-10"></div>}
+
+          {person.attributes.orcid ? (
+            <a
+              href={`https://orcid.org/${person.attributes.orcid}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/link flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 hover:bg-[#A6CE39] text-gray-500 hover:text-white transition-all duration-200 hover:scale-110 hover:shadow-md"
+              aria-label={`${person.attributes.fullName}'s ORCID profile`}
+              title="ORCID iD"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z" fill="currentColor"/>
+                <g>
+                  <path d="M86.3,186.2H70.9V79.1h15.4v48.4V186.2z" fill="white"/>
+                  <path d="M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5   c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z" fill="white"/>
+                  <path d="M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1   C84.2,46.7,88.7,51.3,88.7,56.8z" fill="white"/>
+                </g>
+              </svg>
+            </a>
+          ) : <div className="w-10 h-10"></div>}
+        </div>
+
+        {/* View Profile Button - Always at bottom */}
+        {person.attributes.slug && (
+          <Link
+            href={`/people/faculty/${person.attributes.slug}`}
+            className="block w-full text-center px-4 py-2.5 bg-ocean-teal hover:bg-ocean-blue text-white text-sm font-medium rounded-lg transition-colors shadow-sm hover:shadow-md mt-2"
+          >
+            View Full Profile
+          </Link>
+        )}
       </article>
     )
   }
@@ -639,8 +660,8 @@ export default function PeoplePage() {
                     </div>
                   </div>
                 ) : (
-                  // Directory View - List format (phone book style)
-                  <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                  // Directory View - Beautiful card grid layout
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredAndSortedPeople.map((person) => renderPersonCard(person))}
                   </div>
                 )
