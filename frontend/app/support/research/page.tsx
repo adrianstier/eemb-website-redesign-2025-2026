@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowLeftIcon, WrenchScrewdriverIcon, BeakerIcon, HomeModernIcon, MicroscopeIcon, MapIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, WrenchScrewdriverIcon, BeakerIcon, HomeModernIcon, CameraIcon, MapIcon } from '@heroicons/react/24/outline'
 
 export default function ResearchServicesPage() {
   const facilities = [
@@ -70,7 +70,7 @@ export default function ResearchServicesPage() {
     },
     {
       name: 'NRI/MCDB Microscopy Facility',
-      icon: MicroscopeIcon,
+      icon: CameraIcon,
       description: 'Advanced imaging and microscopy services for biological research.',
       services: [
         'Confocal microscopy',
