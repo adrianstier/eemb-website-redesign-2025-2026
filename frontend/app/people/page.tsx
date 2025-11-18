@@ -141,59 +141,60 @@ export default function PeoplePage() {
       })
     }
 
-    // Sort
-    console.log('Sorting with option:', sortOption, 'People count:', people.length)
+    // Sort - create a new array to avoid mutation issues
+    const sortedPeople = [...people] // Create a copy to avoid mutating the original
+
     switch (sortOption) {
       case 'name-asc':
-        people.sort((a, b) =>
+        sortedPeople.sort((a, b) =>
           a.attributes.lastName.localeCompare(b.attributes.lastName)
         )
         break
       case 'name-desc':
-        people.sort((a, b) =>
+        sortedPeople.sort((a, b) =>
           b.attributes.lastName.localeCompare(a.attributes.lastName)
         )
         break
       case 'title-asc':
-        people.sort((a, b) => {
+        sortedPeople.sort((a, b) => {
           const titleA = a.attributes.title || a.attributes.degreeProgram || ''
           const titleB = b.attributes.title || b.attributes.degreeProgram || ''
           return titleA.localeCompare(titleB)
         })
         break
       case 'title-desc':
-        people.sort((a, b) => {
+        sortedPeople.sort((a, b) => {
           const titleA = a.attributes.title || a.attributes.degreeProgram || ''
           const titleB = b.attributes.title || b.attributes.degreeProgram || ''
           return titleB.localeCompare(titleA)
         })
         break
       case 'email-asc':
-        people.sort((a, b) =>
+        sortedPeople.sort((a, b) =>
           (a.attributes.email || '').localeCompare(b.attributes.email || '')
         )
         break
       case 'email-desc':
-        people.sort((a, b) =>
+        sortedPeople.sort((a, b) =>
           (b.attributes.email || '').localeCompare(a.attributes.email || '')
         )
         break
       case 'office-asc':
-        people.sort((a, b) =>
+        sortedPeople.sort((a, b) =>
           (a.attributes.office || '').localeCompare(b.attributes.office || '')
         )
         break
       case 'office-desc':
-        people.sort((a, b) =>
+        sortedPeople.sort((a, b) =>
           (b.attributes.office || '').localeCompare(a.attributes.office || '')
         )
         break
       case 'recent':
-        people.sort((a, b) => b.id - a.id)
+        sortedPeople.sort((a, b) => b.id - a.id)
         break
     }
 
-    return people
+    return sortedPeople
   }, [searchTerm, sortOption, faculty, staff, students, activeCategory])
 
   const handleImageError = (personId: number) => {
@@ -207,12 +208,9 @@ export default function PeoplePage() {
   const handleColumnSort = (column: 'name' | 'title' | 'email' | 'office') => {
     // Toggle between ascending and descending
     const currentSort = sortOption
-    console.log('Current sort:', currentSort, 'Column clicked:', column)
     if (currentSort === `${column}-asc`) {
-      console.log('Setting to desc:', `${column}-desc`)
       setSortOption(`${column}-desc` as SortOption)
     } else {
-      console.log('Setting to asc:', `${column}-asc`)
       setSortOption(`${column}-asc` as SortOption)
     }
   }
@@ -640,7 +638,7 @@ export default function PeoplePage() {
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                           {filteredAndSortedPeople.map((person, index) => (
-                            <tr key={person.id} className={`hover:bg-ocean-light hover:bg-opacity-10 transition ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                            <tr key={`${person.id}-${person.attributes.email || index}`} className={`hover:bg-ocean-light hover:bg-opacity-10 transition ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                               <td className="px-4 py-3">
                                 <div className="flex items-center gap-3">
                                   {person.attributes.photo_url ? (
