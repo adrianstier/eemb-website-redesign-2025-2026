@@ -600,28 +600,36 @@ export default function PeoplePage() {
                               onClick={() => handleColumnSort('name')}
                               title="Click to sort by name"
                             >
-                              Name{getSortIcon('name')}
+                              <span className="flex items-center">
+                                Name{getSortIcon('name')}
+                              </span>
                             </th>
                             <th
                               className="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
                               onClick={() => handleColumnSort('title')}
                               title="Click to sort by title/role"
                             >
-                              Title/Role{getSortIcon('title')}
+                              <span className="flex items-center">
+                                Title/Role{getSortIcon('title')}
+                              </span>
                             </th>
                             <th
                               className="px-4 py-3 text-left text-sm font-semibold hidden md:table-cell cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
                               onClick={() => handleColumnSort('email')}
                               title="Click to sort by email"
                             >
-                              Email{getSortIcon('email')}
+                              <span className="flex items-center">
+                                Email{getSortIcon('email')}
+                              </span>
                             </th>
                             <th
                               className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell cursor-pointer hover:bg-ocean-deep/20 transition-colors select-none"
                               onClick={() => handleColumnSort('office')}
                               title="Click to sort by office"
                             >
-                              Office{getSortIcon('office')}
+                              <span className="flex items-center">
+                                Office{getSortIcon('office')}
+                              </span>
                             </th>
                             <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Phone</th>
                           </tr>
