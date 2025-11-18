@@ -289,6 +289,29 @@ export default function PeoplePage() {
           )}
         </div>
 
+        {/* Short Bio or Research Summary */}
+        {person.attributes.shortBio && (
+          <div className="mb-4">
+            <p className="text-xs text-gray-600 line-clamp-3">
+              {person.attributes.shortBio}
+            </p>
+          </div>
+        )}
+
+        {/* Research Interests Tags */}
+        {person.attributes.researchInterests && person.attributes.researchInterests.length > 0 && (
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-gray-700 mb-2">Research Interests:</p>
+            <div className="flex flex-wrap gap-1.5">
+              {person.attributes.researchInterests.slice(0, 5).map((interest, idx) => (
+                <span key={idx} className="text-xs bg-ocean-light/20 text-ocean-deep px-2 py-1 rounded-md border border-ocean-light/30">
+                  {interest}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Contact Info - Consistent spacing */}
         <div className="space-y-2 mb-4 flex-grow">
           {person.attributes.email && (
