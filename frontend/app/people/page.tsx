@@ -142,6 +142,7 @@ export default function PeoplePage() {
     }
 
     // Sort
+    console.log('Sorting with option:', sortOption, 'People count:', people.length)
     switch (sortOption) {
       case 'name-asc':
         people.sort((a, b) =>
@@ -206,9 +207,12 @@ export default function PeoplePage() {
   const handleColumnSort = (column: 'name' | 'title' | 'email' | 'office') => {
     // Toggle between ascending and descending
     const currentSort = sortOption
+    console.log('Current sort:', currentSort, 'Column clicked:', column)
     if (currentSort === `${column}-asc`) {
+      console.log('Setting to desc:', `${column}-desc`)
       setSortOption(`${column}-desc` as SortOption)
     } else {
+      console.log('Setting to asc:', `${column}-asc`)
       setSortOption(`${column}-asc` as SortOption)
     }
   }
