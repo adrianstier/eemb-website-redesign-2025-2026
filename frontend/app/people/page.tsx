@@ -208,17 +208,8 @@ export default function PeoplePage() {
         </div>
 
         {/* Name - Fixed height */}
-        <h3 className="text-base font-bold text-center mb-2 min-h-[2.5rem] flex items-center justify-center">
-          {person.attributes.slug ? (
-            <Link
-              href={`/people/faculty/${person.attributes.slug}`}
-              className="text-ocean-teal hover:text-ocean-deep transition-colors hover:underline"
-            >
-              {person.attributes.fullName}
-            </Link>
-          ) : (
-            <span className="text-gray-900">{person.attributes.fullName}</span>
-          )}
+        <h3 className="text-base font-bold text-gray-900 text-center mb-2 min-h-[2.5rem] flex items-center justify-center">
+          {person.attributes.fullName}
         </h3>
 
         {/* Title - Fixed minimum height */}
@@ -548,8 +539,6 @@ export default function PeoplePage() {
                             <th className="px-4 py-3 text-left text-sm font-semibold hidden md:table-cell">Email</th>
                             <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Office</th>
                             <th className="px-4 py-3 text-left text-sm font-semibold hidden lg:table-cell">Phone</th>
-                            <th className="px-4 py-3 text-center text-sm font-semibold hidden xl:table-cell">Links</th>
-                            <th className="px-4 py-3 text-center text-sm font-semibold">Profile</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
@@ -573,7 +562,16 @@ export default function PeoplePage() {
                                       </span>
                                     </div>
                                   )}
-                                  <span className="font-medium text-gray-900">{person.attributes.fullName}</span>
+                                  {person.attributes.slug ? (
+                                    <Link
+                                      href={`/people/faculty/${person.attributes.slug}`}
+                                      className="font-medium text-ocean-teal hover:text-ocean-deep hover:underline"
+                                    >
+                                      {person.attributes.fullName}
+                                    </Link>
+                                  ) : (
+                                    <span className="font-medium text-gray-900">{person.attributes.fullName}</span>
+                                  )}
                                 </div>
                               </td>
                               <td className="px-4 py-3 text-sm text-gray-700">
@@ -591,67 +589,6 @@ export default function PeoplePage() {
                               </td>
                               <td className="px-4 py-3 text-sm text-gray-600 hidden lg:table-cell">
                                 {person.attributes.phone || '—'}
-                              </td>
-                              <td className="px-4 py-3 text-center hidden xl:table-cell">
-                                <div className="flex items-center justify-center gap-2">
-                                  {person.attributes.labWebsite && (
-                                    <a
-                                      href={person.attributes.labWebsite}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-gray-400 hover:text-ocean-teal transition-colors"
-                                      aria-label={`${person.attributes.fullName}'s lab website`}
-                                      title="Lab Website"
-                                    >
-                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                      </svg>
-                                    </a>
-                                  )}
-                                  {person.attributes.googleScholar && (
-                                    <a
-                                      href={person.attributes.googleScholar}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-gray-400 hover:text-ocean-teal transition-colors"
-                                      aria-label={`${person.attributes.fullName}'s Google Scholar profile`}
-                                      title="Google Scholar"
-                                    >
-                                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 0L9 6h6l-3-6zm0 7.5L9.5 13h5L12 7.5zm5.2 5.5H6.8l2.6 4.5h5.2l2.6-4.5zm-1.7 6.5H8.5L12 24l3.5-4.5z"/>
-                                      </svg>
-                                    </a>
-                                  )}
-                                  {person.attributes.orcid && (
-                                    <a
-                                      href={`https://orcid.org/${person.attributes.orcid}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-gray-400 hover:text-ocean-teal transition-colors"
-                                      aria-label={`${person.attributes.fullName}'s ORCID profile`}
-                                      title="ORCID"
-                                    >
-                                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c2.359 0 3.925-1.531 3.925-3.722 0-2.219-1.594-3.722-3.925-3.722h-2.297z"/>
-                                      </svg>
-                                    </a>
-                                  )}
-                                  {!person.attributes.labWebsite && !person.attributes.googleScholar && !person.attributes.orcid && (
-                                    <span className="text-gray-400 text-sm">—</span>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 text-center">
-                                {person.attributes.slug ? (
-                                  <Link
-                                    href={`/people/faculty/${person.attributes.slug}`}
-                                    className="inline-flex items-center justify-center px-3 py-1.5 bg-ocean-teal hover:bg-ocean-blue text-white text-sm font-medium rounded transition"
-                                  >
-                                    View
-                                  </Link>
-                                ) : (
-                                  <span className="text-gray-400 text-sm">—</span>
-                                )}
                               </td>
                             </tr>
                           ))}
