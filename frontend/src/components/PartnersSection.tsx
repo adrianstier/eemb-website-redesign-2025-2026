@@ -43,33 +43,33 @@ export default function PartnersSection() {
   ]
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-16 md:py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
+        <div className="text-center mb-12">
+          <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
             <p className="text-sm font-semibold text-ocean-teal uppercase tracking-wide">Collaborations</p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-ocean-blue mb-4 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3 leading-tight">
             Research Partnerships
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base text-gray-600 max-w-2xl mx-auto">
             We work with diverse partners to advance scientific discovery and environmental stewardship.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {partnerCategories.map((partner, index) => (
             <div
               key={index}
-              className="bg-gradient-to-br from-ocean-50 to-white rounded-xl p-6 border border-ocean-100 hover:shadow-lg transition-all hover:-translate-y-1 transform"
+              className="bg-gradient-to-br from-ocean-50 to-white rounded-lg p-5 border border-gray-200 hover:shadow-md transition-shadow duration-150"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-ocean-teal bg-opacity-10 rounded-lg text-ocean-teal mb-4">
+              <div className="inline-flex items-center justify-center w-10 h-10 bg-ocean-teal bg-opacity-10 rounded-lg text-ocean-teal mb-3">
                 {partner.icon}
               </div>
-              <h3 className="text-xl font-bold text-ocean-blue mb-3">
+              <h3 className="text-lg font-bold text-ocean-blue mb-2">
                 {partner.category}
               </h3>
-              <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+              <p className="text-gray-600 text-sm mb-3 leading-relaxed">
                 {partner.description}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -86,23 +86,23 @@ export default function PartnersSection() {
           ))}
         </div>
 
-        <div className="mt-16 bg-gradient-to-r from-ocean-blue to-ocean-teal rounded-2xl p-12 text-center text-white shadow-xl">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="mt-12 bg-gradient-to-r from-ocean-blue to-ocean-teal rounded-xl p-8 md:p-10 text-center text-white shadow-lg">
+          <h3 className="text-2xl md:text-3xl font-bold mb-3">
             Collaborate with EEMB
           </h3>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+          <p className="text-base md:text-lg mb-6 max-w-2xl mx-auto opacity-90">
             Interested in research partnerships, grant opportunities, or faculty expertise? We welcome collaborations that advance biological science.
           </p>
-          <div className="flex justify-center gap-4 flex-wrap">
+          <div className="flex justify-center gap-3 flex-wrap">
             <a
               href="/contact"
-              className="inline-block bg-white text-ocean-blue px-8 py-4 rounded-lg font-bold text-lg hover:bg-opacity-90 transition shadow-lg"
+              className="inline-block bg-white text-ocean-blue px-8 py-3 rounded-lg font-semibold text-base hover:bg-opacity-90 transition-opacity duration-150 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-blue"
             >
               Contact Us
             </a>
             <a
               href="/research"
-              className="inline-block bg-white bg-opacity-10 backdrop-blur border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-opacity-20 transition"
+              className="inline-block bg-white bg-opacity-10 backdrop-blur border border-white text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-opacity-20 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-blue"
             >
               View Research Areas
             </a>

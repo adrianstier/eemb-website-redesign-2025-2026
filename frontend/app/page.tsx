@@ -1,7 +1,10 @@
 import HeroSection from '@/components/HeroSection'
 import WhoWeAre from '@/components/WhoWeAre'
 import ImpactMetrics from '@/components/ImpactMetrics'
+import FeaturedNews from '@/components/FeaturedNews'
+import UpcomingEvents from '@/components/UpcomingEvents'
 import ResearchThemes from '@/components/ResearchThemes'
+import FeaturedFaculty from '@/components/FeaturedFaculty'
 import PartnersSection from '@/components/PartnersSection'
 
 export default function HomePage() {
@@ -10,11 +13,14 @@ export default function HomePage() {
       <HeroSection />
       <WhoWeAre />
       <ImpactMetrics />
+      <FeaturedNews />
+      <UpcomingEvents />
       <ResearchThemes />
+      <FeaturedFaculty />
       <PartnersSection />
 
       {/* Call-to-action section */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
+      <section className="relative py-16 md:py-20 overflow-hidden">
         {/* Background with pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal"></div>
         <div className="absolute inset-0 opacity-10">
@@ -31,24 +37,24 @@ export default function HomePage() {
 
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 leading-[1.1] text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight text-white">
               Ready to Join EEMB?
             </h2>
-            <p className="text-xl md:text-2xl mb-14 text-white/90 leading-relaxed max-w-4xl mx-auto">
+            <p className="text-base md:text-lg mb-10 text-white/90 leading-relaxed max-w-3xl mx-auto">
               Whether you're a prospective graduate student, potential collaborator, or member of the media, we welcome you to explore opportunities in our department.
             </p>
 
             {/* Three-column CTA cards */}
-            <div className="grid md:grid-cols-3 gap-6 mb-14">
-              <div className="group bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div className="w-14 h-14 bg-ocean-coral rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <div className="grid md:grid-cols-3 gap-5 mb-10">
+              <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-150">
+                <div className="w-12 h-12 bg-ocean-coral rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Graduate Students</h3>
-                <p className="text-white/80 text-sm mb-5 leading-relaxed">Apply to our PhD or MS programs</p>
-                <a href="/academics" className="inline-flex items-center gap-1 text-ocean-coral font-semibold hover:gap-2 transition-all duration-300">
+                <h3 className="text-lg font-bold text-white mb-2">Graduate Students</h3>
+                <p className="text-white/80 text-sm mb-4 leading-relaxed">Apply to our PhD or MS programs</p>
+                <a href="/academics" className="inline-flex items-center gap-1 text-ocean-coral font-semibold hover:gap-2 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-coral focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep rounded">
                   Learn More
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
@@ -56,15 +62,15 @@ export default function HomePage() {
                 </a>
               </div>
 
-              <div className="group bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div className="w-14 h-14 bg-ocean-sunset rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-150">
+                <div className="w-12 h-12 bg-ocean-sunset rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Researchers</h3>
-                <p className="text-white/80 text-sm mb-5 leading-relaxed">Explore collaborations & expertise</p>
-                <a href="/people" className="inline-flex items-center gap-1 text-ocean-coral font-semibold hover:gap-2 transition-all duration-300">
+                <h3 className="text-lg font-bold text-white mb-2">Researchers</h3>
+                <p className="text-white/80 text-sm mb-4 leading-relaxed">Explore collaborations & expertise</p>
+                <a href="/people" className="inline-flex items-center gap-1 text-ocean-coral font-semibold hover:gap-2 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-coral focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep rounded">
                   Meet Faculty
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
@@ -72,15 +78,15 @@ export default function HomePage() {
                 </a>
               </div>
 
-              <div className="group bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div className="w-14 h-14 bg-ocean-teal rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-150">
+                <div className="w-12 h-12 bg-ocean-teal rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd"/>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Media & Press</h3>
-                <p className="text-white/80 text-sm mb-5 leading-relaxed">Connect with our experts</p>
-                <a href="/contact" className="inline-flex items-center gap-1 text-ocean-coral font-semibold hover:gap-2 transition-all duration-300">
+                <h3 className="text-lg font-bold text-white mb-2">Media & Press</h3>
+                <p className="text-white/80 text-sm mb-4 leading-relaxed">Connect with our experts</p>
+                <a href="/contact" className="inline-flex items-center gap-1 text-ocean-coral font-semibold hover:gap-2 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-coral focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep rounded">
                   Get in Touch
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
@@ -89,22 +95,18 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex justify-center gap-5 flex-wrap">
+            <div className="flex justify-center gap-3 flex-wrap">
               <a
                 href="/academics"
-                className="group bg-ocean-coral text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-ocean-sunset transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 transform"
+                className="bg-ocean-coral text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-ocean-sunset transition-colors duration-150 shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep"
               >
-                <span className="inline-block group-hover:scale-105 transition-transform duration-300">
-                  Apply Now
-                </span>
+                Apply Now
               </a>
               <a
                 href="/research"
-                className="group bg-white text-ocean-blue px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 transform"
+                className="bg-white text-ocean-blue px-8 py-3 rounded-lg font-semibold text-base hover:bg-gray-50 transition-colors duration-150 shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep"
               >
-                <span className="inline-block group-hover:scale-105 transition-transform duration-300">
-                  Explore Research
-                </span>
+                Explore Research
               </a>
             </div>
           </div>

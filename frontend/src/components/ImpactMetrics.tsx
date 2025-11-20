@@ -43,33 +43,33 @@ export default function ImpactMetrics() {
   ]
 
   return (
-    <section className="py-20 bg-ocean-50">
+    <section className="py-16 md:py-20 bg-ocean-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
+        <div className="text-center mb-12">
+          <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
             <p className="text-sm font-semibold text-ocean-teal uppercase tracking-wide">Our Impact</p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-ocean-blue mb-4 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3 leading-tight">
             Excellence by the Numbers
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base text-gray-600 max-w-2xl mx-auto">
             Our department brings together world-class researchers, talented students, and extensive resources.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {metrics.map((metric, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 transform border border-ocean-100"
+              className="bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-150 border border-gray-200"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-xl text-white mb-4">
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-lg text-white mb-4">
                 {metric.icon}
               </div>
-              <div className="text-5xl font-bold bg-gradient-to-r from-ocean-teal to-ocean-blue bg-clip-text text-transparent mb-3">
+              <div className="text-4xl font-bold bg-gradient-to-r from-ocean-teal to-ocean-blue bg-clip-text text-transparent mb-2">
                 {metric.number}
               </div>
-              <h3 className="text-xl font-bold text-ocean-blue mb-2">
+              <h3 className="text-lg font-bold text-ocean-blue mb-2">
                 {metric.label}
               </h3>
               <p className="text-gray-600 text-sm leading-relaxed">

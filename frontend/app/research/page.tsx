@@ -1,6 +1,58 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+
+interface Faculty {
+  id: number
+  attributes: {
+    firstName: string
+    lastName: string
+    fullName: string
+    slug?: string
+    title?: string
+    email: string
+    office?: string
+    shortBio?: string
+    researchInterests?: string[]
+    photo_url?: string
+  }
+}
+
 export default function ResearchPage() {
+  const [faculty, setFaculty] = useState<Faculty[]>([])
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
+
+  useEffect(() => {
+    fetchFaculty()
+  }, [])
+
+  const fetchFaculty = async () => {
+    try {
+      const response = await fetch('http://localhost:1337/api/faculties?pagination[limit]=200')
+      const data = await response.json()
+
+      // Filter for active faculty only
+      const activeFaculty = data.data.filter((f: Faculty) => {
+        const title = f.attributes.title
+        return title &&  !['Research Professor', 'Postdoctoral Researcher', 'Professor Emeritus'].includes(title)
+      })
+
+      setFaculty(activeFaculty)
+    } catch (err) {
+      console.error('Error fetching faculty:', err)
+    }
+  }
+
+  const handleImageError = (id: number) => {
+    setImageErrors(prev => new Set(prev).add(id))
+  }
+
+  const getInitials = (person: Faculty) => {
+    const first = person.attributes.firstName?.[0] || ''
+    const last = person.attributes.lastName?.[0] || ''
+    return (first + last).toUpperCase()
+  }
   const researchAreas = [
     {
       id: 'ecology',
@@ -46,7 +98,7 @@ export default function ResearchPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden">
+      <section className="relative py-16 md:py-20 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal"></div>
         <div className="absolute inset-0 opacity-10">
@@ -57,13 +109,13 @@ export default function ResearchPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center text-white">
-            <div className="inline-block mb-6 px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full border border-white border-opacity-30">
+            <div className="inline-block mb-4 px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full border border-white border-opacity-30">
               <p className="text-sm font-semibold tracking-wide uppercase">Research Excellence</p>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold mb-5 leading-tight">
               EEMB Research
             </h1>
-            <p className="text-xl md:text-2xl text-white leading-relaxed">
+            <p className="text-base md:text-lg text-white leading-relaxed">
               EEMB researchers use their scientific understanding to address some of the world's most pressing environmental issues.
             </p>
           </div>
@@ -71,35 +123,35 @@ export default function ResearchPage() {
       </section>
 
       {/* Research Areas */}
-      <section className="py-24 bg-gradient-to-b from-white to-ocean-50">
+      <section className="py-16 md:py-20 bg-gradient-to-b from-white to-ocean-50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="inline-block mb-4 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
+            <div className="text-center mb-12">
+              <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
                 <p className="text-sm font-semibold text-ocean-teal uppercase tracking-wide">Research Focus</p>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-ocean-blue mb-4">Core Research Areas</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3">Core Research Areas</h2>
+              <p className="text-base text-gray-600 max-w-2xl mx-auto">
                 Our research spans ecology, evolution, and marine biology—integrating across scales from molecules to ecosystems.
               </p>
             </div>
 
-            <div className="space-y-16">
+            <div className="space-y-12">
               {researchAreas.map((area, index) => (
                 <div
                   key={area.id}
-                  className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 items-center`}
+                  className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-6 items-center`}
                 >
                   {/* Image */}
                   <div className="w-full lg:w-1/2">
-                    <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all group">
+                    <div className="relative rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-150 border border-gray-200">
                       <img
                         src={area.image}
                         alt={area.title}
-                        className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-64 object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/50 to-transparent"></div>
-                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white text-xs">
+                      <div className="absolute bottom-0 left-0 right-0 p-3 text-white text-xs">
                         {area.credit}
                       </div>
                     </div>
@@ -107,19 +159,19 @@ export default function ResearchPage() {
 
                   {/* Content */}
                   <div className="w-full lg:w-1/2">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-xl text-white mb-6">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-lg text-white mb-4">
                       {area.icon}
                     </div>
-                    <h3 className="text-3xl font-bold text-ocean-blue mb-4">{area.title}</h3>
-                    <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                    <h3 className="text-2xl font-bold text-ocean-blue mb-3">{area.title}</h3>
+                    <p className="text-base text-gray-700 mb-4 leading-relaxed">
                       {area.description}
                     </p>
-                    <p className="text-gray-600 leading-relaxed mb-6">
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
                       {area.fullDescription}
                     </p>
                     <a
                       href={`/people?filter=${area.id}`}
-                      className="inline-flex items-center gap-2 text-ocean-teal font-semibold hover:gap-3 transition-all"
+                      className="inline-flex items-center gap-2 text-ocean-teal font-semibold hover:gap-3 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-teal focus-visible:ring-offset-2 rounded"
                     >
                       View {area.title} Faculty
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,17 +187,17 @@ export default function ResearchPage() {
       </section>
 
       {/* Research Impact */}
-      <section className="py-24 bg-ocean-50">
+      <section className="py-16 md:py-20 bg-ocean-50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="inline-block mb-4 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
+            <div className="text-center mb-12">
+              <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
                 <p className="text-sm font-semibold text-ocean-teal uppercase tracking-wide">Research Impact</p>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-ocean-blue mb-4">By the Numbers</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3">By the Numbers</h2>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
               {[
                 { number: '$25M+', label: 'Annual Funding' },
                 { number: '65+', label: 'Faculty' },
@@ -154,9 +206,9 @@ export default function ResearchPage() {
               ].map((stat, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 transform border border-ocean-100"
+                  className="bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-150 border border-gray-200"
                 >
-                  <div className="text-4xl font-bold bg-gradient-to-r from-ocean-teal to-ocean-blue bg-clip-text text-transparent mb-2">
+                  <div className="text-3xl font-bold bg-gradient-to-r from-ocean-teal to-ocean-blue bg-clip-text text-transparent mb-2">
                     {stat.number}
                   </div>
                   <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
@@ -168,26 +220,26 @@ export default function ResearchPage() {
       </section>
 
       {/* Research Facilities */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="inline-block mb-4 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
+            <div className="text-center mb-12">
+              <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
                 <p className="text-sm font-semibold text-ocean-teal uppercase tracking-wide">Our Facilities</p>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-ocean-blue mb-4">Research Centers & Reserves</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3">Research Centers & Reserves</h2>
+              <p className="text-base text-gray-600 max-w-2xl mx-auto">
                 World-class facilities supporting cutting-edge research in ecology, evolution, and marine biology.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-5">
               {[
                 {
                   name: 'Marine Science Institute',
                   description: 'Dedicated research facility for marine ecology, oceanography, and coastal science.',
                   icon: (
-                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clipRule="evenodd"/>
                     </svg>
                   ),
@@ -196,7 +248,7 @@ export default function ResearchPage() {
                   name: 'Cheadle Center for Biodiversity',
                   description: 'Focus on ecological restoration and conservation of California\'s natural habitats.',
                   icon: (
-                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd"/>
                     </svg>
                   ),
@@ -205,7 +257,7 @@ export default function ResearchPage() {
                   name: 'Coal Oil Point Reserve',
                   description: 'Natural reserve supporting research on coastal ecology and conservation.',
                   icon: (
-                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                     </svg>
                   ),
@@ -214,7 +266,7 @@ export default function ResearchPage() {
                   name: 'Sedgwick Reserve',
                   description: 'Field research station for terrestrial ecology and biodiversity studies.',
                   icon: (
-                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
                     </svg>
                   ),
@@ -222,15 +274,15 @@ export default function ResearchPage() {
               ].map((facility, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 transform border border-ocean-100"
+                  className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-150 border border-gray-200"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-xl text-white flex items-center justify-center">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-lg text-white flex items-center justify-center">
                       {facility.icon}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-ocean-blue mb-2">{facility.name}</h3>
-                      <p className="text-gray-600 leading-relaxed">{facility.description}</p>
+                      <h3 className="text-lg font-bold text-ocean-blue mb-2">{facility.name}</h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{facility.description}</p>
                     </div>
                   </div>
                 </div>
@@ -240,32 +292,164 @@ export default function ResearchPage() {
         </div>
       </section>
 
+      {/* Faculty Research */}
+      <section className="py-16 md:py-20 bg-gradient-to-b from-white to-ocean-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal bg-opacity-10 rounded-full">
+                <p className="text-sm font-semibold text-ocean-teal uppercase tracking-wide">Our Researchers</p>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3">Faculty Research</h2>
+              <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                Explore the diverse research interests and expertise of our faculty members.
+              </p>
+            </div>
+
+            <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {faculty.map((person) => {
+                const hasImageError = imageErrors.has(person.id)
+                return (
+                  <article
+                    key={person.id}
+                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-150 overflow-hidden border border-gray-200"
+                  >
+                    <div className="relative h-40 bg-gradient-to-br from-ocean-light via-ocean-teal to-ocean-mid overflow-hidden">
+                      {person.attributes.photo_url && !hasImageError ? (
+                        <img
+                          src={person.attributes.photo_url.startsWith('http')
+                            ? person.attributes.photo_url
+                            : `http://localhost:1337${person.attributes.photo_url}`}
+                          alt={person.attributes.fullName}
+                          className="w-full h-full object-cover opacity-30"
+                          loading="lazy"
+                          onError={() => handleImageError(person.id)}
+                        />
+                      ) : null}
+                      <div className="absolute inset-0 flex items-end p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white shadow-lg flex-shrink-0">
+                            {person.attributes.photo_url && !hasImageError ? (
+                              <img
+                                src={person.attributes.photo_url.startsWith('http')
+                                  ? person.attributes.photo_url
+                                  : `http://localhost:1337${person.attributes.photo_url}`}
+                                alt={person.attributes.fullName}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                                onError={() => handleImageError(person.id)}
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-ocean-teal to-ocean-blue flex items-center justify-center">
+                                <span className="text-white text-lg font-bold">
+                                  {getInitials(person)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <h3 className="text-base font-bold text-white drop-shadow-lg">
+                              {person.attributes.fullName}
+                            </h3>
+                            <p className="text-xs text-white/90 drop-shadow-md">
+                              {person.attributes.title}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-5">
+                      {person.attributes.shortBio && (
+                        <p className="text-sm text-gray-700 mb-3 line-clamp-2 leading-relaxed">
+                          {person.attributes.shortBio}
+                        </p>
+                      )}
+
+                      {person.attributes.researchInterests && person.attributes.researchInterests.length > 0 && (
+                        <div className="mb-3">
+                          <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Research Focus</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {person.attributes.researchInterests.slice(0, 3).map((interest, index) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-ocean-light/10 border border-ocean-teal/20 text-ocean-teal text-xs rounded-full font-medium"
+                              >
+                                {interest}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap gap-2 text-xs text-gray-600 mb-3 pt-3 border-t border-gray-200">
+                        {person.attributes.office && (
+                          <div className="flex items-center gap-1">
+                            <svg className="w-3 h-3 text-ocean-teal flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span className="truncate">{person.attributes.office}</span>
+                          </div>
+                        )}
+                        {person.attributes.email && (
+                          <div className="flex items-center gap-1 min-w-0">
+                            <svg className="w-3 h-3 text-ocean-teal flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <a href={`mailto:${person.attributes.email}`} className="hover:text-ocean-deep hover:underline truncate">
+                              {person.attributes.email}
+                            </a>
+                          </div>
+                        )}
+                      </div>
+
+                      {person.attributes.slug && (
+                        <Link
+                          href={`/people/faculty/${person.attributes.slug}`}
+                          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-ocean-teal hover:bg-ocean-blue text-white font-semibold text-sm rounded-lg transition-colors duration-150 shadow-sm w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-teal focus-visible:ring-offset-2"
+                        >
+                          <span>Explore Research</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      )}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="relative py-32 overflow-hidden">
+      <section className="relative py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-ocean-blue to-ocean-teal"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center text-white">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Join Our Research Community</h2>
-            <p className="text-xl text-white text-opacity-90 mb-10 leading-relaxed">
+            <h2 className="text-3xl md:text-4xl font-bold mb-5">Join Our Research Community</h2>
+            <p className="text-base md:text-lg text-white text-opacity-90 mb-8 leading-relaxed">
               Whether you're interested in graduate programs, research collaborations, or learning more about our work, we invite you to connect with us.
             </p>
-            <div className="flex justify-center gap-4 flex-wrap">
+            <div className="flex justify-center gap-3 flex-wrap">
               <a
                 href="/academics"
-                className="bg-ocean-coral text-white px-10 py-4 rounded-lg font-bold text-lg hover:bg-ocean-sunset transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform"
+                className="bg-ocean-coral text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-ocean-sunset transition-colors duration-150 shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-teal"
               >
                 Graduate Programs
               </a>
               <a
                 href="/people"
-                className="bg-white text-ocean-blue px-10 py-4 rounded-lg font-bold text-lg hover:bg-opacity-90 transition-all shadow-lg hover:-translate-y-0.5 transform"
+                className="bg-white text-ocean-blue px-8 py-3 rounded-lg font-semibold text-base hover:bg-opacity-90 transition-opacity duration-150 shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-teal"
               >
                 Meet Our Faculty
               </a>
               <a
                 href="/contact"
-                className="bg-white bg-opacity-10 backdrop-blur border-2 border-white text-white px-10 py-4 rounded-lg font-bold text-lg hover:bg-opacity-20 transition-all hover:-translate-y-0.5 transform"
+                className="bg-white bg-opacity-10 backdrop-blur border border-white text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-opacity-20 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-teal"
               >
                 Contact Us
               </a>

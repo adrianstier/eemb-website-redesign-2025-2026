@@ -60,12 +60,17 @@ export default function UpcomingEvents() {
 
   if (loading) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 md:py-20 bg-ocean-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Upcoming Events</h2>
-          <div className="animate-pulse space-y-4">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-3 px-3 py-1 bg-ocean-sunset bg-opacity-10 rounded-full">
+              <p className="text-sm font-semibold text-ocean-sunset uppercase tracking-wide">Events</p>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3 leading-tight">Upcoming Events</h2>
+          </div>
+          <div className="max-w-4xl mx-auto animate-pulse space-y-4">
             {[1, 2].map((i) => (
-              <div key={i} className="bg-white p-6 rounded-lg h-24"></div>
+              <div key={i} className="bg-white p-6 rounded-lg h-28"></div>
             ))}
           </div>
         </div>
@@ -74,21 +79,29 @@ export default function UpcomingEvents() {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 md:py-20 bg-ocean-50">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Upcoming Events</h2>
-        <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-block mb-3 px-3 py-1 bg-ocean-sunset bg-opacity-10 rounded-full">
+            <p className="text-sm font-semibold text-ocean-sunset uppercase tracking-wide">Events</p>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-3 leading-tight">Upcoming Events</h2>
+          <p className="text-base text-gray-600 max-w-2xl mx-auto">
+            Seminars, symposia, thesis defenses, and other department events.
+          </p>
+        </div>
+        <div className="max-w-4xl mx-auto">
           {events.length > 0 ? (
             <div className="space-y-4">
               {events.map((event) => (
-                <div key={event.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div key={event.id} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-150 border border-gray-200">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-2">
-                        <span className="text-sm bg-ucsb-gold text-ucsb-navy px-3 py-1 rounded-full font-semibold">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-xs bg-ocean-sunset/10 text-ocean-sunset px-3 py-1 rounded-full font-semibold">
                           {event.attributes.eventType || 'Event'}
                         </span>
-                        <time className="text-sm text-gray-500">
+                        <time className="text-xs text-gray-500">
                           {new Date(event.attributes.startDate).toLocaleDateString('en-US', {
                             weekday: 'short',
                             month: 'short',
@@ -98,18 +111,29 @@ export default function UpcomingEvents() {
                           })}
                         </time>
                       </div>
-                      <h3 className="text-xl font-semibold text-ucsb-navy mb-2">
-                        <Link href={`/events/${event.attributes.slug}`} className="hover:text-ucsb-gold transition">
+                      <h3 className="text-lg font-bold text-ocean-blue mb-2">
+                        <Link href={`/events/${event.attributes.slug}`} className="hover:text-ocean-teal transition-colors duration-150">
                           {event.attributes.title}
                         </Link>
                       </h3>
                       {event.attributes.location && (
-                        <p className="text-gray-600">📍 {event.attributes.location}</p>
+                        <p className="text-sm text-gray-600 flex items-center gap-1">
+                          <svg className="w-4 h-4 text-ocean-teal" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                          </svg>
+                          {event.attributes.location}
+                        </p>
                       )}
                     </div>
-                    <div className="mt-4 md:mt-0">
-                      <Link href={`/events/${event.attributes.slug}`} className="text-ucsb-navy font-semibold hover:text-ucsb-gold transition">
-                        Learn More →
+                    <div>
+                      <Link
+                        href={`/events/${event.attributes.slug}`}
+                        className="inline-flex items-center gap-1 text-ocean-teal font-semibold text-sm hover:gap-2 transition-all duration-150"
+                      >
+                        Details
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
                       </Link>
                     </div>
                   </div>
@@ -117,10 +141,12 @@ export default function UpcomingEvents() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-600">No upcoming events scheduled.</p>
+            <div className="text-center py-8 bg-white rounded-lg border border-gray-200">
+              <p className="text-gray-600">No upcoming events scheduled.</p>
+            </div>
           )}
-          <div className="text-center mt-8">
-            <Link href="/events" className="inline-block bg-ucsb-navy text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-900 transition">
+          <div className="text-center mt-10">
+            <Link href="/events" className="inline-block bg-ocean-blue text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-ocean-teal transition-colors duration-150 shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-teal focus-visible:ring-offset-2">
               View All Events
             </Link>
           </div>

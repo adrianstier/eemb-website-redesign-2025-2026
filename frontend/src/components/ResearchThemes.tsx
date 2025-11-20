@@ -27,50 +27,49 @@ export default function ResearchThemes() {
   ]
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-16 md:py-20 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-5xl md:text-6xl font-bold text-ocean-blue mb-6 text-center leading-tight">
+        <h2 className="text-3xl md:text-4xl font-bold text-ocean-blue mb-4 text-center leading-tight">
           Research Areas
         </h2>
-        <p className="text-lg text-gray-600 text-center mb-16 max-w-2xl mx-auto">
+        <p className="text-base text-gray-600 text-center mb-12 max-w-2xl mx-auto">
           Our faculty and students conduct research across the full breadth of ecology, evolution, and marine biology.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {themes.map((theme, index) => (
             <div
               key={index}
-              className="rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1"
+              className="rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-150 border border-gray-200"
             >
               {/* Image background */}
               <div
-                className="relative h-64 bg-cover bg-center"
+                className="relative h-48 bg-cover bg-center"
                 style={{
                   backgroundImage: `linear-gradient(135deg, rgba(10, 31, 46, 0.5) 0%, rgba(31, 163, 202, 0.5) 100%), url("${theme.image}")`,
                 }}
               >
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                  <h3 className="text-3xl font-bold mb-3">
+                <div className="absolute inset-0 flex flex-col justify-end p-5 text-white">
+                  <h3 className="text-2xl font-bold">
                     {theme.title}
                   </h3>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="bg-white p-6">
-                <p className="text-gray-700 leading-relaxed">
+              <div className="bg-white p-5">
+                <p className="text-gray-700 text-sm leading-relaxed">
                   {theme.description}
                 </p>
-                <div className={`h-1 w-12 bg-${theme.color} mt-6`} />
               </div>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-16">
+        <div className="text-center mt-12">
           <a
             href="/research"
-            className="inline-block bg-ocean-blue text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-ocean-teal transition shadow-lg"
+            className="inline-block bg-ocean-blue text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-ocean-teal transition-colors duration-150 shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-teal focus-visible:ring-offset-2"
           >
             View All Research Areas
           </a>
