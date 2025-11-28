@@ -190,11 +190,11 @@ export default function GoodNewsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-24">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Good News</h1>
-            <p className="text-xl md:text-2xl text-white/90">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Good News</h1>
+            <p className="text-lg md:text-xl text-white/90">
               Celebrating the achievements, awards, publications, and milestones of our EEMB community.
             </p>
           </div>
@@ -236,7 +236,7 @@ export default function GoodNewsPage() {
       </section>
 
       {/* Good News Grid */}
-      <section className="py-16">
+      <section className="py-12">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="space-y-6">

@@ -1249,6 +1249,8 @@ export interface ApiFacultyFaculty extends Schema.CollectionType {
         'Professor Emeritus',
         'Distinguished Professor',
         'Research Professor',
+        'Adjunct Professor',
+        'Postdoctoral Researcher',
         'Lecturer',
         'Teaching Professor'
       ]
@@ -1306,6 +1308,10 @@ export interface ApiFacultyFaculty extends Schema.CollectionType {
     photo_url: Attribute.String &
       Attribute.SetMinMaxLength<{
         maxLength: 500;
+      }>;
+    research_areas: Attribute.String &
+      Attribute.SetMinMaxLength<{
+        maxLength: 255;
       }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

@@ -15,6 +15,7 @@ interface Program {
   icon: string
   focusAreas: string[]
   careerOutcomes: string[]
+  link?: string
 }
 
 export default function AcademicsPage() {
@@ -29,52 +30,36 @@ export default function AcademicsPage() {
       fullDescription: 'Our PhD program provides comprehensive training in ecology, evolution, and marine biology through coursework, seminars, and original research. Students work with leading faculty mentors, collaborate across research areas, and develop expertise in specific fields while maintaining broad understanding of the discipline.',
       requirements: [
         'Bachelor\'s degree in biology or related field',
-        'Completion of core courses in ecology, evolution, and marine biology',
-        'Qualifying examination',
+        'Completion of core courses (EEMB 507, 508, 509)',
+        'Written and oral qualifying examinations',
         'Original dissertation research',
-        'Teaching requirement'
+        'Two quarters of TA service'
       ],
       courses: 45,
       duration: '5-6 years',
       icon: '🎓',
       focusAreas: ['Marine Conservation', 'Climate Adaptation', 'Evolutionary Biology', 'Behavioral Ecology'],
-      careerOutcomes: ['Research Scientist', 'University Professor', 'Conservation Manager', 'Environmental Consultant']
+      careerOutcomes: ['Research Scientist', 'University Professor', 'Conservation Manager', 'Environmental Consultant'],
+      link: '/academics/graduate'
     },
     {
-      id: 'ms-marine-biology',
-      title: 'MS in Marine Biology',
-      degree: 'MS',
-      description: 'Master\'s program focused on marine biological research and conservation.',
-      fullDescription: 'The MS in Marine Biology provides advanced education in marine ecology, conservation, and research methods. Students engage in field research, laboratory work, and independent research projects. The program offers both thesis and non-thesis options.',
+      id: 'ma-eemb',
+      title: 'MA in Ecology, Evolution and Marine Biology',
+      degree: 'MA',
+      description: 'Master\'s program with thesis or comprehensive exam options.',
+      fullDescription: 'The MA program offers advanced education with two pathways: Plan I (thesis, 30 units) for research careers, or Plan II (comprehensive exam, 36 units) for professional training. Both options include core coursework and TA experience.',
       requirements: [
         'Bachelor\'s degree in biology or related field',
-        'Completion of marine biology core courses',
-        'Research thesis or comprehensive examination',
-        'Minimum 30 units of graduate coursework'
+        'Completion of core courses (EEMB 507, 508, 509)',
+        'Thesis OR comprehensive examination',
+        'Two quarters of TA service'
       ],
-      courses: 32,
+      courses: 30,
       duration: '2 years',
-      icon: '🌊',
-      focusAreas: ['Marine Conservation', 'Oceanography', 'Coral Reef Ecology', 'Marine Microbiology'],
-      careerOutcomes: ['Marine Biologist', 'Conservation Scientist', 'Environmental Manager', 'Government Researcher']
-    },
-    {
-      id: 'ms-ecology-evolution',
-      title: 'MS in Ecology and Evolution',
-      degree: 'MS',
-      description: 'Master\'s program emphasizing ecological and evolutionary processes.',
-      fullDescription: 'This program emphasizes understanding ecological and evolutionary processes across diverse organisms and environments. Students develop strong quantitative skills, engage in field and laboratory research, and prepare for diverse career paths in science.',
-      requirements: [
-        'Bachelor\'s degree in biology or related field',
-        'Coursework in ecology, evolution, and statistics',
-        'Research thesis or project',
-        'Minimum 30 units of graduate coursework'
-      ],
-      courses: 32,
-      duration: '2 years',
-      icon: '🧬',
-      focusAreas: ['Population Genetics', 'Ecosystem Ecology', 'Conservation Biology', 'Evolutionary Biology'],
-      careerOutcomes: ['Ecologist', 'Conservation Biologist', 'Field Researcher', 'Academic Researcher']
+      icon: '📜',
+      focusAreas: ['Marine Biology', 'Population Genetics', 'Ecosystem Ecology', 'Conservation Biology'],
+      careerOutcomes: ['Research Technician', 'Conservation Scientist', 'Environmental Manager', 'PhD Student'],
+      link: '/academics/graduate'
     },
     {
       id: 'bs-ecology-evolution',
@@ -119,174 +104,201 @@ export default function AcademicsPage() {
     { number: 'EEMB 102', title: 'Evolutionary Biology', level: 'Undergraduate' },
     { number: 'EEMB 103', title: 'Marine Biology', level: 'Undergraduate' },
     { number: 'EEMB 104', title: 'Biodiversity and Systematics', level: 'Undergraduate' },
-    { number: 'EEMB 200A', title: 'Advanced Ecology Seminar', level: 'Graduate' },
-    { number: 'EEMB 200B', title: 'Advanced Evolution Seminar', level: 'Graduate' },
+    { number: 'EEMB 507', title: 'Introduction to Graduate Research', level: 'Graduate' },
+    { number: 'EEMB 508', title: 'Levels of Biological Organization I', level: 'Graduate' },
+    { number: 'EEMB 509', title: 'Levels of Biological Organization II', level: 'Graduate' },
     { number: 'EEMB 201', title: 'Quantitative Ecology', level: 'Graduate' },
     { number: 'EEMB 202', title: 'Population Genetics', level: 'Graduate' },
     { number: 'EEMB 203', title: 'Conservation Biology', level: 'Graduate' },
     { number: 'EEMB 204', title: 'Marine Ecology', level: 'Graduate' },
-    { number: 'EEMB 210', title: 'Ecological Field Methods', level: 'Graduate' },
-    { number: 'EEMB 220', title: 'Microbial Ecology', level: 'Graduate' }
+    { number: 'EEMB 210', title: 'Ecological Field Methods', level: 'Graduate' }
   ]
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Academic Programs</h1>
-            <p className="text-xl md:text-2xl text-white">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Academic Programs</h1>
+            <p className="text-lg md:text-xl text-white/90 leading-relaxed">
               Comprehensive education in ecology, evolution, and marine biology from the undergraduate to doctoral level.
             </p>
           </div>
         </div>
       </section>
 
+      {/* Graduate Programs Highlight */}
+      <section className="py-12 bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="bg-gradient-to-r from-ocean-deep to-ocean-blue rounded-2xl p-8 text-white">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <span className="inline-block bg-ucsb-gold text-ucsb-navy px-3 py-1 rounded-full text-sm font-bold mb-4">
+                  Graduate Programs
+                </span>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">PhD & MA Programs</h2>
+                <p className="text-white/90 mb-6 leading-relaxed">
+                  World-class training in ecology, evolution, and marine biology. Our graduate students work closely
+                  with faculty on cutting-edge research from day one, with full funding available.
+                </p>
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm">Full Funding</span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm">No GRE Required</span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm">December 1 Deadline</span>
+                </div>
+                <Link
+                  href="/academics/graduate"
+                  className="inline-flex items-center gap-2 bg-ucsb-gold text-ucsb-navy px-6 py-3 rounded-lg font-bold hover:bg-yellow-400 transition-all"
+                >
+                  Explore Graduate Programs
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/10 rounded-xl p-4 text-center">
+                  <p className="text-3xl font-bold text-ucsb-gold">40+</p>
+                  <p className="text-sm text-white/80">Faculty Mentors</p>
+                </div>
+                <div className="bg-white/10 rounded-xl p-4 text-center">
+                  <p className="text-3xl font-bold text-ucsb-gold">100+</p>
+                  <p className="text-sm text-white/80">Grad Students</p>
+                </div>
+                <div className="bg-white/10 rounded-xl p-4 text-center">
+                  <p className="text-3xl font-bold text-ucsb-gold">Top 3</p>
+                  <p className="text-sm text-white/80">Marine Science</p>
+                </div>
+                <div className="bg-white/10 rounded-xl p-4 text-center">
+                  <p className="text-3xl font-bold text-ucsb-gold">2</p>
+                  <p className="text-sm text-white/80">LTER Sites</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Programs Grid */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-ucsb-navy mb-4">Degree Programs</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-4">All Degree Programs</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Choose from our variety of undergraduate and graduate programs designed to prepare you for a rewarding career in biological sciences.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             {programs.map(program => (
-              <button
+              <div
                 key={program.id}
-                onClick={() => setSelectedProgram(selectedProgram === program.id ? null : program.id)}
-                className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-8 text-left border-2 border-gray-200 hover:border-ucsb-navy bg-gradient-to-br hover:from-blue-50"
+                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border border-gray-100"
               >
-                <div className="text-5xl mb-4">{program.icon}</div>
-                <span className="inline-block bg-ucsb-aqua text-white px-3 py-1 rounded-full text-sm font-bold mb-3">
-                  {program.degree}
-                </span>
-                <h3 className="text-xl font-bold text-ucsb-navy mb-3 group-hover:text-ucsb-gold transition">
-                  {program.title}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  {program.description}
-                </p>
-                <div className="text-xs text-gray-500">
-                  {program.duration} | {program.courses} units
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl">{program.icon}</div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                        program.degree === 'PhD' ? 'bg-ocean-blue text-white' :
+                        program.degree === 'MA' ? 'bg-ocean-teal text-white' :
+                        program.degree === 'BS' ? 'bg-ucsb-gold text-ucsb-navy' :
+                        'bg-gray-200 text-gray-700'
+                      }`}>
+                        {program.degree}
+                      </span>
+                      <span className="text-xs text-gray-500">{program.duration}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-ucsb-navy mb-2 group-hover:text-ocean-blue transition">
+                      {program.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {program.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {program.focusAreas.slice(0, 3).map((area, idx) => (
+                        <span key={idx} className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
+                          {area}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      {program.link ? (
+                        <Link
+                          href={program.link}
+                          className="text-sm text-ocean-blue hover:text-ocean-teal font-medium inline-flex items-center gap-1"
+                        >
+                          Learn More
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => setSelectedProgram(selectedProgram === program.id ? null : program.id)}
+                          className="text-sm text-ocean-blue hover:text-ocean-teal font-medium"
+                        >
+                          {selectedProgram === program.id ? 'Hide Details' : 'View Details'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </button>
+
+                {/* Expanded Details */}
+                {selectedProgram === program.id && !program.link && (
+                  <div className="mt-6 pt-6 border-t border-gray-100">
+                    <p className="text-gray-700 mb-4 leading-relaxed">{program.fullDescription}</p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-semibold text-ucsb-navy mb-2">Requirements</h4>
+                        <ul className="space-y-1">
+                          {program.requirements.map((req, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                              <span className="text-ocean-teal">-</span>
+                              {req}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-ucsb-navy mb-2">Career Outcomes</h4>
+                        <ul className="space-y-1">
+                          {program.careerOutcomes.map((outcome, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                              <span className="text-ucsb-gold">-</span>
+                              {outcome}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
-
-          {/* Detailed View */}
-          {selectedProgram && (
-            <div className="mt-12 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-8 border-l-4 border-ucsb-navy">
-              {programs.find(p => p.id === selectedProgram) && (
-                <div className="max-w-4xl mx-auto">
-                  {(() => {
-                    const program = programs.find(p => p.id === selectedProgram)!
-                    return (
-                      <>
-                        <div className="flex items-start gap-6 mb-8">
-                          <div className="text-6xl">{program.icon}</div>
-                          <div className="flex-1">
-                            <span className="inline-block bg-ucsb-aqua text-white px-4 py-1 rounded-full text-sm font-bold mb-3">
-                              {program.degree}
-                            </span>
-                            <h3 className="text-3xl font-bold text-ucsb-navy mb-2">{program.title}</h3>
-                            <p className="text-lg text-gray-700 mb-4">{program.description}</p>
-                            <div className="flex gap-4 flex-wrap">
-                              <span className="bg-ucsb-gold text-ucsb-navy px-4 py-2 rounded-full font-semibold">
-                                {program.duration}
-                              </span>
-                              <span className="bg-ucsb-moss text-white px-4 py-2 rounded-full font-semibold">
-                                {program.courses} Units
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                          {program.fullDescription}
-                        </p>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                          <div className="bg-white rounded-lg p-6 border-2 border-gray-200">
-                            <h4 className="text-xl font-bold text-ucsb-navy mb-4">Program Requirements</h4>
-                            <ul className="space-y-3">
-                              {program.requirements.map((req, idx) => (
-                                <li key={idx} className="flex items-start gap-3">
-                                  <span className="text-ucsb-gold font-bold mt-1">✓</span>
-                                  <span className="text-gray-700">{req}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          <div className="bg-white rounded-lg p-6 border-2 border-gray-200">
-                            <h4 className="text-xl font-bold text-ucsb-navy mb-4">Focus Areas</h4>
-                            <div className="space-y-2 mb-6">
-                              {program.focusAreas.map((area, idx) => (
-                                <span key={idx} className="inline-block bg-blue-100 text-ucsb-navy px-3 py-1 rounded-full text-sm">
-                                  {area}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="bg-green-50 rounded-lg p-6 border-l-4 border-ucsb-moss mb-8">
-                          <h4 className="text-xl font-bold text-ucsb-navy mb-4">Career Outcomes</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {program.careerOutcomes.map((outcome, idx) => (
-                              <div key={idx} className="flex items-center gap-2">
-                                <span className="text-ucsb-moss text-xl">→</span>
-                                <span className="text-gray-700">{outcome}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="flex gap-4 flex-wrap">
-                          <Link
-                            href="/contact"
-                            className="bg-ucsb-navy text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-900 transition"
-                          >
-                            Request Information
-                          </Link>
-                          <button
-                            onClick={() => setSelectedProgram(null)}
-                            className="bg-gray-300 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-400 transition"
-                          >
-                            Close Details
-                          </button>
-                        </div>
-                      </>
-                    )
-                  })()}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </section>
 
       {/* Course Catalog */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Course Catalog</h2>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-8 text-center">Sample Courses</h2>
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {courses.map((course, idx) => (
-                <div key={idx} className="bg-gray-50 p-6 rounded-lg border-l-4 border-ucsb-aqua hover:shadow-md transition">
+                <div key={idx} className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <p className="text-sm font-bold text-ucsb-navy mb-1">{course.number}</p>
-                      <p className="text-lg font-semibold text-gray-800">{course.title}</p>
+                      <p className="text-gray-700">{course.title}</p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
+                    <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${
                       course.level === 'Graduate'
-                        ? 'bg-ucsb-coral text-white'
-                        : 'bg-ucsb-gold text-ucsb-navy'
+                        ? 'bg-ocean-blue/10 text-ocean-blue'
+                        : 'bg-ucsb-gold/20 text-ucsb-navy'
                     }`}>
                       {course.level}
                     </span>
@@ -299,40 +311,46 @@ export default function AcademicsPage() {
       </section>
 
       {/* Learning Outcomes */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Student Learning Outcomes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-8 text-center">Student Learning Outcomes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
                 title: 'Research Skills',
-                description: 'Master field and laboratory techniques for studying ecological and evolutionary processes.'
+                description: 'Master field and laboratory techniques for studying ecological and evolutionary processes.',
+                icon: '🔬'
               },
               {
                 title: 'Quantitative Analysis',
-                description: 'Develop competency in statistics, modeling, and data analysis for biological research.'
+                description: 'Develop competency in statistics, modeling, and data analysis for biological research.',
+                icon: '📊'
               },
               {
                 title: 'Critical Thinking',
-                description: 'Apply scientific reasoning to evaluate evidence and solve complex environmental problems.'
+                description: 'Apply scientific reasoning to evaluate evidence and solve complex environmental problems.',
+                icon: '💡'
               },
               {
                 title: 'Communication',
-                description: 'Effectively communicate scientific findings to diverse audiences through writing and presentations.'
+                description: 'Effectively communicate scientific findings to diverse audiences through writing and presentations.',
+                icon: '📝'
               },
               {
                 title: 'Collaboration',
-                description: 'Work effectively in research teams and develop professional networks.'
+                description: 'Work effectively in research teams and develop professional networks.',
+                icon: '🤝'
               },
               {
                 title: 'Professional Development',
-                description: 'Prepare for careers in academia, government, conservation, and industry.'
+                description: 'Prepare for careers in academia, government, conservation, and industry.',
+                icon: '🎯'
               }
             ].map((outcome, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
-                <div className="text-4xl mb-4 text-ucsb-gold">★</div>
-                <h3 className="text-xl font-bold text-ucsb-navy mb-3">{outcome.title}</h3>
-                <p className="text-gray-600">{outcome.description}</p>
+              <div key={idx} className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-md transition">
+                <div className="text-3xl mb-3">{outcome.icon}</div>
+                <h3 className="text-lg font-bold text-ucsb-navy mb-2">{outcome.title}</h3>
+                <p className="text-gray-600 text-sm">{outcome.description}</p>
               </div>
             ))}
           </div>
@@ -340,19 +358,22 @@ export default function AcademicsPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-ucsb-navy to-blue-800 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Apply?</h2>
-          <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">
+      <section className="py-12 md:py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Apply?</h2>
+          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
             Join our academic community and pursue your passion for understanding the natural world.
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
-            <button className="bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition">
-              Apply Now
-            </button>
+            <Link
+              href="/academics/graduate"
+              className="bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-bold hover:bg-yellow-400 hover:shadow-lg transition-all"
+            >
+              Graduate Programs
+            </Link>
             <Link
               href="/contact"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-ucsb-navy transition"
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-ocean-blue transition-all"
             >
               Contact Admissions
             </Link>

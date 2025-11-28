@@ -149,11 +149,11 @@ export default function NewsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-ucsb-navy via-blue-800 to-blue-700 text-white py-24">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Latest News</h1>
-            <p className="text-xl md:text-2xl text-gray-100">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Latest News</h1>
+            <p className="text-lg md:text-xl text-white/90">
               Stay informed about our research discoveries, faculty achievements, and departmental updates from the Department of Ecology, Evolution and Marine Biology.
             </p>
           </div>
@@ -161,20 +161,20 @@ export default function NewsPage() {
       </section>
 
       {/* Search and Filter Section */}
-      <section className="py-12 bg-white border-b">
+      <section className="py-8 bg-white border-b">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <input
                 type="text"
                 placeholder="Search news articles..."
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ucsb-gold focus:border-transparent transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-ocean-blue transition"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <select
-              className="px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ucsb-gold focus:border-transparent transition bg-white"
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-ocean-blue transition bg-white min-w-[200px]"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
@@ -187,12 +187,12 @@ export default function NewsPage() {
       </section>
 
       {/* News Grid */}
-      <section className="py-16">
+      <section className="py-12">
         <div className="container mx-auto px-4">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
+                <div key={i} className="bg-white rounded-xl overflow-hidden shadow-md animate-pulse">
                   <div className="h-48 bg-gray-200"></div>
                   <div className="p-6">
                     <div className="h-4 bg-gray-200 rounded mb-4 w-2/3"></div>
@@ -208,12 +208,12 @@ export default function NewsPage() {
             </div>
           ) : (
             <>
-              <div className="mb-8 text-gray-600">
+              <div className="mb-6 text-gray-600 font-medium">
                 Showing {filteredNews.length} article{filteredNews.length !== 1 ? 's' : ''}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredNews.map(item => (
-                  <article key={item.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow group">
+                  <article key={item.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all group border border-gray-100">
                     {item.attributes.image && (
                       <div className="h-48 overflow-hidden bg-gray-200">
                         <img
@@ -225,20 +225,20 @@ export default function NewsPage() {
                     )}
                     <div className="p-6">
                       {item.attributes.category && (
-                        <span className="text-xs font-bold text-white bg-ucsb-coral px-3 py-1 rounded-full">
+                        <span className="text-xs font-bold text-white bg-gradient-to-r from-ocean-blue to-ocean-teal px-3 py-1 rounded-full">
                           {item.attributes.category}
                         </span>
                       )}
-                      <h2 className="text-xl font-bold text-ucsb-navy mt-4 mb-3 group-hover:text-ucsb-gold transition">
+                      <h2 className="text-xl font-bold text-ucsb-navy mt-4 mb-3 group-hover:text-ocean-teal transition line-clamp-2">
                         <Link href={`/news/${item.attributes.slug}`}>
                           {item.attributes.title}
                         </Link>
                       </h2>
-                      <p className="text-gray-600 mb-4 line-clamp-3">
+                      <p className="text-gray-600 mb-4 line-clamp-3 text-sm">
                         {item.attributes.excerpt}
                       </p>
-                      <div className="flex items-center justify-between">
-                        <time className="text-sm text-gray-500">
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <time className="text-xs text-gray-500">
                           {new Date(item.attributes.publishDate).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
@@ -247,7 +247,7 @@ export default function NewsPage() {
                         </time>
                         <Link
                           href={`/news/${item.attributes.slug}`}
-                          className="text-sm font-semibold text-ucsb-navy hover:text-ucsb-gold transition"
+                          className="text-sm font-semibold text-ocean-blue hover:text-ocean-teal transition"
                         >
                           Read More →
                         </Link>
@@ -262,23 +262,23 @@ export default function NewsPage() {
       </section>
 
       {/* Newsletter Signup Section */}
-      <section className="py-16 bg-gradient-to-r from-ucsb-navy to-blue-800 text-white">
+      <section className="py-12 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-            <p className="text-lg text-gray-200 mb-8">
+            <h2 className="text-3xl font-bold mb-3">Stay Updated</h2>
+            <p className="text-lg text-white/90 mb-6">
               Subscribe to our newsletter to receive the latest news and announcements directly in your inbox.
             </p>
             <form className="flex flex-col sm:flex-row gap-3">
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-ucsb-gold"
+                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-ucsb-gold focus:outline-none"
                 required
               />
               <button
                 type="submit"
-                className="bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition"
+                className="bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-bold hover:bg-yellow-400 transition"
               >
                 Subscribe
               </button>

@@ -116,12 +116,14 @@ export default function AlumniPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-ucsb-gold to-yellow-500 text-white py-20">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-5xl font-bold mb-4 text-ucsb-navy">Alumni Network</h1>
-          <p className="text-xl text-ucsb-navy">
-            Connect with our global community of EEMB graduates making an impact around the world.
-          </p>
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Alumni Network</h1>
+            <p className="text-lg md:text-xl text-white/90">
+              Connect with our global community of EEMB graduates making an impact around the world.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -264,7 +266,7 @@ export default function AlumniPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-ucsb-navy text-white">
+      <section className="py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Stay Connected</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">

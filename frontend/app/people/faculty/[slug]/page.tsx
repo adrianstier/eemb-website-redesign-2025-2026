@@ -34,10 +34,10 @@ export default function FacultyProfilePage() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if (params.slug) {
+    if (params?.slug) {
       fetchFacultyMember(params.slug as string)
     }
-  }, [params.slug])
+  }, [params?.slug])
 
   const fetchFacultyMember = async (slug: string) => {
     try {

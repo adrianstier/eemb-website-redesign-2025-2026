@@ -141,11 +141,11 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-24">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Get in Touch</h1>
-            <p className="text-xl md:text-2xl text-white">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Get in Touch</h1>
+            <p className="text-lg md:text-xl text-white/90">
               Have questions about our programs, research, or department? We're here to help. Reach out to us using any of the methods below.
             </p>
           </div>
@@ -153,7 +153,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Information Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-ucsb-navy mb-12 text-center">How to Reach Us</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -177,7 +177,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form and Map */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Form */}
@@ -355,7 +355,7 @@ export default function ContactPage() {
       </section>
 
       {/* Office Hours */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Office Hours & Availability</h2>
           <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -385,7 +385,7 @@ export default function ContactPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-ucsb-navy to-blue-800 text-white">
+      <section className="py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">We're Looking Forward to Hearing From You</h2>
           <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">

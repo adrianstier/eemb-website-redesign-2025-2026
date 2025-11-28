@@ -139,6 +139,11 @@
     "photo_url": {
       "type": "string",
       "maxLength": 500
+    },
+    "research_areas": {
+      "type": "string",
+      "maxLength": 255,
+      "description": "Comma-separated research areas: ecology, evolution, marine-biology"
     }
   }
 }

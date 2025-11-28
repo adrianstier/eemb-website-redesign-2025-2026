@@ -37,7 +37,7 @@ export default function EventDetailPage() {
 
   useEffect(() => {
     fetchEventDetail()
-  }, [params.slug])
+  }, [params?.slug])
 
   const fetchEventDetail = async () => {
     try {
@@ -68,7 +68,7 @@ Light refreshments will be served following the seminar.`,
           endDate: '2024-12-15T16:30:00Z',
           location: 'Life Sciences Building, Room 1001',
           eventType: 'Seminar',
-          slug: params.slug as string,
+          slug: params?.slug as string || '',
           image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200',
           speaker: 'Dr. Sarah Chen',
           speakerBio: 'Dr. Sarah Chen is a marine biologist and climate scientist at Stanford University\'s Hopkins Marine Station. Her research focuses on the effects of climate change on marine ecosystems, particularly coral reefs and their associated communities.',
@@ -396,7 +396,7 @@ END:VCALENDAR`
 
                 <div className="flex gap-2">
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={generateICS}
                     className="flex-1"
                   >
@@ -404,7 +404,7 @@ END:VCALENDAR`
                     Add to Calendar
                   </Button>
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={addToGoogleCalendar}
                     className="flex-1"
                   >
@@ -436,7 +436,7 @@ END:VCALENDAR`
               <h3 className="text-lg font-bold text-ucsb-navy mb-4">Share This Event</h3>
               <div className="flex gap-2">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href)
@@ -450,7 +450,7 @@ END:VCALENDAR`
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button variant="outline" size="sm">
+                  <Button variant="secondary" size="sm">
                     Share on X
                   </Button>
                 </a>

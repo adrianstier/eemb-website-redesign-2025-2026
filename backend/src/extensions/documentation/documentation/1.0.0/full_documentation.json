@@ -14,7 +14,7 @@
       "url": "https://opensource.org/licenses/MIT"
     },
     "termsOfService": "YOUR_TERMS_OF_SERVICE_URL",
-    "x-generation-date": "2025-11-14T13:36:28.530Z"
+    "x-generation-date": "2025-11-27T14:33:24.478Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -117,6 +117,8 @@
                   "Professor Emeritus",
                   "Distinguished Professor",
                   "Research Professor",
+                  "Adjunct Professor",
+                  "Postdoctoral Researcher",
                   "Lecturer",
                   "Teaching Professor"
                 ]
@@ -231,6 +233,9 @@
               },
               "photo_url": {
                 "type": "string"
+              },
+              "research_areas": {
+                "type": "string"
               }
             }
           }
@@ -307,6 +312,8 @@
               "Professor Emeritus",
               "Distinguished Professor",
               "Research Professor",
+              "Adjunct Professor",
+              "Postdoctoral Researcher",
               "Lecturer",
               "Teaching Professor"
             ]
@@ -1002,6 +1009,8 @@
                                           "Professor Emeritus",
                                           "Distinguished Professor",
                                           "Research Professor",
+                                          "Adjunct Professor",
+                                          "Postdoctoral Researcher",
                                           "Lecturer",
                                           "Teaching Professor"
                                         ]
@@ -1788,6 +1797,9 @@
                                       "photo_url": {
                                         "type": "string"
                                       },
+                                      "research_areas": {
+                                        "type": "string"
+                                      },
                                       "createdAt": {
                                         "type": "string",
                                         "format": "date-time"
@@ -2163,6 +2175,9 @@
             "type": "string"
           },
           "photo_url": {
+            "type": "string"
+          },
+          "research_areas": {
             "type": "string"
           },
           "createdAt": {
@@ -3132,6 +3147,8 @@
                           "Professor Emeritus",
                           "Distinguished Professor",
                           "Research Professor",
+                          "Adjunct Professor",
+                          "Postdoctoral Researcher",
                           "Lecturer",
                           "Teaching Professor"
                         ]
@@ -4182,6 +4199,9 @@
                         "type": "string"
                       },
                       "photo_url": {
+                        "type": "string"
+                      },
+                      "research_areas": {
                         "type": "string"
                       },
                       "createdAt": {

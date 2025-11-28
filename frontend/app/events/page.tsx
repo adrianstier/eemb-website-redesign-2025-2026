@@ -180,11 +180,11 @@ export default function EventsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-24">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Events & Seminars</h1>
-            <p className="text-xl md:text-2xl text-white">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Events & Seminars</h1>
+            <p className="text-lg md:text-xl text-white/90">
               Join us for seminars, workshops, field trips, and networking events throughout the academic year.
             </p>
           </div>
@@ -193,7 +193,7 @@ export default function EventsPage() {
 
       {/* Featured Events */}
       {events.filter(e => e.attributes.isFeatured).length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-12 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-ucsb-navy mb-8">Featured Events</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -294,7 +294,7 @@ export default function EventsPage() {
       </section>
 
       {/* Events List */}
-      <section className="py-16">
+      <section className="py-12">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="space-y-6">
@@ -371,7 +371,7 @@ export default function EventsPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-ucsb-navy to-blue-800 text-white">
+      <section className="py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Don't Miss Our Events</h2>
           <p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">

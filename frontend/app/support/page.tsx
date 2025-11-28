@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import {
   PhoneIcon,
   EnvelopeIcon,
@@ -13,513 +12,490 @@ import {
   HeartIcon,
   TruckIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
   ExclamationTriangleIcon,
-  ShieldCheckIcon
+  MapPinIcon,
+  UserGroupIcon,
+  BanknotesIcon,
+  HomeModernIcon,
+  CameraIcon,
+  MagnifyingGlassIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 
+// Types
 interface StaffMember {
   name: string
   title: string
   email: string
+  phone?: string
   responsibilities: string
 }
 
-interface Service {
-  icon: any
-  title: string
-  description: string
-  href: string
-  audience: string[]
-}
-
-interface EmergencyContact {
-  service: string
-  phone: string
-  description: string
-  urgent: boolean
-}
-
 export default function SupportPage() {
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['staff']))
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedAudience, setSelectedAudience] = useState('all')
-  const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
-  // Staff Directory
-  const staff: StaffMember[] = [
-    {
-      name: 'Andrea Jorgensen',
-      title: 'Academic Business Officer',
-      email: 'amjorgen@ucsb.edu',
-      responsibilities: 'Overall business operations and departmental management'
-    },
-    {
-      name: 'Rosa Vasquez',
-      title: 'Academic Personnel',
-      email: 'rosavasquez@ucsb.edu',
-      responsibilities: 'Faculty recruitment, merit & promotion cases, curriculum planning'
-    },
-    {
-      name: 'Danielle Perez',
-      title: 'Departmental Assistant',
-      email: 'dcperez@ucsb.edu',
-      responsibilities: 'General administrative support and department operations'
-    },
-    {
-      name: 'Haley Martin',
-      title: 'Director of Finance',
-      email: 'haleymartin@ucsb.edu',
-      responsibilities: 'Procurement, accounts payable, recharges, fund management'
-    },
-    {
-      name: 'Mengshu Ye',
-      title: 'Staff Graduate Advisor',
-      email: 'mengshuye@ucsb.edu',
-      responsibilities: 'Graduate student support and advising'
-    },
-    {
-      name: 'Ellery Wilkie',
-      title: 'Undergraduate Advisor',
-      email: 'ewilkie@lifesci.ucsb.edu',
-      responsibilities: 'Undergraduate program advising and student support'
-    }
-  ]
-
-  // Emergency Contacts
-  const emergencyContacts: EmergencyContact[] = [
-    {
-      service: 'Campus Emergency',
-      phone: '9-911',
-      description: 'Life-threatening emergencies (from campus phone)',
-      urgent: true
-    },
-    {
-      service: 'Campus Police',
-      phone: '805-893-3446',
-      description: 'Non-emergency police assistance',
-      urgent: true
-    },
-    {
-      service: 'CAPS 24/7 Counseling',
-      phone: '805-893-4411',
-      description: 'Confidential mental health support, available 24/7',
-      urgent: true
-    },
-    {
-      service: 'CARE (Sexual Assault)',
-      phone: '805-893-3778',
-      description: 'Confidential sexual assault support and resources',
-      urgent: true
-    }
-  ]
-
-  // Campus Wellness Resources
-  const wellnessResources = [
-    {
-      name: 'Title IX / Sexual Harassment',
-      phone: '805-893-2701',
-      description: 'Report sexual harassment or discrimination',
-      confidential: false
-    },
-    {
-      name: 'Ombuds Office',
-      phone: '805-893-3285',
-      description: 'Confidential consultation services for conflicts',
-      confidential: true
-    },
-    {
-      name: 'ASAP (Employee Assistance)',
-      phone: '805-893-3318',
-      description: 'Faculty/staff assistance and threat management',
-      confidential: false
-    },
-    {
-      name: 'RCSGD (LGBTQIA+ Center)',
-      phone: '805-894-5847',
-      description: 'Resources and advocacy for LGBTQIA+ community',
-      confidential: false
-    },
-    {
-      name: 'Bias Incident Response',
-      phone: '805-893-3596',
-      description: 'Report hate crimes or bias incidents',
-      confidential: false
-    },
-    {
-      name: 'Ethics Point Hotline',
-      phone: '800-403-4744',
-      description: 'Anonymous whistleblower reporting',
-      confidential: true
-    }
-  ]
-
-  // Service Categories
-  const services: Service[] = [
-    {
-      icon: BuildingOfficeIcon,
-      title: 'Administration',
-      description: 'Departmental financial management, business operations, personnel support',
-      href: '/support/administration',
-      audience: ['faculty', 'staff']
-    },
-    {
-      icon: AcademicCapIcon,
-      title: 'Student Services',
-      description: 'Graduate and undergraduate advising, academic support',
-      href: '/support/students',
-      audience: ['students']
-    },
-    {
-      icon: BeakerIcon,
-      title: 'Research Services',
-      description: 'EEMB Shop, Greenhouse, Marine Operations, Microscopy Facility',
-      href: '/support/research',
-      audience: ['faculty', 'students', 'staff']
-    },
-    {
-      icon: WrenchScrewdriverIcon,
-      title: 'Facilities',
-      description: 'Conference room reservations, equipment, building access',
-      href: '/support/facilities',
-      audience: ['faculty', 'staff']
-    },
-    {
-      icon: ComputerDesktopIcon,
-      title: 'Technical Support',
-      description: 'IT support, user accounts, network access, desktop help',
-      href: '/support/technical',
-      audience: ['faculty', 'staff', 'students']
-    },
-    {
-      icon: HeartIcon,
-      title: 'Wellness & Safety',
-      description: 'Campus resources for mental health, safety, and wellbeing',
-      href: '/support/wellness',
-      audience: ['faculty', 'staff', 'students', 'public']
-    },
-    {
-      icon: TruckIcon,
-      title: 'Shipping & Receiving',
-      description: 'Departmental mail and package services',
-      href: '/support/shipping',
-      audience: ['faculty', 'staff']
-    }
-  ]
-
-  // Leadership contacts
-  const leadership = [
-    {
-      name: 'Todd Oakley',
-      title: 'Department Chair, Professor',
-      phone: '805-893-4715',
-      email: 'oakley@ucsb.edu',
-      office: 'Life Sciences 4101'
-    },
-    {
-      name: 'Hillary Young',
-      title: 'Vice Chair Resources, Professor',
-      phone: '805-893-4681',
-      email: 'hillary.young@lifesci.ucsb.edu',
-      office: 'Noble Hall 2116'
-    },
-    {
-      name: 'Stephen Proulx',
-      title: 'Vice Chair Curriculum, Professor',
-      phone: '',
-      email: 'sproul@ucsb.edu',
-      office: 'Life Sciences 4109'
-    }
-  ]
-
-  const filteredServices = services.filter(service => {
-    const matchesSearch = service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         service.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesAudience = selectedAudience === 'all' || service.audience.includes(selectedAudience)
-    return matchesSearch && matchesAudience
-  })
-
-  const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('')
+  const toggleSection = (id: string) => {
+    setExpandedSections(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
   }
+
+  // Staff Directory - consolidated
+  const adminStaff: StaffMember[] = [
+    { name: 'Andrea Jorgensen', title: 'Management Services Officer', email: 'andrea.jorgensen@lifesci.ucsb.edu', responsibilities: 'Business operations, department management' },
+    { name: 'Rosa Vasquez', title: 'Academic Personnel', email: 'rosavasquez@ucsb.edu', responsibilities: 'Faculty recruitment, merit & promotion' },
+    { name: 'Danielle Perez', title: 'Departmental Assistant', email: 'dcperez@ucsb.edu', responsibilities: 'Front desk, keys & access' },
+    { name: 'Haley Martin', title: 'Director of Finance', email: 'haleymartin@ucsb.edu', responsibilities: 'Procurement, accounts payable' },
+  ]
+
+  const academicAdvisors: StaffMember[] = [
+    { name: 'Mengshu Ye', title: 'Graduate Advisor', email: 'mengshuye@ucsb.edu', responsibilities: 'Graduate program, qualifying exams' },
+    { name: 'Evelin Ambrocio-Silva', title: 'Undergraduate Advisor', email: 'eambrocio@lifesci.ucsb.edu', phone: '805-893-4622', responsibilities: 'Major requirements, graduation' },
+    { name: 'Ellery Wilkie', title: 'Undergraduate Advisor', email: 'ewilkie@lifesci.ucsb.edu', responsibilities: 'Biology majors, course planning' },
+  ]
+
+  const leadership = [
+    { name: 'Todd Oakley', title: 'Department Chair', email: 'oakley@ucsb.edu', phone: '805-893-4715', office: 'LSB 4101' },
+    { name: 'Hillary Young', title: 'Vice Chair Resources', email: 'hillary.young@lifesci.ucsb.edu', phone: '805-893-4681', office: 'Noble 2116' },
+    { name: 'Stephen Proulx', title: 'Vice Chair Curriculum', email: 'sproul@ucsb.edu', office: 'LSB 4109' },
+  ]
+
+  // Compact contact card component
+  const ContactCard = ({ name, title, email, phone, extra }: { name: string; title: string; email: string; phone?: string; extra?: string }) => (
+    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100 hover:border-ocean-blue/30 hover:shadow-sm transition-all">
+      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-ocean-blue to-ocean-teal flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
+        {name.split(' ').map(n => n[0]).join('')}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold text-gray-900 text-sm">{name}</p>
+        <p className="text-xs text-ocean-blue">{title}</p>
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0 mt-0.5">
+          <a href={`mailto:${email}`} className="text-xs text-gray-500 hover:text-ocean-blue">{email.split('@')[0]}@...</a>
+          {phone && <a href={`tel:${phone}`} className="text-xs text-gray-500 hover:text-ocean-blue">{phone}</a>}
+          {extra && <span className="text-xs text-gray-400">{extra}</span>}
+        </div>
+      </div>
+    </div>
+  )
+
+  // Section content components
+  const StaffDirectoryContent = () => (
+    <div className="space-y-6">
+      {/* Leadership - horizontal on desktop */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Leadership</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {leadership.map((l, i) => (
+            <ContactCard key={i} name={l.name} title={l.title} email={l.email} phone={l.phone} extra={l.office} />
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Admin Staff */}
+        <div>
+          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Administrative Staff</h4>
+          <div className="space-y-2">
+            {adminStaff.map((s, i) => (
+              <ContactCard key={i} name={s.name} title={s.title} email={s.email} />
+            ))}
+          </div>
+        </div>
+
+        {/* Academic Advisors */}
+        <div>
+          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Academic Advisors</h4>
+          <div className="space-y-2">
+            {academicAdvisors.map((a, i) => (
+              <ContactCard key={i} name={a.name} title={a.title} email={a.email} phone={a.phone} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const StudentServicesContent = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="p-4 bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-100">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+          <h4 className="font-semibold text-gray-900">Graduate Students</h4>
+        </div>
+        <p className="text-sm text-gray-600 mb-3">
+          Contact <a href="mailto:mengshuye@ucsb.edu" className="text-purple-600 font-medium hover:underline">Mengshu Ye</a>
+        </p>
+        <ul className="text-sm text-gray-600 space-y-1">
+          {['Program requirements', 'Qualifying exams', 'Dissertation guidance', 'TA/GSR positions', 'Fellowships'].map((item, i) => (
+            <li key={i} className="flex items-center gap-2"><ChevronRightIcon className="w-3 h-3 text-purple-400" />{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="p-4 bg-gradient-to-br from-green-50 to-white rounded-lg border border-green-100">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-2 h-2 rounded-full bg-green-500"></span>
+          <h4 className="font-semibold text-gray-900">Undergraduate Students</h4>
+        </div>
+        <p className="text-sm text-gray-600 mb-3">
+          Contact <a href="mailto:eambrocio@lifesci.ucsb.edu" className="text-green-600 font-medium hover:underline">Evelin</a> or <a href="mailto:ewilkie@lifesci.ucsb.edu" className="text-green-600 font-medium hover:underline">Ellery</a>
+        </p>
+        <ul className="text-sm text-gray-600 space-y-1">
+          {['Major declaration', 'Course planning', 'Graduation petitions', 'Research (EEMB 199)', 'Career guidance'].map((item, i) => (
+            <li key={i} className="flex items-center gap-2"><ChevronRightIcon className="w-3 h-3 text-green-400" />{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="md:col-span-2 p-3 bg-blue-50 rounded-lg flex items-center justify-between">
+        <div>
+          <span className="font-medium text-gray-900">Disability Accommodations (DSP)</span>
+          <span className="text-sm text-gray-500 ml-2">Testing, note-taking, accessible materials</span>
+        </div>
+        <a href="tel:8058932668" className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">
+          805-893-2668
+        </a>
+      </div>
+    </div>
+  )
+
+  const ResearchServicesContent = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {[
+          { name: 'EEMB Shop', icon: WrenchScrewdriverIcon, desc: 'Equipment fabrication & repair', location: 'Life Sciences', contact: 'info@eemb.ucsb.edu' },
+          { name: 'Greenhouse', icon: HomeModernIcon, desc: 'Climate-controlled growing spaces', location: 'Adjacent to LSB', contact: 'info@eemb.ucsb.edu' },
+          { name: 'Marine Operations', icon: MapPinIcon, desc: 'Vessels, diving, coastal access', location: 'MSI', contact: '805-893-2675' },
+          { name: 'Microscopy Facility', icon: CameraIcon, desc: 'Confocal, SEM/TEM imaging', location: 'NRI', contact: 'nri.ucsb.edu/microscopy' },
+        ].map((f, i) => {
+          const Icon = f.icon
+          return (
+            <div key={i} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-100">
+              <Icon className="w-6 h-6 text-ocean-blue flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">{f.name}</p>
+                <p className="text-xs text-gray-500">{f.desc}</p>
+                <p className="text-xs text-gray-400">{f.location} • <span className="text-ocean-blue">{f.contact}</span></p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="p-3 bg-amber-50 rounded-lg border border-amber-100">
+        <p className="text-sm text-gray-700">
+          <strong className="text-amber-800">Safety & Compliance:</strong> Lab safety, field work, dive certification, IACUC protocols.
+          Contact EH&S: <a href="tel:8058935813" className="font-medium text-amber-700">805-893-5813</a>
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {[
+          { name: 'CNSI', url: 'cnsi.ucsb.edu' },
+          { name: 'NCEAS', url: 'nceas.ucsb.edu' },
+          { name: 'Office of Research', url: 'research.ucsb.edu' },
+          { name: 'Research Computing', url: 'ccs.ucsb.edu' },
+          { name: 'Library', url: 'library.ucsb.edu' },
+        ].map((r, i) => (
+          <a key={i} href={`https://${r.url}`} target="_blank" rel="noopener noreferrer"
+             className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs font-medium text-gray-700 transition">
+            {r.name} ↗
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+
+  const FacilitiesContent = () => (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {[
+        { title: 'Conference Rooms', desc: 'LSB 1001, 4001, Noble Hall', action: 'Book via EMS' },
+        { title: 'Keys & Access', desc: 'Building, lab, after-hours', action: 'dcperez@ucsb.edu' },
+        { title: 'Equipment', desc: 'AV, projectors, field gear', action: 'Contact front desk' },
+        { title: 'Maintenance', desc: 'HVAC, electrical, plumbing', action: 'Facilities Mgmt' },
+      ].map((item, i) => (
+        <div key={i} className="p-3 bg-gray-50 rounded-lg">
+          <p className="font-semibold text-gray-900 text-sm">{item.title}</p>
+          <p className="text-xs text-gray-500 mb-1">{item.desc}</p>
+          <p className="text-xs text-ocean-blue">{item.action}</p>
+        </div>
+      ))}
+    </div>
+  )
+
+  const FinanceContent = () => (
+    <div className="space-y-3">
+      <p className="text-sm text-gray-600">
+        Contact <a href="mailto:haleymartin@ucsb.edu" className="text-ocean-blue font-medium">Haley Martin</a> for all finance matters
+      </p>
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { title: 'Procurement', items: ['Purchase orders', 'P-Card', 'Vendor setup'] },
+          { title: 'Reimbursements', items: ['Travel', 'Supplies', 'Conference fees'] },
+          { title: 'Fund Management', items: ['Budgets', 'Grants', 'Recharges'] },
+        ].map((section, i) => (
+          <div key={i} className="p-3 bg-amber-50 rounded-lg border border-amber-100">
+            <p className="font-semibold text-gray-900 text-sm mb-2">{section.title}</p>
+            <ul className="text-xs text-gray-600 space-y-0.5">
+              {section.items.map((item, j) => <li key={j}>• {item}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const TechnicalContent = () => (
+    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+      <div>
+        <p className="font-semibold text-gray-900">UCSB IT Help Desk</p>
+        <p className="text-sm text-gray-500">Network, email, software, VPN, printing, security</p>
+      </div>
+      <div className="flex items-center gap-2">
+        <a href="mailto:help@ucsb.edu" className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:border-gray-300 transition">
+          help@ucsb.edu
+        </a>
+        <a href="tel:8058932400" className="px-3 py-1.5 bg-slate-700 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition">
+          805-893-2400
+        </a>
+      </div>
+    </div>
+  )
+
+  const ShippingContent = () => (
+    <div className="flex items-center justify-between p-4 bg-orange-50 rounded-lg">
+      <div>
+        <p className="font-semibold text-gray-900">Mail & Shipping</p>
+        <p className="text-sm text-gray-500">Mailroom in LSB • FedEx/UPS available • Hazmat requires special handling</p>
+      </div>
+      <div className="text-right text-sm">
+        <p className="text-gray-700">EEMB, UC Santa Barbara</p>
+        <p className="text-gray-500">Santa Barbara, CA 93106-9620</p>
+      </div>
+    </div>
+  )
+
+  const WellnessContent = () => (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+        {[
+          { name: 'CAPS', phone: '805-893-4411', note: '24/7 Mental Health', highlight: true },
+          { name: 'Title IX', phone: '805-893-2701', note: 'Sexual Harassment' },
+          { name: 'Ombuds', phone: '805-893-3285', note: 'Conflict Resolution' },
+          { name: 'Employee Assist', phone: '805-893-3318', note: 'Faculty/Staff' },
+          { name: 'RCSGD', phone: '805-894-5847', note: 'LGBTQIA+ Resources' },
+          { name: 'Ethics Hotline', phone: '800-403-4744', note: 'Anonymous' },
+        ].map((r, i) => (
+          <a key={i} href={`tel:${r.phone.replace(/[^0-9]/g, '')}`}
+             className={`p-3 rounded-lg border transition-all hover:shadow-sm ${
+               r.highlight ? 'bg-teal-50 border-teal-200 hover:border-teal-300' : 'bg-white border-gray-100 hover:border-gray-200'
+             }`}>
+            <p className="font-semibold text-gray-900 text-sm">{r.name}</p>
+            <p className="text-ocean-blue font-medium text-sm">{r.phone}</p>
+            <p className="text-xs text-gray-500">{r.note}</p>
+          </a>
+        ))}
+      </div>
+      <p className="text-xs text-gray-500 text-center">
+        Also: Women's Center • Multicultural Center • International Students • Legal Resource Center
+      </p>
+    </div>
+  )
+
+  const EmergencyContent = () => (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {[
+        { service: 'Campus Emergency', phone: '9-911', desc: 'From campus phone' },
+        { service: 'Campus Police', phone: '805-893-3446', desc: 'Non-emergency' },
+        { service: 'CAPS Crisis', phone: '805-893-4411', desc: '24/7 counseling' },
+        { service: 'CARE', phone: '805-893-3778', desc: 'Sexual assault support' },
+      ].map((c, i) => (
+        <a key={i} href={`tel:${c.phone.replace(/[^0-9]/g, '')}`}
+           className="p-4 bg-red-50 rounded-lg border border-red-100 hover:border-red-200 hover:shadow-sm transition-all text-center">
+          <p className="text-xs text-red-600 uppercase tracking-wide font-medium">{c.service}</p>
+          <p className="text-xl font-bold text-red-700 my-1">{c.phone}</p>
+          <p className="text-xs text-gray-500">{c.desc}</p>
+        </a>
+      ))}
+    </div>
+  )
+
+  // All sections with metadata
+  const sections = [
+    { id: 'staff', icon: UserGroupIcon, title: 'Staff Directory', count: 10, content: <StaffDirectoryContent /> },
+    { id: 'students', icon: AcademicCapIcon, title: 'Student Services', count: null, content: <StudentServicesContent /> },
+    { id: 'research', icon: BeakerIcon, title: 'Research Facilities', count: 4, content: <ResearchServicesContent /> },
+    { id: 'facilities', icon: BuildingOfficeIcon, title: 'Facilities', count: null, content: <FacilitiesContent /> },
+    { id: 'finance', icon: BanknotesIcon, title: 'Finance', count: null, content: <FinanceContent /> },
+    { id: 'technical', icon: ComputerDesktopIcon, title: 'IT Support', count: null, content: <TechnicalContent /> },
+    { id: 'shipping', icon: TruckIcon, title: 'Mail & Shipping', count: null, content: <ShippingContent /> },
+    { id: 'wellness', icon: HeartIcon, title: 'Wellness', count: 6, content: <WellnessContent /> },
+    { id: 'emergency', icon: ExclamationTriangleIcon, title: 'Emergency', count: null, content: <EmergencyContent /> },
+  ]
+
+  // Filter sections by search
+  const filteredSections = searchQuery
+    ? sections.filter(s => s.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : sections
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-20">
+      {/* Compact Hero */}
+      <section className="bg-gradient-to-r from-ucsb-navy to-blue-800 text-white py-6">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Support Services</h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8">
-              Comprehensive support for faculty, staff, students, and researchers in the EEMB department.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold">Support Services</h1>
+              <p className="text-blue-200 text-sm mt-1">Find contacts, resources, and services</p>
+            </div>
 
-            {/* Search and Filter */}
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  placeholder="Search for services, resources, or staff..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-4 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-ucsb-gold/50 focus:outline-none"
-                />
-              </div>
-              <select
-                value={selectedAudience}
-                onChange={(e) => setSelectedAudience(e.target.value)}
-                className="px-6 py-4 rounded-lg text-gray-900 focus:ring-4 focus:ring-ucsb-gold/50 focus:outline-none bg-white"
-              >
-                <option value="all">All Services</option>
-                <option value="faculty">Faculty</option>
-                <option value="staff">Staff</option>
-                <option value="students">Students</option>
-                <option value="public">Public</option>
-              </select>
+            {/* Search */}
+            <div className="relative w-full md:w-72">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-ucsb-gold focus:outline-none"
+              />
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Emergency Contacts - Prominent Section */}
-      <section className="py-12 bg-red-50 border-y-4 border-red-600">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 mb-6">
-            <ExclamationTriangleIcon className="w-8 h-8 text-red-600" />
-            <h2 className="text-3xl font-bold text-red-900">Emergency Contacts</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {emergencyContacts.map((contact, index) => (
-              <div key={index} className="bg-white rounded-lg p-6 shadow-md border-2 border-red-200 hover:border-red-400 transition">
-                <h3 className="font-bold text-lg text-red-900 mb-2">{contact.service}</h3>
-                <a
-                  href={`tel:${contact.phone.replace(/[^0-9]/g, '')}`}
-                  className="text-2xl font-bold text-red-600 hover:text-red-800 mb-2 block"
+          {/* Quick Navigation - Scrollable on mobile */}
+          <div className="flex gap-2 mt-4 overflow-x-auto pb-2 -mb-2 scrollbar-hide">
+            {sections.map(s => {
+              const Icon = s.icon
+              const isActive = expandedSections.has(s.id)
+              const isEmergency = s.id === 'emergency'
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => {
+                    if (!expandedSections.has(s.id)) {
+                      toggleSection(s.id)
+                    }
+                    setTimeout(() => {
+                      document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }, 100)
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition whitespace-nowrap flex-shrink-0 border ${
+                    isEmergency
+                      ? isActive
+                        ? 'bg-red-500 text-white border-red-500'
+                        : 'bg-red-900/40 text-red-100 border-red-400/50 hover:bg-red-800/50'
+                      : isActive
+                        ? 'bg-white text-gray-900 border-white'
+                        : 'bg-blue-900/40 text-blue-100 border-blue-300/30 hover:bg-blue-800/50 hover:border-blue-300/50'
+                  }`}
                 >
-                  {contact.phone}
-                </a>
-                <p className="text-sm text-gray-700">{contact.description}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 bg-white rounded-lg p-6 border-l-4 border-red-600">
-            <p className="text-gray-700">
-              <strong className="text-red-900">Important:</strong> From a campus phone, dial <strong>9-911</strong> for emergencies.
-              From a cell phone, dial <strong>911</strong>. For non-emergencies, contact Campus Police at <strong>805-893-3446</strong>.
-            </p>
+                  <Icon className="w-4 h-4" />
+                  <span>{s.title}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      {/* Service Categories */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8">Support Services</h2>
+      {/* Main Content */}
+      <section className="py-6">
+        <div className="container mx-auto px-4 max-w-5xl">
+          {/* Main Contact Banner */}
+          <div className="mb-5 p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-ocean-blue/10 flex items-center justify-center flex-shrink-0">
+                  <BuildingOfficeIcon className="w-5 h-5 text-ocean-blue" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">EEMB Main Office</p>
+                  <p className="text-xs text-gray-500">Life Sciences Building</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 pl-13 sm:pl-0">
+                <a href="mailto:info@eemb.ucsb.edu" className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-600 transition">
+                  <EnvelopeIcon className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">info@eemb.ucsb.edu</span>
+                  <span className="sm:hidden">Email</span>
+                </a>
+                <a href="tel:8058932974" className="flex items-center gap-1.5 px-3 py-1.5 bg-ocean-blue hover:bg-ocean-deep text-white rounded-lg text-xs font-medium transition">
+                  <PhoneIcon className="w-3.5 h-3.5" />
+                  805-893-2974
+                </a>
+              </div>
+            </div>
+          </div>
 
-          {filteredServices.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
-              <p className="text-gray-600 text-lg">No services found matching your search.</p>
+          {/* Accordion Sections */}
+          <div className="space-y-3">
+            {filteredSections.map((section) => {
+              const Icon = section.icon
+              const isExpanded = expandedSections.has(section.id)
+              const isEmergency = section.id === 'emergency'
+
+              return (
+                <div
+                  key={section.id}
+                  id={section.id}
+                  className={`bg-white rounded-xl overflow-hidden transition-shadow ${
+                    isExpanded ? 'shadow-md' : 'shadow-sm hover:shadow-md'
+                  } ${isEmergency ? 'ring-1 ring-red-200' : ''}`}
+                >
+                  <button
+                    onClick={() => toggleSection(section.id)}
+                    className={`w-full px-5 py-4 flex items-center gap-3 text-left transition ${
+                      isExpanded ? 'border-b border-gray-100' : ''
+                    }`}
+                  >
+                    <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${
+                      isEmergency
+                        ? 'bg-red-100 text-red-600'
+                        : isExpanded
+                          ? 'bg-ocean-blue text-white'
+                          : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className={`font-semibold ${isEmergency ? 'text-red-800' : 'text-gray-900'}`}>
+                        {section.title}
+                        {section.count && <span className="ml-2 text-sm font-normal text-gray-400">({section.count})</span>}
+                      </h3>
+                    </div>
+                    <ChevronDownIcon
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+
+                  <div className={`overflow-hidden transition-all duration-200 ${isExpanded ? 'max-h-[2000px]' : 'max-h-0'}`}>
+                    <div className={`px-5 py-4 ${isEmergency ? 'bg-red-50/50' : ''}`}>
+                      {section.content}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {filteredSections.length === 0 && (
+            <div className="text-center py-12 bg-white rounded-xl shadow-sm">
+              <p className="text-gray-500">No services found for "{searchQuery}"</p>
               <button
-                onClick={() => {
-                  setSearchQuery('')
-                  setSelectedAudience('all')
-                }}
-                className="mt-4 px-6 py-2 bg-ocean-blue text-white rounded-lg hover:bg-ocean-deep transition"
+                onClick={() => setSearchQuery('')}
+                className="mt-3 px-4 py-2 bg-ocean-blue text-white rounded-lg text-sm font-medium hover:bg-ocean-deep transition"
               >
-                Clear Filters
+                Clear Search
               </button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredServices.map((service, index) => {
-                const Icon = service.icon
-                return (
-                  <Link
-                    key={index}
-                    href={service.href}
-                    className="group bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-all border-2 border-transparent hover:border-ocean-teal"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-ocean-blue to-ocean-teal rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-                        <Icon className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-ucsb-navy mb-2 group-hover:text-ocean-teal transition">
-                          {service.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                          {service.description}
-                        </p>
-                        <div className="mt-3 flex gap-2 flex-wrap">
-                          {service.audience.map(aud => (
-                            <span
-                              key={aud}
-                              className="text-xs px-2 py-1 bg-ocean-blue/10 text-ocean-deep rounded-full"
-                            >
-                              {aud}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
           )}
-        </div>
-      </section>
-
-      {/* Administrative Staff Directory */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8">Administrative Staff</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {staff.map((member, index) => (
-              <div key={index} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 shadow-md border border-gray-200 hover:shadow-lg transition">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-ocean-blue to-ocean-teal rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    {getInitials(member.name)}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-lg text-ucsb-navy mb-1">{member.name}</h3>
-                    <p className="text-sm text-ocean-blue font-semibold mb-2">{member.title}</p>
-                    <a
-                      href={`mailto:${member.email}`}
-                      className="text-sm text-gray-600 hover:text-ocean-teal transition block mb-3"
-                    >
-                      {member.email}
-                    </a>
-                    <p className="text-xs text-gray-500 leading-relaxed">
-                      {member.responsibilities}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Wellness & Safety Resources */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 mb-8">
-            <ShieldCheckIcon className="w-8 h-8 text-ocean-blue" />
-            <h2 className="text-3xl font-bold text-ucsb-navy">Campus Wellness & Safety Resources</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {wellnessResources.map((resource, index) => (
-              <div key={index} className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-bold text-lg text-ucsb-navy flex-1">{resource.name}</h3>
-                  {resource.confidential && (
-                    <span className="flex-shrink-0 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-semibold">
-                      Confidential
-                    </span>
-                  )}
-                </div>
-                {resource.phone && (
-                  <a
-                    href={`tel:${resource.phone.replace(/[^0-9]/g, '')}`}
-                    className="text-xl font-bold text-ocean-blue hover:text-ocean-teal mb-2 block"
-                  >
-                    {resource.phone}
-                  </a>
-                )}
-                <p className="text-sm text-gray-600">{resource.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 bg-white rounded-lg p-6 border-l-4 border-ocean-blue">
-            <h3 className="font-bold text-lg text-ucsb-navy mb-3">Additional Campus Resources</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="text-sm text-gray-700">• Women's Center</div>
-              <div className="text-sm text-gray-700">• Multicultural Center</div>
-              <div className="text-sm text-gray-700">• International Students</div>
-              <div className="text-sm text-gray-700">• Legal Resource Center</div>
-              <div className="text-sm text-gray-700">• Graduate Diversity</div>
-              <div className="text-sm text-gray-700">• Undocumented Student Services</div>
-            </div>
-            <p className="text-sm text-gray-600 mt-4">
-              For more information about these resources, visit the
-              <a href="https://www.ucsb.edu" className="text-ocean-blue hover:text-ocean-teal ml-1">
-                UCSB campus resources page
-              </a>.
-            </p>
-          </div>
-
-          <div className="mt-6 bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-500">
-            <p className="text-sm text-gray-700">
-              <strong className="text-yellow-900">Reporting Information:</strong> Reporting a possible hate crime
-              or bias incident does not commit you to any action. Reports can be made anonymously through the
-              Ethics Point Hotline or UCSB's online reporting system.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Department Leadership */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8">Department Leadership</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {leadership.map((leader, index) => (
-              <div key={index} className="bg-gradient-to-br from-ucsb-navy to-blue-800 text-white rounded-xl p-8 shadow-lg">
-                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold mb-4">
-                  {getInitials(leader.name)}
-                </div>
-                <h3 className="text-xl font-bold mb-2">{leader.name}</h3>
-                <p className="text-sm text-white/80 mb-4">{leader.title}</p>
-                <div className="space-y-2 text-sm">
-                  {leader.phone && (
-                    <a href={`tel:${leader.phone.replace(/[^0-9]/g, '')}`} className="block hover:text-ucsb-gold transition">
-                      <PhoneIcon className="w-4 h-4 inline mr-2" />
-                      {leader.phone}
-                    </a>
-                  )}
-                  <a href={`mailto:${leader.email}`} className="block hover:text-ucsb-gold transition">
-                    <EnvelopeIcon className="w-4 h-4 inline mr-2" />
-                    {leader.email}
-                  </a>
-                  <p className="text-white/80">
-                    <BuildingOfficeIcon className="w-4 h-4 inline mr-2" />
-                    {leader.office}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* General Contact */}
-      <section className="py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">General Department Contact</h2>
-          <p className="text-xl mb-8">For general inquiries and information</p>
-          <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-            <a
-              href="tel:8058932974"
-              className="flex items-center gap-2 bg-white text-ocean-blue px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition"
-            >
-              <PhoneIcon className="w-5 h-5" />
-              805-893-2974
-            </a>
-            <a
-              href="mailto:info@eemb.ucsb.edu"
-              className="flex items-center gap-2 bg-white text-ocean-blue px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition"
-            >
-              <EnvelopeIcon className="w-5 h-5" />
-              info@eemb.ucsb.edu
-            </a>
-          </div>
-          <div className="mt-8 text-white/80">
-            <p>Ecology, Evolution, and Marine Biology</p>
-            <p>University of California, Santa Barbara</p>
-            <p>Santa Barbara, CA 93106-9620</p>
-          </div>
         </div>
       </section>
     </div>

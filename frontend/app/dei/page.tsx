@@ -143,11 +143,11 @@ export default function DEIPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-24">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Diversity, Equity & Inclusion</h1>
-            <p className="text-xl md:text-2xl text-white">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Diversity, Equity & Inclusion</h1>
+            <p className="text-lg md:text-xl text-white/90">
               Creating a welcoming, inclusive community where all students, faculty, and staff can thrive and contribute their unique perspectives and talents.
             </p>
           </div>
@@ -167,7 +167,7 @@ export default function DEIPage() {
       </section>
 
       {/* DEI Committee */}
-      <section className="py-16 bg-gradient-to-br from-ocean-deep/5 to-ocean-teal/5">
+      <section className="py-12 bg-gradient-to-br from-ocean-deep/5 to-ocean-teal/5">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-ucsb-navy mb-6 text-center">DEI Committee</h2>
@@ -202,7 +202,7 @@ export default function DEIPage() {
       </section>
 
       {/* Statistics */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-ucsb-navy mb-12 text-center">Departmental Demographics</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -219,7 +219,7 @@ export default function DEIPage() {
       </section>
 
       {/* Initiatives Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-ucsb-navy mb-12 text-center">Our Initiatives</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -287,7 +287,7 @@ export default function DEIPage() {
       </section>
 
       {/* Resources */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Resources & Support</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -307,7 +307,7 @@ export default function DEIPage() {
       </section>
 
       {/* Belonging Section */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Building Belonging</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -360,7 +360,7 @@ export default function DEIPage() {
       </section>
 
       {/* DEI Statement Footer */}
-      <section className="py-16 bg-gray-900 text-white">
+      <section className="py-12 bg-gray-900 text-white">
         <div className="container mx-auto px-4 max-w-3xl">
           <h3 className="text-2xl font-bold mb-4">Our DEI Commitment</h3>
           <p className="text-gray-300 leading-relaxed">

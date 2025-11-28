@@ -98,7 +98,7 @@ export default function ResearchPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-16 md:py-20 overflow-hidden">
+      <section className="relative py-16 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal"></div>
         <div className="absolute inset-0 opacity-10">
@@ -123,7 +123,7 @@ export default function ResearchPage() {
       </section>
 
       {/* Research Areas */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-white to-ocean-50">
+      <section className="py-12 bg-gradient-to-b from-white to-ocean-50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -187,7 +187,7 @@ export default function ResearchPage() {
       </section>
 
       {/* Research Impact */}
-      <section className="py-16 md:py-20 bg-ocean-50">
+      <section className="py-12 bg-ocean-50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -220,7 +220,7 @@ export default function ResearchPage() {
       </section>
 
       {/* Research Facilities */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -293,7 +293,7 @@ export default function ResearchPage() {
       </section>
 
       {/* Faculty Research */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-white to-ocean-50">
+      <section className="py-12 bg-gradient-to-b from-white to-ocean-50">
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
@@ -425,7 +425,7 @@ export default function ResearchPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-16 md:py-20 overflow-hidden">
+      <section className="relative py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-ocean-blue to-ocean-teal"></div>
 
         <div className="container mx-auto px-4 relative z-10">

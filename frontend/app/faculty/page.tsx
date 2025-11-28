@@ -115,13 +115,15 @@ export default function FacultyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-ucsb-navy to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-5xl font-bold mb-4">Faculty Directory</h1>
-          <p className="text-xl text-gray-200 max-w-3xl">
-            Meet our world-class researchers and educators who are advancing our understanding
-            of ecology, evolution, and marine biology.
-          </p>
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Faculty Directory</h1>
+            <p className="text-lg md:text-xl text-white/90 max-w-3xl">
+              Meet our world-class researchers and educators who are advancing our understanding
+              of ecology, evolution, and marine biology.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -238,7 +240,7 @@ export default function FacultyPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-ucsb-navy text-white">
+      <section className="py-12 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
