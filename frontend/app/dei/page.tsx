@@ -2,13 +2,27 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import {
+  GraduationCap,
+  Handshake,
+  Brain,
+  Accessibility,
+  Mic,
+  Users,
+  Rainbow,
+  Star,
+  Home,
+  PartyPopper,
+  Rocket,
+  LucideIcon
+} from 'lucide-react'
 
 interface Initiative {
   id: string
   title: string
   description: string
   fullDescription: string
-  icon: string
+  icon: LucideIcon
   leader: string
   contact: string
 }
@@ -31,7 +45,7 @@ export default function DEIPage() {
       title: 'Inclusive Recruitment',
       description: 'Actively recruiting diverse students and faculty from underrepresented groups in STEM.',
       fullDescription: 'We have implemented comprehensive recruitment strategies targeting students from underrepresented backgrounds in biology and environmental sciences. Our efforts include partnerships with community colleges, minority-serving institutions, and outreach programs in K-12 schools.',
-      icon: '🎓',
+      icon: GraduationCap,
       leader: 'DEI Committee',
       contact: 'eemb-dei@ucsb.edu'
     },
@@ -40,7 +54,7 @@ export default function DEIPage() {
       title: 'Mentorship Programs',
       description: 'Comprehensive mentoring for underrepresented students to support their success.',
       fullDescription: 'Our departmental mentorship programs pair students from underrepresented backgrounds with faculty and advanced graduate student mentors. Programs include academic support, career guidance, and professional development workshops.',
-      icon: '🤝',
+      icon: Handshake,
       leader: 'Dr. James Wilson',
       contact: 'jwilson@ucsb.edu'
     },
@@ -49,7 +63,7 @@ export default function DEIPage() {
       title: 'Unconscious Bias Training',
       description: 'Regular training for faculty and staff on recognizing and addressing implicit bias.',
       fullDescription: 'All faculty, staff, and graduate teaching assistants participate in evidence-based training on unconscious bias, inclusive teaching, and creating welcoming learning environments.',
-      icon: '🧠',
+      icon: Brain,
       leader: 'Dr. Angela Martinez',
       contact: 'amartinez@ucsb.edu'
     },
@@ -58,7 +72,7 @@ export default function DEIPage() {
       title: 'Accessibility & Accommodations',
       description: 'Ensuring all students have equal access to educational opportunities and resources.',
       fullDescription: 'We work closely with Disabled Students Program (DSP) to provide accommodations for students with disabilities. Our facilities and curriculum are designed to be accessible, and we continuously work to improve our accessibility practices.',
-      icon: '♿',
+      icon: Accessibility,
       leader: 'Dr. Robert Chen',
       contact: 'rchen@ucsb.edu'
     },
@@ -67,7 +81,7 @@ export default function DEIPage() {
       title: 'Diversity in Biology Seminar',
       description: 'Monthly seminars celebrating diverse perspectives and experiences in biological sciences.',
       fullDescription: 'This seminar series features speakers from underrepresented groups in biology discussing their research, career paths, and experiences in STEM. Open to all students, these events highlight diverse role models and foster inclusive community.',
-      icon: '🎤',
+      icon: Mic,
       leader: 'Dr. Lisa Wong',
       contact: 'lwong@ucsb.edu'
     },
@@ -76,7 +90,7 @@ export default function DEIPage() {
       title: 'Graduate Student Family Support',
       description: 'Support programs for graduate students with family responsibilities.',
       fullDescription: 'We provide childcare subsidies, parental leave policies, lactation rooms, and flexible scheduling to support graduate students who are parents or have other family responsibilities.',
-      icon: '👨‍👩‍👧‍👦',
+      icon: Users,
       leader: 'Dr. Patricia Johnson',
       contact: 'pjohnson@ucsb.edu'
     },
@@ -85,7 +99,7 @@ export default function DEIPage() {
       title: 'LGBTQ+ Inclusion',
       description: 'Creating a welcoming and affirming environment for LGBTQ+ members of our community.',
       fullDescription: 'Our department is committed to creating an inclusive environment for LGBTQ+ students, faculty, and staff. We use affirming language, support gender diversity, and actively work to address discrimination.',
-      icon: '🌈',
+      icon: Rainbow,
       leader: 'Dr. Michael Torres',
       contact: 'mtorres@ucsb.edu'
     },
@@ -94,7 +108,7 @@ export default function DEIPage() {
       title: 'First-Generation Support',
       description: 'Targeted support for first-generation college students navigating higher education.',
       fullDescription: 'First-generation students face unique challenges in higher education. We provide navigation support, peer mentoring, financial resources, and community to help first-gen students thrive.',
-      icon: '⭐',
+      icon: Star,
       leader: 'Dr. Carlos Rodriguez',
       contact: 'crodriguez@ucsb.edu'
     }
@@ -229,7 +243,9 @@ export default function DEIPage() {
                 onClick={() => setExpandedInitiative(expandedInitiative === initiative.id ? null : initiative.id)}
                 className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-6 text-left border-2 border-gray-200 hover:border-purple-600"
               >
-                <div className="text-4xl mb-4">{initiative.icon}</div>
+                <div className="mb-4">
+                  <initiative.icon className="w-10 h-10 text-purple-600" />
+                </div>
                 <h3 className="text-lg font-bold text-ucsb-navy mb-2 group-hover:text-purple-600 transition">
                   {initiative.title}
                 </h3>
@@ -250,7 +266,9 @@ export default function DEIPage() {
                     return (
                       <>
                         <div className="flex items-start gap-6 mb-8">
-                          <div className="text-6xl">{initiative.icon}</div>
+                          <div>
+                            <initiative.icon className="w-16 h-16 text-purple-600" />
+                          </div>
                           <div className="flex-1">
                             <h3 className="text-3xl font-bold text-ucsb-navy mb-2">{initiative.title}</h3>
                             <p className="text-lg text-gray-700">{initiative.description}</p>
@@ -315,21 +333,23 @@ export default function DEIPage() {
               {
                 title: 'Inclusive Environment',
                 description: 'We are committed to creating spaces where every member of our community feels valued, respected, and able to bring their authentic selves to work and study.',
-                icon: '🏠'
+                icon: Home
               },
               {
                 title: 'Celebrate Diversity',
                 description: 'We celebrate the unique backgrounds, perspectives, and experiences that our diverse community members bring to our department and to science.',
-                icon: '🎉'
+                icon: PartyPopper
               },
               {
                 title: 'Equity in Opportunity',
                 description: 'We actively work to ensure that all students have equal access to opportunities for research, mentoring, and professional development.',
-                icon: '🚀'
+                icon: Rocket
               }
             ].map((item, idx) => (
               <div key={idx} className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-8 border-2 border-purple-200 hover:border-purple-600 transition">
-                <div className="text-5xl mb-4">{item.icon}</div>
+                <div className="mb-4">
+                  <item.icon className="w-12 h-12 text-purple-600" />
+                </div>
                 <h3 className="text-xl font-bold text-ucsb-navy mb-3">{item.title}</h3>
                 <p className="text-gray-700">{item.description}</p>
               </div>

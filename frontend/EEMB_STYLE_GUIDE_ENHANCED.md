@@ -1,22 +1,31 @@
 # EEMB Website Comprehensive Style Guide
-## For Claude Code Implementation
+## Version 3.0 — Personality & Warmth Update
 
 ---
 
 ## 1. Design Philosophy
 
 ### Core Principles
-1. **Ocean-Inspired Elegance**: Design should evoke the marine research focus—fluid, calming, professional
-2. **Academic Authority**: Clean, readable, trustworthy appearance befitting a research institution
-3. **Accessibility First**: WCAG AA compliance minimum; clear hierarchy, sufficient contrast
-4. **Progressive Enhancement**: Mobile-first responsive design with enhanced desktop experiences
-5. **Consistency Over Creativity**: Every page should feel like part of the same cohesive system
+1. **Distinctly EEMB**: Design should be unmistakably ours—not a generic template that could belong to any department
+2. **Ocean-Inspired Elegance**: Fluid, calming, professional—but with warmth and personality
+3. **Academic Authority with Approachability**: Credible enough for peer review, welcoming enough for prospective students
+4. **Accessibility First**: WCAG AA compliance minimum; clear hierarchy, sufficient contrast
+5. **Place-Based Identity**: Every design choice should evoke Santa Barbara—where mountains meet the sea
 
 ### Design Personality
-- **Professional** but not sterile
-- **Scientific** but approachable
-- **Modern** but timeless
-- **Informative** but not overwhelming
+- **Confident** not corporate
+- **Warm** not sterile
+- **Scientific** but curious
+- **Modern** with timeless character
+- **Grounded in place** — always connecting to Santa Barbara
+
+### What Makes This Different from v2.0
+- **Serif headlines** (Literata) for academic character
+- **Warm neutral backgrounds** instead of cold grays
+- **Reduced gradient usage** — simplified, not overwhelming
+- **Wave dividers** for organic transitions
+- **Asymmetric layouts** to break template syndrome
+- **Nature accent colors** (kelp green, sand, sunset)
 
 ---
 
@@ -27,9 +36,28 @@
 |------|-----|----------------|-------|
 | Ocean Deep | `#003660` | `ocean-deep` | Headers, primary CTAs, footer, navigation backgrounds |
 | Ocean Blue | `#047AB5` | `ocean-blue` | Links, secondary buttons, interactive elements, icons |
-| Ocean Teal | `#20B2AA` | `ocean-teal` | Accents, gradients, success states, highlights |
+| Ocean Teal | `#20B2AA` | `ocean-teal` | Accents, success states, highlights |
 | UCSB Navy | `#003660` | `ucsb-navy` | Text headings, formal elements (same as Ocean Deep) |
 | UCSB Gold | `#FEBC11` | `ucsb-gold` | Primary CTAs, important callouts, awards, highlights |
+
+### NEW: Warm Neutrals
+Replace cold grays with these warmer tones:
+| Name | Hex | Tailwind Class | Usage |
+|------|-----|----------------|-------|
+| Warm 50 | `#FDFCFB` | `warm-50` | Warmest white, subtle cream |
+| Warm 100 | `#FAF9F7` | `warm-100` | Primary page background (replaces gray-50) |
+| Warm 200 | `#F5F3F0` | `warm-200` | Secondary backgrounds, alternating sections |
+| Warm 300 | `#E8E4DE` | `warm-300` | Borders light |
+| Warm 700 | `#5C574F` | `warm-700` | Primary body text |
+| Warm 800 | `#3D3A35` | `warm-800` | Dark text |
+
+### NEW: Nature-Inspired Accents
+| Name | Hex | Tailwind Class | Usage |
+|------|-----|----------------|-------|
+| Sand | `#E8E0D4` | `sand` | Warm neutral accent, beach evocation |
+| Kelp 500 | `#1B5E45` | `kelp-500` | Nature connection, terrestrial research |
+| Kelp 600 | `#1B4D3E` | `kelp-600` | Deep kelp green |
+| Sunset | `#E07B4C` | `sunset` | Santa Barbara sunset (use sparingly) |
 
 ### Secondary & Accent Colors
 | Name | Hex | Tailwind Class | Usage |
@@ -38,103 +66,107 @@
 | Success Green | `#10B981` | `emerald-500` | Success messages, positive indicators |
 | Warning Amber | `#F59E0B` | `amber-500` | Warnings, pending states |
 
-### Neutral Palette
-| Purpose | Light Mode | Class |
-|---------|------------|-------|
-| Page Background | `#F9FAFB` | `bg-gray-50` |
-| Card Background | `#FFFFFF` | `bg-white` |
-| Subtle Background | `#F3F4F6` | `bg-gray-100` |
-| Light Border | `#F3F4F6` | `border-gray-100` |
-| Medium Border | `#E5E7EB` | `border-gray-200` |
-| Strong Border | `#D1D5DB` | `border-gray-300` |
-| Secondary Text | `#6B7280` | `text-gray-500` |
-| Body Text | `#4B5563` | `text-gray-600` |
-| Primary Text | `#374151` | `text-gray-700` |
-| Heading Text | `#1F2937` | `text-gray-800` |
-
 ### Color Usage Rules
-- **NEVER** use pure black (`#000000`) for text; use `text-gray-800` or `text-gray-900`
-- **NEVER** use pure white (`#FFFFFF`) for large text areas on colored backgrounds; use `text-white/90` for better readability
+- **NEVER** use pure black (`#000000`) for text; use `warm-800` or `warm-900`
+- **PREFER** `warm-100` over `gray-50` for backgrounds
+- **REDUCE** 3-color gradients — use solid colors or simple 2-color gradients
 - **ALWAYS** ensure link colors have sufficient contrast (4.5:1 minimum)
-- **ALWAYS** use `ocean-blue` for clickable text links, `ocean-teal` for hover states
+- **USE** `ocean-blue` for clickable text links
 
 ---
 
 ## 3. Typography System
 
-### Font Stack
+### Font Families
 ```css
-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+/* Body text - clean and modern */
+font-family: var(--font-inter), system-ui, sans-serif;
+
+/* Headlines - academic with warmth */
+font-family: var(--font-literata), Georgia, serif;
+```
+
+### Tailwind Classes
+```tsx
+// Headlines (serif)
+className="font-heading"  // or font-serif
+
+// Body text (sans)
+className="font-sans"  // default
 ```
 
 ### Type Scale
 
 #### Display (Hero Headlines)
 ```tsx
-className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
+className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
 // Use for: Main hero headlines only
 // Color: text-white (on gradient) or text-ucsb-navy (on light)
+// NEW: Uses serif font for character
 ```
 
 #### H1 (Page Titles)
 ```tsx
-className="text-3xl md:text-4xl font-bold text-ucsb-navy"
+className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy"
 // Use for: Single page title, top of content area
 // Spacing: mb-4 or mb-6
 ```
 
 #### H2 (Section Titles)
 ```tsx
-className="text-2xl md:text-3xl font-bold text-ucsb-navy"
+className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold text-ucsb-navy"
 // Use for: Major section divisions
-// Spacing: mb-6 md:mb-8, mt-12 md:mt-16 (if not first section)
+// Spacing: mb-6 md:mb-8
 ```
 
 #### H3 (Subsection Titles)
 ```tsx
-className="text-xl md:text-2xl font-semibold text-ucsb-navy"
+className="font-heading text-xl md:text-2xl font-semibold text-ucsb-navy"
 // Use for: Card titles, subsections within sections
 // Spacing: mb-3 md:mb-4
 ```
 
 #### H4 (Component Titles)
 ```tsx
-className="text-lg font-semibold text-gray-800"
+className="font-heading text-lg font-semibold text-warm-800"
 // Use for: Smaller component headers, list titles
 // Spacing: mb-2
 ```
 
 #### Body Large (Lead Text)
 ```tsx
-className="text-lg md:text-xl text-gray-600 leading-relaxed"
+className="text-lg md:text-xl text-warm-600 leading-relaxed"
 // Use for: Hero subtitles, section introductions
 // Spacing: mb-6 md:mb-8
+// Or use: className="text-lead"
 ```
 
 #### Body (Default)
 ```tsx
-className="text-base text-gray-700 leading-relaxed"
+className="text-base text-warm-700 leading-relaxed"
 // Use for: All body copy, paragraphs
 // Spacing: mb-4 between paragraphs
 ```
 
 #### Body Small
 ```tsx
-className="text-sm text-gray-600"
+className="text-sm text-warm-600"
 // Use for: Captions, metadata, secondary information
 ```
 
 #### Caption/Fine Print
 ```tsx
-className="text-xs text-gray-500"
+className="text-xs text-warm-500"
 // Use for: Timestamps, legal text, tertiary information
 ```
 
 ### Typography Rules
-- **Line Height**: Always use `leading-relaxed` (1.625) for body text, `leading-tight` (1.25) for headings
-- **Letter Spacing**: Use `tracking-tight` for large display text only
-- **Max Width**: Limit paragraph width to `max-w-prose` (65ch) for optimal readability
-- **Font Weight**: 
+- **Headings**: Always use `font-heading` (Literata serif) for h1-h4
+- **Body**: Uses Inter (sans-serif) by default
+- **Line Height**: `leading-relaxed` (1.625) for body, tight for headings
+- **Letter Spacing**: `tracking-tight` for large display text, `-0.02em` for headings (built in)
+- **Max Width**: `max-w-prose` (65ch) for optimal readability
+- **Font Weight**:
   - `font-bold` (700) for H1, H2, display
   - `font-semibold` (600) for H3, H4
   - `font-medium` (500) for emphasized body text
@@ -800,32 +832,68 @@ import { AcademicCapIcon } from '@heroicons/react/24/solid'
 
 ---
 
-## 11. Tailwind Config Extensions
+## 11. NEW: Visual Motifs & Components
 
-Ensure your `tailwind.config.js` includes:
+### Wave Dividers
+Use wave dividers to create organic transitions between sections:
 
-```javascript
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        'ocean-deep': '#003660',
-        'ocean-blue': '#047AB5',
-        'ocean-teal': '#20B2AA',
-        'ucsb-navy': '#003660',
-        'ucsb-gold': '#FEBC11',
-        'ucsb-coral': '#EF5645',
-      },
-      fontFamily: {
-        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-      },
-    },
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
-}
+```tsx
+import WaveDivider from '@/components/ui/WaveDivider'
+
+// Between sections
+<WaveDivider variant="subtle" toColor="fill-warm-100" />
+
+// Before footer
+<WaveDivider variant="bold" toColor="fill-ocean-deep" />
+
+// Flipped (wave goes up)
+<WaveDivider variant="subtle" toColor="fill-white" flip />
+```
+
+**Variants:**
+- `subtle` - Light wave for similar backgrounds
+- `bold` - Multi-layer wave for major transitions
+- `layered` - Multiple translucent waves for depth
+
+### Section Eyebrows
+Use eyebrows to introduce sections consistently:
+
+```tsx
+<div className="flex items-center gap-3 mb-4">
+  <div className="w-8 h-0.5 bg-ocean-teal" />
+  <span className="text-ocean-teal text-sm font-semibold tracking-wide uppercase">
+    Section Label
+  </span>
+</div>
+```
+
+### Asymmetric Layouts
+Break the template feel with 12-column grids:
+
+```tsx
+<div className="grid md:grid-cols-12 gap-8 lg:gap-16 items-center">
+  <div className="md:col-span-5">
+    {/* Smaller column - image */}
+  </div>
+  <div className="md:col-span-7">
+    {/* Larger column - content */}
+  </div>
+</div>
+```
+
+### Decorative Background Elements
+
+```tsx
+// Decorative offset background behind image
+<div className="relative">
+  <div className="absolute -top-4 -left-4 w-full h-full bg-ocean-teal/10 rounded-2xl -z-10" />
+  <div className="relative rounded-2xl overflow-hidden">
+    <Image ... />
+  </div>
+</div>
+
+// Floating accent blob
+<div className="absolute -bottom-6 -right-6 w-24 h-24 bg-ucsb-gold/10 rounded-full blur-2xl" />
 ```
 
 ---
@@ -834,53 +902,94 @@ module.exports = {
 
 ### ❌ Don't Do This
 
-1. **Inconsistent spacing**: Don't mix arbitrary values like `mt-7` with standard scale
-2. **Hardcoded colors**: Never use raw hex values; always use Tailwind classes
-3. **Missing hover/focus states**: All interactive elements need these
-4. **Text on images without overlay**: Always add a gradient or overlay for readability
-5. **Orphaned headings**: Never have an H3 without a parent H2 on the page
-6. **Inline styles**: Avoid `style={}` props; use Tailwind classes
+1. **Three-color gradients**: Use solid colors or 2-color gradients max
+2. **Cold gray backgrounds**: Use `warm-100` instead of `gray-50`
+3. **System fonts for headlines**: Always use `font-heading` (Literata)
+4. **Centered everything**: Use asymmetric layouts for visual interest
+5. **Missing hover/focus states**: All interactive elements need these
+6. **Text on images without overlay**: Always add a gradient overlay
 7. **Generic alt text**: Never use "image" or "photo" as alt text
 8. **Missing responsive design**: Every component must work at all breakpoints
 9. **Overusing animations**: Keep motion subtle and purposeful
-10. **Ignoring color contrast**: Test all text/background combinations
+10. **Template syndrome**: Make it feel like EEMB, not a generic template
 
 ---
 
-## 13. Quick Reference Cheatsheet
+## 13. Quick Reference Cheatsheet v3.0
 
 ### Most Common Patterns
 
 ```tsx
-// Hero section
-className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16 md:py-24"
+// Hero section (simplified gradient)
+className="bg-gradient-to-t from-ocean-deep via-ocean-deep/70 to-ocean-deep/40"
 
-// Section wrapper
-className="py-12 md:py-16 bg-white" // or bg-gray-50
+// Section wrapper (warm background)
+className="py-16 md:py-24 bg-warm-100"
 
 // Container
-className="container mx-auto px-4 sm:px-6 lg:px-8"
+className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl"
 
-// Section title
-className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-8"
+// Section title (with serif)
+className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold text-ucsb-navy mb-8"
 
-// Card
-className="bg-white rounded-xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all border border-gray-100"
+// Card (warm shadows)
+className="bg-white rounded-2xl p-6 shadow-warm-md hover:shadow-warm-xl transition-all border border-warm-200"
 
-// Primary button
-className="bg-ocean-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-ocean-deep transition-all"
+// Primary button (gold CTA)
+className="bg-ucsb-gold text-ucsb-navy px-7 py-3.5 rounded-xl font-bold hover:bg-yellow-400 transition-all"
 
-// Link
-className="text-ocean-blue hover:text-ocean-teal transition-colors"
+// Secondary button
+className="bg-white/10 backdrop-blur-sm text-white px-7 py-3.5 rounded-xl border border-white/30"
+
+// Link with animated underline
+className="link-underline text-ocean-blue"
 
 // Grid
-className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
 
-// Badge
-className="text-xs font-bold text-white bg-gradient-to-r from-ocean-blue to-ocean-teal px-3 py-1 rounded-full"
+// Badge (ocean)
+className="badge-ocean" // or use full classes
+
+// Body text (warm)
+className="text-warm-700 leading-relaxed"
+```
+
+### CSS Utility Classes (from globals.css)
+
+```tsx
+// Components
+.section           // Standard section padding
+.section-warm      // Section with warm background
+.container-content // Max-width container
+.card              // Base card with warm shadow
+.card-tilt         // Card with 3D tilt hover
+.btn-primary       // Primary button
+.btn-gold          // Gold CTA button
+.btn-secondary     // Outline button
+.badge-ocean       // Ocean gradient badge
+.badge-gold        // Gold badge
+.badge-kelp        // Kelp green badge
+
+// Typography
+.text-display      // Large display headlines
+.section-title     // Section headings
+.text-lead         // Intro paragraphs
+.link-underline    // Animated underline link
+
+// Decorative
+.gradient-ocean    // Ocean gradient background
+.gradient-warm     // Warm gradient background
+.accent-bar        // Vertical accent line
+.hr-wave           // Horizontal wave line
+.underline-gold    // Gold underline accent
+
+// Interactive
+.hover-lift        // Lift on hover
+.hover-zoom        // Zoom on hover (for group)
+.hover-glow        // Subtle glow on hover
 ```
 
 ---
 
-*Last updated: November 2025*
-*Version: 2.0*
+*Last updated: December 2025*
+*Version: 3.0 — Personality & Warmth Update*

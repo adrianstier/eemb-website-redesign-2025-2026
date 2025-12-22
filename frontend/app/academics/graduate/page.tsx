@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { GraduationCap, Scroll } from 'lucide-react'
 
 type TabId = 'overview' | 'phd' | 'ma' | 'apply' | 'funding' | 'faq' | 'resources'
 
@@ -262,7 +263,7 @@ export default function GraduateProgramPage() {
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-14 h-14 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-xl flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl">🎓</span>
+                        <GraduationCap className="w-7 h-7 text-white" />
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-ucsb-navy mb-2">Doctor of Philosophy (PhD)</h3>
@@ -283,7 +284,7 @@ export default function GraduateProgramPage() {
                   >
                     <div className="flex items-start gap-4">
                       <div className="w-14 h-14 bg-gradient-to-br from-ucsb-gold to-orange-400 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl">📜</span>
+                        <Scroll className="w-7 h-7 text-ucsb-navy" />
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-ucsb-navy mb-2">Master of Arts (MA)</h3>

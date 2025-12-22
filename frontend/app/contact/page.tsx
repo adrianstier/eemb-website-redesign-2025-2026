@@ -2,11 +2,22 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import {
+  Building2,
+  GraduationCap,
+  BookOpen,
+  Microscope,
+  Mail,
+  Rainbow,
+  MapPin,
+  Clock,
+  LucideIcon
+} from 'lucide-react'
 
 interface ContactInfo {
   title: string
   description: string
-  icon: string
+  icon: LucideIcon
   details: string[]
 }
 
@@ -57,7 +68,7 @@ export default function ContactPage() {
     {
       title: 'Main Office',
       description: 'General inquiries and department information',
-      icon: '🏢',
+      icon: Building2,
       details: [
         'Life Sciences Building, Room 2001',
         'University of California, Santa Barbara',
@@ -68,7 +79,7 @@ export default function ContactPage() {
     {
       title: 'Graduate Program',
       description: 'Information about graduate applications and programs',
-      icon: '🎓',
+      icon: GraduationCap,
       details: [
         'Phone: (805) 893-2200',
         'Email: gradinfo@eemb.ucsb.edu',
@@ -78,7 +89,7 @@ export default function ContactPage() {
     {
       title: 'Undergraduate Program',
       description: 'Undergraduate majors, minors, and courses',
-      icon: '📚',
+      icon: BookOpen,
       details: [
         'Phone: (805) 893-2300',
         'Email: undergradinfo@eemb.ucsb.edu',
@@ -88,7 +99,7 @@ export default function ContactPage() {
     {
       title: 'Research Office',
       description: 'Research opportunities and collaborations',
-      icon: '🔬',
+      icon: Microscope,
       details: [
         'Phone: (805) 893-2400',
         'Email: research@eemb.ucsb.edu',
@@ -98,7 +109,7 @@ export default function ContactPage() {
     {
       title: 'Admissions',
       description: 'Application questions and admissions support',
-      icon: '✉️',
+      icon: Mail,
       details: [
         'Email: admissions@eemb.ucsb.edu',
         'Phone: (805) 893-2500',
@@ -108,7 +119,7 @@ export default function ContactPage() {
     {
       title: 'Diversity & Inclusion',
       description: 'DEI initiatives and community support',
-      icon: '🌈',
+      icon: Rainbow,
       details: [
         'Email: dei@eemb.ucsb.edu',
         'Phone: (805) 893-2600',
@@ -159,7 +170,9 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {contactInfo.map((info, idx) => (
               <div key={idx} className="bg-white rounded-lg shadow-md hover:shadow-xl transition p-8 border-t-4 border-ucsb-coral">
-                <div className="text-4xl mb-4">{info.icon}</div>
+                <div className="mb-4">
+                  <info.icon className="w-10 h-10 text-ucsb-coral" />
+                </div>
                 <h3 className="text-xl font-bold text-ucsb-navy mb-2">{info.title}</h3>
                 <p className="text-gray-600 mb-6">{info.description}</p>
                 <div className="space-y-2 text-sm text-gray-700">
@@ -316,11 +329,11 @@ export default function ContactPage() {
                     <p className="text-gray-600 mb-3">{location.purpose}</p>
                     <div className="space-y-1 text-sm text-gray-700">
                       <p className="flex items-center gap-2">
-                        <span className="text-ucsb-coral">📍</span>
+                        <MapPin className="w-4 h-4 text-ucsb-coral" />
                         {location.address}
                       </p>
                       <p className="flex items-center gap-2">
-                        <span className="text-ucsb-coral">🕐</span>
+                        <Clock className="w-4 h-4 text-ucsb-coral" />
                         {location.hours}
                       </p>
                     </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { Sparkles, CheckCircle, XCircle, Star, Calendar, MapPin, Mic } from 'lucide-react'
 
 interface EventForm {
   title: string
@@ -174,7 +175,7 @@ export default function AdminEventsPage() {
       generatedData.endDate = end.toISOString().split('.')[0]
 
       setFormData(prev => ({ ...prev, ...generatedData }))
-      setSaveMessage('✨ AI generated event details! Review and adjust as needed.')
+      setSaveMessage('ai:AI generated event details! Review and adjust as needed.')
       setTimeout(() => setSaveMessage(''), 5000)
     } catch (error) {
       console.error('Error generating with AI:', error)
@@ -232,7 +233,7 @@ export default function AdminEventsPage() {
       })
 
       if (response.ok) {
-        setSaveMessage(`✅ Event ${editingEventId ? 'updated' : 'created'} successfully!`)
+        setSaveMessage(`success:Event ${editingEventId ? 'updated' : 'created'} successfully!`)
         setFormData(initialFormState)
         setShowForm(false)
         setEditingEventId(null)
@@ -240,11 +241,11 @@ export default function AdminEventsPage() {
         setTimeout(() => setSaveMessage(''), 5000)
       } else {
         const error = await response.json()
-        setSaveMessage(`❌ Error: ${error.error?.message || 'Failed to save event'}`)
+        setSaveMessage(`error:Error: ${error.error?.message || 'Failed to save event'}`)
       }
     } catch (error) {
       console.error('Error saving event:', error)
-      setSaveMessage('❌ Error saving event. Make sure the backend is running.')
+      setSaveMessage('error:Error saving event. Make sure the backend is running.')
     } finally {
       setIsSaving(false)
     }
@@ -288,13 +289,13 @@ export default function AdminEventsPage() {
       })
 
       if (response.ok) {
-        setSaveMessage('✅ Event deleted successfully!')
+        setSaveMessage('success:Event deleted successfully!')
         fetchEvents()
         setTimeout(() => setSaveMessage(''), 3000)
       }
     } catch (error) {
       console.error('Error deleting event:', error)
-      setSaveMessage('❌ Error deleting event')
+      setSaveMessage('error:Error deleting event')
     }
   }
 
@@ -385,13 +386,21 @@ export default function AdminEventsPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {saveMessage && (
-          <div className={`mb-6 p-4 rounded-lg ${saveMessage.includes('✅') ? 'bg-green-50 border-l-4 border-green-500' : saveMessage.includes('✨') ? 'bg-blue-50 border-l-4 border-blue-500' : 'bg-red-50 border-l-4 border-red-500'}`}>
-            <p className={`font-semibold ${saveMessage.includes('✅') ? 'text-green-700' : saveMessage.includes('✨') ? 'text-blue-700' : 'text-red-700'}`}>
-              {saveMessage}
-            </p>
-          </div>
-        )}
+        {saveMessage && (() => {
+          const [type, message] = saveMessage.includes(':') ? saveMessage.split(':') : ['error', saveMessage]
+          const isSuccess = type === 'success'
+          const isAi = type === 'ai'
+          return (
+            <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${isSuccess ? 'bg-green-50 border-l-4 border-green-500' : isAi ? 'bg-blue-50 border-l-4 border-blue-500' : 'bg-red-50 border-l-4 border-red-500'}`}>
+              {isSuccess && <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />}
+              {isAi && <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0" />}
+              {!isSuccess && !isAi && <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" />}
+              <p className={`font-semibold ${isSuccess ? 'text-green-700' : isAi ? 'text-blue-700' : 'text-red-700'}`}>
+                {message}
+              </p>
+            </div>
+          )
+        })()}
 
         {!showForm && (
           <div className="mb-8">
@@ -761,16 +770,29 @@ export default function AdminEventsPage() {
                           {event.attributes.eventType}
                         </span>
                         {event.attributes.featured && (
-                          <span className="px-3 py-1 bg-yellow-400 text-yellow-900 rounded-full text-xs font-semibold">
-                            ⭐ Featured
+                          <span className="px-3 py-1 bg-yellow-400 text-yellow-900 rounded-full text-xs font-semibold flex items-center gap-1">
+                            <Star className="w-3 h-3" /> Featured
                           </span>
                         )}
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{event.attributes.title}</h3>
                       <div className="text-sm text-gray-600 space-y-1">
-                        <p>📅 {new Date(event.attributes.startDate).toLocaleString()}</p>
-                        {event.attributes.location && <p>📍 {event.attributes.location}</p>}
-                        {event.attributes.speaker && <p>🎤 {event.attributes.speaker}</p>}
+                        <p className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(event.attributes.startDate).toLocaleString()}
+                        </p>
+                        {event.attributes.location && (
+                          <p className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4" />
+                            {event.attributes.location}
+                          </p>
+                        )}
+                        {event.attributes.speaker && (
+                          <p className="flex items-center gap-2">
+                            <Mic className="w-4 h-4" />
+                            {event.attributes.speaker}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="flex gap-2">

@@ -1,27 +1,36 @@
+import { Waves, Dna, Bug, Microscope, LucideIcon } from 'lucide-react'
+
+interface Highlight {
+  title: string
+  description: string
+  icon: LucideIcon
+  link: string
+}
+
 export default function ResearchHighlights() {
-  const highlights = [
+  const highlights: Highlight[] = [
     {
       title: 'Climate Change & Marine Ecosystems',
       description: 'Understanding how ocean warming and acidification affect marine biodiversity and ecosystem functions.',
-      image: '🌊',
+      icon: Waves,
       link: '/research/climate-marine'
     },
     {
       title: 'Evolution & Biodiversity',
       description: 'Investigating the mechanisms driving species evolution and maintaining biological diversity.',
-      image: '🧬',
+      icon: Dna,
       link: '/research/evolution'
     },
     {
       title: 'Conservation Biology',
       description: 'Developing science-based strategies for protecting endangered species and habitats.',
-      image: '🦋',
+      icon: Bug,
       link: '/research/conservation'
     },
     {
       title: 'Microbial Ecology',
       description: 'Exploring the role of microorganisms in ecosystem processes and global biogeochemical cycles.',
-      image: '🦠',
+      icon: Microscope,
       link: '/research/microbial'
     }
   ]
@@ -44,7 +53,9 @@ export default function ResearchHighlights() {
               className="group"
             >
               <div className="bg-gradient-to-br from-ucsb-navy to-blue-700 text-white p-6 rounded-lg h-full hover:shadow-xl transition-all transform hover:-translate-y-1">
-                <div className="text-5xl mb-4">{item.image}</div>
+                <div className="mb-4">
+                  <item.icon className="w-12 h-12 text-ucsb-gold" />
+                </div>
                 <h3 className="text-xl font-semibold mb-3 group-hover:text-ucsb-gold transition">
                   {item.title}
                 </h3>

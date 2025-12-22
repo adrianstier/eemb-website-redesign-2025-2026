@@ -2,6 +2,19 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import {
+  GraduationCap,
+  Scroll,
+  BookOpen,
+  Shell,
+  Microscope,
+  BarChart3,
+  Lightbulb,
+  FileText,
+  Handshake,
+  Target,
+  LucideIcon
+} from 'lucide-react'
 
 interface Program {
   id: string
@@ -12,7 +25,7 @@ interface Program {
   requirements: string[]
   courses: number
   duration: string
-  icon: string
+  icon: LucideIcon
   focusAreas: string[]
   careerOutcomes: string[]
   link?: string
@@ -37,7 +50,7 @@ export default function AcademicsPage() {
       ],
       courses: 45,
       duration: '5-6 years',
-      icon: '🎓',
+      icon: GraduationCap,
       focusAreas: ['Marine Conservation', 'Climate Adaptation', 'Evolutionary Biology', 'Behavioral Ecology'],
       careerOutcomes: ['Research Scientist', 'University Professor', 'Conservation Manager', 'Environmental Consultant'],
       link: '/academics/graduate'
@@ -56,7 +69,7 @@ export default function AcademicsPage() {
       ],
       courses: 30,
       duration: '2 years',
-      icon: '📜',
+      icon: Scroll,
       focusAreas: ['Marine Biology', 'Population Genetics', 'Ecosystem Ecology', 'Conservation Biology'],
       careerOutcomes: ['Research Technician', 'Conservation Scientist', 'Environmental Manager', 'PhD Student'],
       link: '/academics/graduate'
@@ -76,7 +89,7 @@ export default function AcademicsPage() {
       ],
       courses: 60,
       duration: '4 years',
-      icon: '📚',
+      icon: BookOpen,
       focusAreas: ['Field Biology', 'Laboratory Techniques', 'Research Methods', 'Environmental Science'],
       careerOutcomes: ['Graduate Student', 'Research Technician', 'Field Biologist', 'Environmental Professional']
     },
@@ -93,7 +106,7 @@ export default function AcademicsPage() {
       ],
       courses: 20,
       duration: '1-2 years',
-      icon: '🐚',
+      icon: Shell,
       focusAreas: ['Marine Ecology', 'Oceanography', 'Coastal Biology', 'Marine Conservation'],
       careerOutcomes: ['Environmental Manager', 'Naturalist', 'Graduate Student', 'Science Teacher']
     }
@@ -197,7 +210,9 @@ export default function AcademicsPage() {
                 className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border border-gray-100"
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-4xl">{program.icon}</div>
+                  <div>
+                    <program.icon className="w-10 h-10 text-ocean-blue" />
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
@@ -319,36 +334,38 @@ export default function AcademicsPage() {
               {
                 title: 'Research Skills',
                 description: 'Master field and laboratory techniques for studying ecological and evolutionary processes.',
-                icon: '🔬'
+                icon: Microscope
               },
               {
                 title: 'Quantitative Analysis',
                 description: 'Develop competency in statistics, modeling, and data analysis for biological research.',
-                icon: '📊'
+                icon: BarChart3
               },
               {
                 title: 'Critical Thinking',
                 description: 'Apply scientific reasoning to evaluate evidence and solve complex environmental problems.',
-                icon: '💡'
+                icon: Lightbulb
               },
               {
                 title: 'Communication',
                 description: 'Effectively communicate scientific findings to diverse audiences through writing and presentations.',
-                icon: '📝'
+                icon: FileText
               },
               {
                 title: 'Collaboration',
                 description: 'Work effectively in research teams and develop professional networks.',
-                icon: '🤝'
+                icon: Handshake
               },
               {
                 title: 'Professional Development',
                 description: 'Prepare for careers in academia, government, conservation, and industry.',
-                icon: '🎯'
+                icon: Target
               }
             ].map((outcome, idx) => (
               <div key={idx} className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-md transition">
-                <div className="text-3xl mb-3">{outcome.icon}</div>
+                <div className="mb-3">
+                  <outcome.icon className="w-8 h-8 text-ocean-blue" />
+                </div>
                 <h3 className="text-lg font-bold text-ucsb-navy mb-2">{outcome.title}</h3>
                 <p className="text-gray-600 text-sm">{outcome.description}</p>
               </div>

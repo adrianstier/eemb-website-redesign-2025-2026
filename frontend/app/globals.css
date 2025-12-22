@@ -2,29 +2,241 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   EEMB Design System v3.0 - Global Styles
+   ============================================ */
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
+    /* Core CSS variables for theming */
+    --background: 250 250 248;
+    --foreground: 31 29 26;
+    --border: 232 228 222;
+
+    /* Typography rhythm */
+    --heading-line-height: 1.2;
+    --body-line-height: 1.7;
+
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
+    --background: 31 29 26;
+    --foreground: 250 250 248;
+    --border: 60 58 53;
+  }
+
+  /* Base HTML element styles */
+  html {
+    @apply antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-warm-50 text-warm-800;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  /* Heading styles with serif font */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-ucsb-navy;
+    line-height: var(--heading-line-height);
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  h4 {
+    @apply text-lg md:text-xl font-semibold;
+  }
+
+  /* Body text defaults */
+  p {
+    @apply text-warm-700 leading-relaxed;
+    line-height: var(--body-line-height);
+  }
+
+  /* Link styles with animated underline */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Selection colors */
+  ::selection {
+    @apply bg-ocean-blue/20 text-ocean-deep;
+  }
+
+  /* Focus styles - consistent across all interactive elements */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ocean-blue ring-offset-2 ring-offset-warm-50;
+  }
+
+  /* Smooth image rendering */
+  img {
+    @apply max-w-full h-auto;
   }
 }
 
-@layer base {
-  body {
-    @apply bg-white text-gray-900;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+@layer components {
+  /* ============================================
+     Typography Components
+     ============================================ */
+
+  /* Display text - for hero headlines */
+  .text-display {
+    @apply font-heading text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+    line-height: 1.1;
+  }
+
+  /* Section title - consistent section headers */
+  .section-title {
+    @apply font-heading text-2xl md:text-3xl font-bold text-ucsb-navy mb-4;
+  }
+
+  /* Lead text - intro paragraphs */
+  .text-lead {
+    @apply text-lg md:text-xl text-warm-600 leading-relaxed;
+  }
+
+  /* Animated link underline */
+  .link-underline {
+    @apply relative inline-block text-ocean-blue;
+  }
+
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-ocean-teal origin-left;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-out;
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* ============================================
+     Card Components
+     ============================================ */
+
+  /* Base card with warm shadow */
+  .card {
+    @apply bg-white rounded-2xl shadow-warm-md border border-warm-200;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .card:hover {
+    @apply shadow-warm-xl -translate-y-1;
+  }
+
+  /* Card with subtle 3D tilt on hover */
+  .card-tilt {
+    @apply card;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .card-tilt:hover {
+    transform: translateY(-4px) rotateX(2deg) rotateY(-1deg);
+  }
+
+  /* ============================================
+     Button Components
+     ============================================ */
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply transition-all duration-200 ease-out;
+    @apply focus:ring-2 focus:ring-offset-2 focus:outline-none;
+  }
+
+  .btn-primary {
+    @apply btn bg-ocean-blue text-white;
+    @apply hover:bg-ocean-deep hover:shadow-lg;
+    @apply focus:ring-ocean-blue;
+  }
+
+  .btn-gold {
+    @apply btn bg-ucsb-gold text-ucsb-navy font-bold;
+    @apply hover:bg-yellow-400 hover:shadow-lg;
+    @apply focus:ring-ucsb-gold;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-ocean-blue border-2 border-ocean-blue;
+    @apply hover:bg-ocean-blue hover:text-white;
+    @apply focus:ring-ocean-blue;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-ocean-blue;
+    @apply hover:bg-ocean-blue/10;
+    @apply focus:ring-ocean-blue;
+  }
+
+  /* ============================================
+     Section Components
+     ============================================ */
+
+  /* Standard section padding */
+  .section {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+
+  /* Warm background section */
+  .section-warm {
+    @apply section bg-warm-100;
+  }
+
+  /* Container with consistent padding */
+  .container-content {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl;
+  }
+
+  /* Full-bleed container for edge-to-edge content */
+  .container-full {
+    @apply w-full px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ============================================
+     Badge Components
+     ============================================ */
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold;
+  }
+
+  .badge-ocean {
+    @apply badge bg-gradient-to-r from-ocean-blue to-ocean-teal text-white;
+  }
+
+  .badge-gold {
+    @apply badge bg-ucsb-gold/20 text-ucsb-navy;
+  }
+
+  .badge-kelp {
+    @apply badge bg-kelp-500/10 text-kelp-600;
   }
 }
 
 @layer utilities {
-  /* Screen reader only utility - hides content visually but keeps it accessible */
+  /* ============================================
+     Screen Reader Utilities
+     ============================================ */
+
   .sr-only {
     position: absolute;
     width: 1px;
@@ -37,7 +249,6 @@
     border-width: 0;
   }
 
-  /* Make screen reader only content visible when focused */
   .focus\:not-sr-only:focus {
     position: static;
     width: auto;
@@ -49,61 +260,193 @@
     white-space: normal;
   }
 
-  /* Animation for loading bar */
-  @keyframes slide {
-    0% {
-      transform: translateX(-100%);
-    }
-    50% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
+  /* ============================================
+     Animation Utilities
+     ============================================ */
 
-  /* Fade in animation */
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+  /* Staggered animation delays */
+  .animation-delay-100 { animation-delay: 0.1s; }
+  .animation-delay-200 { animation-delay: 0.2s; }
+  .animation-delay-300 { animation-delay: 0.3s; }
+  .animation-delay-400 { animation-delay: 0.4s; }
+  .animation-delay-500 { animation-delay: 0.5s; }
+  .animation-delay-600 { animation-delay: 0.6s; }
 
-  /* Fade in up animation */
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out forwards;
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out forwards;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.2s;
+  /* Initial state for fade animations */
+  .animate-on-scroll {
     opacity: 0;
   }
 
-  .animation-delay-300 {
-    animation-delay: 0.3s;
-    opacity: 0;
+  .animate-on-scroll.is-visible {
+    animation: fadeInUp 0.6s ease-out forwards;
   }
 
-  .animation-delay-400 {
-    animation-delay: 0.4s;
+  /* ============================================
+     Gradient Utilities
+     ============================================ */
+
+  /* Ocean gradient - simplified, not overwhelming */
+  .gradient-ocean {
+    @apply bg-gradient-to-br from-ocean-deep to-ocean-blue;
+  }
+
+  /* Subtle warm gradient for backgrounds */
+  .gradient-warm {
+    @apply bg-gradient-to-br from-warm-50 to-warm-100;
+  }
+
+  /* Text gradient */
+  .text-gradient-ocean {
+    @apply bg-gradient-to-r from-ocean-blue to-ocean-teal bg-clip-text text-transparent;
+  }
+
+  /* ============================================
+     Image Treatment Utilities
+     ============================================ */
+
+  /* Image with warm overlay for text readability */
+  .image-overlay {
+    @apply relative;
+  }
+
+  .image-overlay::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-t from-ocean-deep/80 via-ocean-deep/40 to-transparent;
+  }
+
+  /* Asymmetric image container - breaks the grid for visual interest */
+  .image-asymmetric {
+    @apply relative;
+  }
+
+  .image-asymmetric::before {
+    content: '';
+    @apply absolute -bottom-4 -right-4 w-full h-full bg-ocean-teal/10 rounded-2xl -z-10;
+  }
+
+  /* ============================================
+     Decorative Utilities
+     ============================================ */
+
+  /* Accent bar - vertical decoration */
+  .accent-bar {
+    @apply w-1 bg-gradient-to-b from-ocean-teal to-ocean-blue rounded-full;
+  }
+
+  /* Horizontal rule with personality */
+  .hr-wave {
+    @apply h-px bg-gradient-to-r from-transparent via-ocean-teal/30 to-transparent;
+  }
+
+  /* Gold accent underline */
+  .underline-gold {
+    @apply relative;
+  }
+
+  .underline-gold::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 w-12 h-1 bg-ucsb-gold rounded-full;
+  }
+
+  /* ============================================
+     Layout Utilities
+     ============================================ */
+
+  /* Overlap utility - for asymmetric layouts */
+  .overlap-left {
+    @apply relative -ml-4 md:-ml-8 lg:-ml-12;
+  }
+
+  .overlap-right {
+    @apply relative -mr-4 md:-mr-8 lg:-mr-12;
+  }
+
+  .overlap-top {
+    @apply relative -mt-8 md:-mt-12 lg:-mt-16;
+  }
+
+  /* ============================================
+     Interactive State Utilities
+     ============================================ */
+
+  /* Subtle scale on hover */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-warm-lg;
+  }
+
+  /* Image zoom on hover */
+  .hover-zoom {
+    @apply transition-transform duration-500 ease-out;
+  }
+
+  .group:hover .hover-zoom {
+    @apply scale-105;
+  }
+
+  /* Glow effect on hover */
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(4, 122, 181, 0.15);
+  }
+}
+
+/* ============================================
+   Keyframe Animations (defined here for @apply compatibility)
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
     opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Counter animation for stats */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

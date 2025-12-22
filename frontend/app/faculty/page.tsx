@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Mail, Phone, MapPin } from 'lucide-react'
 
 interface Faculty {
   id: number
@@ -192,7 +193,7 @@ export default function FacultyPage() {
                     <div className="space-y-2 text-sm">
                       {person.attributes.email && (
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-500">📧</span>
+                          <Mail className="w-4 h-4 text-gray-500" />
                           <a href={`mailto:${person.attributes.email}`} className="text-ucsb-navy hover:text-ucsb-gold">
                             {person.attributes.email}
                           </a>
@@ -200,13 +201,13 @@ export default function FacultyPage() {
                       )}
                       {person.attributes.phone && (
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-500">📞</span>
+                          <Phone className="w-4 h-4 text-gray-500" />
                           <span>{person.attributes.phone}</span>
                         </div>
                       )}
                       {person.attributes.office && (
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-500">📍</span>
+                          <MapPin className="w-4 h-4 text-gray-500" />
                           <span>{person.attributes.office}</span>
                         </div>
                       )}

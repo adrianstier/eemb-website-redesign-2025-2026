@@ -1,10 +1,22 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Literata } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-const inter = Inter({ subsets: ['latin'] })
+// Body font - clean, modern, highly readable
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+// Heading font - academic serif with warmth and character
+const literata = Literata({
+  subsets: ['latin'],
+  variable: '--font-literata',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'EEMB - Ecology, Evolution & Marine Biology | UC Santa Barbara',
@@ -18,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${literata.variable} font-sans`}>
         {/* Skip to main content link for accessibility */}
         <a
           href="#main-content"

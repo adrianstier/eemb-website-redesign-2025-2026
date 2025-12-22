@@ -2,16 +2,31 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import {
+  GraduationCap,
+  TrendingUp,
+  Globe,
+  Waves,
+  Palmtree,
+  Microscope,
+  Star,
+  Sun,
+  Lightbulb,
+  Bug,
+  Users,
+  Handshake,
+  LucideIcon
+} from 'lucide-react'
 
 export default function AboutPage() {
-  const milestones = [
-    { year: '1960s', event: 'UCSB Biology Department established, laying the foundation for biological sciences at UCSB', icon: '🎓' },
-    { year: '1972-77', event: 'Vice Chancellor Alec Alexander strategically reallocated faculty appointments to strengthen ecology and marine biology', icon: '📈' },
-    { year: '1995', event: 'EEMB faculty founded NCEAS (National Center for Ecological Analysis and Synthesis), pioneering synthesis science worldwide', icon: '🌍' },
-    { year: '2000', event: 'NSF Santa Barbara Coastal Long Term Ecological Research Site established, enabling decades of kelp forest monitoring', icon: '🌊' },
-    { year: '2004', event: 'NSF Moorea Coral Reef LTER established in French Polynesia, expanding our tropical research footprint', icon: '🏝️' },
-    { year: '2010s', event: 'Department grows to 40+ research groups, becomes top-ranked program in marine science and ecology', icon: '🔬' },
-    { year: 'Present', event: 'Recognized globally: Top 10 in research impact, Top 3 in Marine Science, leading climate change and biodiversity research', icon: '⭐' }
+  const milestones: { year: string; event: string; icon: LucideIcon }[] = [
+    { year: '1960s', event: 'UCSB Biology Department established, laying the foundation for biological sciences at UCSB', icon: GraduationCap },
+    { year: '1972-77', event: 'Vice Chancellor Alec Alexander strategically reallocated faculty appointments to strengthen ecology and marine biology', icon: TrendingUp },
+    { year: '1995', event: 'EEMB faculty founded NCEAS (National Center for Ecological Analysis and Synthesis), pioneering synthesis science worldwide', icon: Globe },
+    { year: '2000', event: 'NSF Santa Barbara Coastal Long Term Ecological Research Site established, enabling decades of kelp forest monitoring', icon: Waves },
+    { year: '2004', event: 'NSF Moorea Coral Reef LTER established in French Polynesia, expanding our tropical research footprint', icon: Palmtree },
+    { year: '2010s', event: 'Department grows to 40+ research groups, becomes top-ranked program in marine science and ecology', icon: Microscope },
+    { year: 'Present', event: 'Recognized globally: Top 10 in research impact, Top 3 in Marine Science, leading climate change and biodiversity research', icon: Star }
   ]
 
   const researchCenters = [
@@ -47,36 +62,36 @@ export default function AboutPage() {
     },
   ]
 
-  const whyEEMB = [
+  const whyEEMB: { title: string; description: string; icon: LucideIcon }[] = [
     {
       title: 'Unparalleled Coastal Location',
       description: 'Our campus sits directly on the Pacific Ocean, providing immediate access to kelp forests, rocky intertidal zones, sandy beaches, and the Santa Barbara Channel—a biodiversity hotspot.',
-      icon: '🌊',
+      icon: Waves,
     },
     {
       title: 'Year-Round Fieldwork',
       description: 'California\'s Mediterranean climate enables field research 365 days a year, from local coastal habitats to the Sierra Nevada, Mojave Desert, and Channel Islands.',
-      icon: '☀️',
+      icon: Sun,
     },
     {
       title: 'Birthplace of Synthesis Science',
       description: 'EEMB faculty founded NCEAS in 1995, revolutionizing how ecologists collaborate and analyze data at global scales. This legacy of innovation continues today.',
-      icon: '💡',
+      icon: Lightbulb,
     },
     {
       title: 'Two Long-Term Ecological Research Sites',
       description: 'Direct access to NSF-funded LTER sites in the Santa Barbara Channel and Moorea, French Polynesia—enabling research from temperate to tropical ecosystems.',
-      icon: '🔬',
+      icon: Microscope,
     },
     {
       title: 'Marine + Terrestrial Integration',
       description: 'Unlike purely marine programs, EEMB integrates marine biology with terrestrial ecology and evolution, enabling unique cross-ecosystem research.',
-      icon: '🦋',
+      icon: Bug,
     },
     {
       title: 'Channel Islands Access',
       description: 'Research partnerships with Channel Islands National Park and Marine Sanctuary provide access to pristine island ecosystems just offshore.',
-      icon: '🏝️',
+      icon: Palmtree,
     },
   ]
 
@@ -159,7 +174,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyEEMB.map((item, index) => (
               <div key={index} className="bg-white rounded-xl p-6 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-200">
-                <div className="text-4xl mb-4">{item.icon}</div>
+                <div className="mb-4">
+                  <item.icon className="w-10 h-10 text-ocean-blue" />
+                </div>
                 <h3 className="text-lg font-bold text-ucsb-navy mb-2">{item.title}</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
               </div>
@@ -341,8 +358,8 @@ export default function AboutPage() {
             {milestones.map((milestone, index) => (
               <div key={index} className={`relative mb-8 md:mb-10 ${index % 2 === 0 ? 'md:pr-1/2' : 'md:pl-1/2 md:ml-auto'}`}>
                 <div className={`flex items-center gap-4 md:gap-6 ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}>
-                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-full flex items-center justify-center text-white text-xl md:text-2xl shadow-lg z-10">
-                    {milestone.icon}
+                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-full flex items-center justify-center shadow-lg z-10">
+                    <milestone.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
                   </div>
                   <div className="flex-1 bg-white rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
                     <p className="text-xl font-bold text-ocean-teal mb-2">{milestone.year}</p>
@@ -497,17 +514,19 @@ export default function AboutPage() {
           <h2 className="text-2xl md:text-3xl font-bold text-center text-ucsb-navy mb-10">Explore EEMB</h2>
           <div className="grid md:grid-cols-4 gap-4">
             {[
-              { href: '/people', label: 'People', desc: 'Faculty, students & staff', icon: '👥' },
-              { href: '/research', label: 'Research', desc: 'Explore our research areas', icon: '🔬' },
-              { href: '/academics', label: 'Academics', desc: 'Graduate & undergrad programs', icon: '🎓' },
-              { href: '/dei', label: 'DEI', desc: 'Diversity & inclusion', icon: '🤝' },
+              { href: '/people', label: 'People', desc: 'Faculty, students & staff', icon: Users },
+              { href: '/research', label: 'Research', desc: 'Explore our research areas', icon: Microscope },
+              { href: '/academics', label: 'Academics', desc: 'Graduate & undergrad programs', icon: GraduationCap },
+              { href: '/dei', label: 'DEI', desc: 'Diversity & inclusion', icon: Handshake },
             ].map((link, index) => (
               <Link
                 key={index}
                 href={link.href}
                 className="group bg-white rounded-xl p-6 border border-gray-100 shadow-md hover:shadow-xl hover:border-ocean-blue/30 transition-all text-center"
               >
-                <div className="text-4xl mb-3">{link.icon}</div>
+                <div className="mb-3 flex justify-center">
+                  <link.icon className="w-10 h-10 text-ocean-blue" />
+                </div>
                 <h3 className="font-bold text-ucsb-navy group-hover:text-ocean-blue transition-colors">{link.label}</h3>
                 <p className="text-gray-500 text-sm">{link.desc}</p>
               </Link>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import WaveDivider from './ui/WaveDivider'
 
 export default function Footer() {
   const quickLinks = [
@@ -48,98 +49,137 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-ocean-deep text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {/* Brand column */}
-          <div className="lg:col-span-1">
-            <h3 className="text-xl font-bold mb-4">EEMB</h3>
-            <p className="text-white/70 text-sm leading-relaxed mb-4">
-              Department of Ecology, Evolution and Marine Biology at UC Santa Barbara.
-            </p>
-            <p className="text-white/70 text-sm leading-relaxed">
-              University of California, Santa Barbara<br />
-              Santa Barbara, CA 93106-9620
-            </p>
-          </div>
+    <>
+      {/* Wave transition to footer */}
+      <WaveDivider variant="bold" toColor="fill-ocean-deep" />
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-ucsb-gold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/70 hover:text-white transition text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <footer className="bg-ocean-deep text-white -mt-1">
+        {/* Subtle topographic pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.02] pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 Q25 40 50 50 T100 50' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M0 70 Q25 60 50 70 T100 70' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M0 30 Q25 20 50 30 T100 30' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E")`,
+          }}
+        />
 
-          {/* Resources */}
-          <div>
-            <h4 className="font-semibold text-ucsb-gold mb-4">Resources</h4>
-            <ul className="space-y-2">
-              {resourceLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/70 hover:text-white transition text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+            {/* Brand column */}
+            <div className="lg:col-span-1">
+              <h3 className="font-heading text-2xl font-bold mb-4 tracking-tight">EEMB</h3>
+              <p className="text-white/70 text-sm leading-relaxed mb-5">
+                Department of Ecology, Evolution and Marine Biology at UC Santa Barbara.
+              </p>
+              <div className="text-white/60 text-sm leading-relaxed">
+                <p>University of California, Santa Barbara</p>
+                <p>Santa Barbara, CA 93106-9620</p>
+              </div>
 
-          {/* Connect */}
-          <div>
-            <h4 className="font-semibold text-ucsb-gold mb-4">Connect</h4>
-            <div className="flex gap-4 mb-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="text-white/60 hover:text-white transition"
-                  aria-label={social.label}
-                >
-                  {social.icon}
-                </a>
-              ))}
+              {/* UCSB affiliation badge */}
+              <div className="mt-6 inline-flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg border border-white/10">
+                <div className="w-6 h-6 bg-ucsb-gold rounded flex items-center justify-center">
+                  <span className="text-ocean-deep text-xs font-bold">UC</span>
+                </div>
+                <span className="text-xs text-white/70">UC Santa Barbara</span>
+              </div>
             </div>
-            <p className="text-white/70 text-sm">
-              <a
-                href="mailto:eemb@lifesci.ucsb.edu"
-                className="hover:text-white transition"
-              >
-                eemb@lifesci.ucsb.edu
-              </a>
-              <br />
-              (805) 893-3511
-            </p>
-          </div>
-        </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-white/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/60 text-sm">
-            &copy; {new Date().getFullYear()} The Regents of the University of California. All rights reserved.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/privacy" className="text-white/60 hover:text-white transition text-sm">
-              Privacy Policy
-            </Link>
-            <Link href="/accessibility" className="text-white/60 hover:text-white transition text-sm">
-              Accessibility
-            </Link>
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-heading font-semibold text-ucsb-gold mb-5 text-sm uppercase tracking-wider">
+                Quick Links
+              </h4>
+              <ul className="space-y-3">
+                {quickLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 bg-ocean-teal/50 rounded-full group-hover:bg-ucsb-gold transition-colors" />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h4 className="font-heading font-semibold text-ucsb-gold mb-5 text-sm uppercase tracking-wider">
+                Resources
+              </h4>
+              <ul className="space-y-3">
+                {resourceLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 bg-ocean-teal/50 rounded-full group-hover:bg-ucsb-gold transition-colors" />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Connect */}
+            <div>
+              <h4 className="font-heading font-semibold text-ucsb-gold mb-5 text-sm uppercase tracking-wider">
+                Connect
+              </h4>
+              <div className="flex gap-3 mb-6">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-200 border border-white/10 hover:border-white/20"
+                    aria-label={social.label}
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
+              <div className="space-y-2">
+                <a
+                  href="mailto:eemb@lifesci.ucsb.edu"
+                  className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  eemb@lifesci.ucsb.edu
+                </a>
+                <a
+                  href="tel:+18058933511"
+                  className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  (805) 893-3511
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-white/10 mt-14 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-white/50 text-sm">
+              &copy; {new Date().getFullYear()} The Regents of the University of California. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <Link href="/privacy" className="text-white/50 hover:text-white/80 transition-colors text-sm">
+                Privacy Policy
+              </Link>
+              <Link href="/accessibility" className="text-white/50 hover:text-white/80 transition-colors text-sm">
+                Accessibility
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   )
 }
