@@ -1,291 +1,471 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { Search, Calendar, ChevronRight, ArrowRight, ChevronDown, Filter, X } from 'lucide-react'
+import newsData from '@/data/news.json'
 
 interface NewsItem {
   id: number
-  attributes: {
-    title: string
-    excerpt: string
-    content?: string
-    publishDate: string
-    slug: string
-    category?: string
-    image?: string
-  }
+  title: string
+  slug: string
+  date: string
+  excerpt: string
+  imageUrl: string
+  originalImageUrl: string
+}
+
+// Topic categories with colors - inferred from content
+const topics = [
+  { id: 'marine', label: 'Marine & Ocean', color: 'bg-ocean-blue', textColor: 'text-ocean-blue' },
+  { id: 'climate', label: 'Climate & Environment', color: 'bg-emerald-500', textColor: 'text-emerald-600' },
+  { id: 'ecology', label: 'Ecology', color: 'bg-amber-500', textColor: 'text-amber-600' },
+  { id: 'evolution', label: 'Evolution & Genetics', color: 'bg-purple-500', textColor: 'text-purple-600' },
+  { id: 'conservation', label: 'Conservation', color: 'bg-teal-500', textColor: 'text-teal-600' },
+  { id: 'faculty', label: 'Faculty & Awards', color: 'bg-ucsb-gold', textColor: 'text-yellow-700' },
+]
+
+// Simple topic inference based on keywords
+function inferTopic(title: string, excerpt: string): string {
+  const text = (title + ' ' + excerpt).toLowerCase()
+  if (text.includes('coral') || text.includes('ocean') || text.includes('marine') || text.includes('sea') || text.includes('fish') || text.includes('kelp') || text.includes('shark')) return 'marine'
+  if (text.includes('climate') || text.includes('carbon') || text.includes('temperature') || text.includes('warming')) return 'climate'
+  if (text.includes('conservation') || text.includes('protected') || text.includes('wildlife') || text.includes('endangered')) return 'conservation'
+  if (text.includes('evolution') || text.includes('genome') || text.includes('gene') || text.includes('species')) return 'evolution'
+  if (text.includes('award') || text.includes('fellow') || text.includes('professor') || text.includes('grant') || text.includes('honor')) return 'faculty'
+  return 'ecology'
 }
 
 export default function NewsPage() {
-  const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedYear, setSelectedYear] = useState<string>('all')
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([])
+  const [visibleCount, setVisibleCount] = useState(9)
+  const [showFilters, setShowFilters] = useState(false)
 
-  useEffect(() => {
-    fetchNews()
+  // Get unique years from news data
+  const years = useMemo(() => {
+    const yearSet = new Set<string>()
+    newsData.forEach((item: NewsItem) => {
+      const year = new Date(item.date).getFullYear().toString()
+      yearSet.add(year)
+    })
+    return Array.from(yearSet).sort((a, b) => parseInt(b) - parseInt(a))
   }, [])
 
-  const fetchNews = async () => {
-    try {
-      const response = await fetch('http://localhost:1337/api/news-articles?sort=publishDate:desc&populate=*')
-      const data = await response.json()
-      setNews(data.data || [])
-    } catch (error) {
-      console.error('Error fetching news:', error)
-      // Set placeholder data
-      setNews([
-        {
-          id: 1,
-          attributes: {
-            title: 'EEMB Researchers Discover New Deep-Sea Species',
-            excerpt: 'A groundbreaking expedition led by EEMB scientists has identified three previously unknown species of deep-sea organisms in the Santa Barbara Channel.',
-            content: 'Our research team recently completed a five-week expedition studying the unique ecosystems of the Santa Barbara Channel at depths exceeding 2,000 meters. The discoveries include two new species of hydrozoan and one new species of deepwater squid.',
-            publishDate: '2024-11-15',
-            slug: 'new-deep-sea-species',
-            category: 'Research',
-            image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600'
-          }
-        },
-        {
-          id: 2,
-          attributes: {
-            title: 'PhD Student Wins NSF Graduate Fellowship',
-            excerpt: 'Congratulations to Sarah Johnson for receiving the prestigious National Science Foundation Graduate Research Fellowship.',
-            content: 'Sarah Johnson, a PhD student in our Evolutionary Biology program, has been awarded the highly competitive NSF Graduate Research Fellowship. Her research focuses on the evolutionary adaptations of coastal organisms to climate change.',
-            publishDate: '2024-11-10',
-            slug: 'phd-nsf-fellowship',
-            category: 'Awards',
-            image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600'
-          }
-        },
-        {
-          id: 3,
-          attributes: {
-            title: 'EEMB Receives $3.2M Climate Research Grant',
-            excerpt: 'The National Science Foundation awards EEMB department a major grant to study ecosystem responses to ocean warming.',
-            content: 'The Department of Ecology, Evolution and Marine Biology has received a $3.2 million grant from the National Science Foundation to conduct a five-year study on how marine ecosystems respond to increasing ocean temperatures and acidification.',
-            publishDate: '2024-11-05',
-            slug: 'climate-grant',
-            category: 'Funding',
-            image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600'
-          }
-        },
-        {
-          id: 4,
-          attributes: {
-            title: 'Coral Restoration Project Celebrates First Year',
-            excerpt: 'EEMB\'s coral restoration initiative has successfully restored over 1,000 coral colonies in local marine reserves.',
-            content: 'After one year of intensive work, our coral restoration program has achieved remarkable success with a 95% survival rate for restored colonies. This groundbreaking initiative provides hope for coral reef conservation globally.',
-            publishDate: '2024-10-28',
-            slug: 'coral-restoration-milestone',
-            category: 'Conservation',
-            image: 'https://images.unsplash.com/photo-1583212192562-40c695cabccf?w=600'
-          }
-        },
-        {
-          id: 5,
-          attributes: {
-            title: 'New Undergraduate Research Summer Program Launches',
-            excerpt: 'EEMB announces an expanded summer research opportunity for undergraduate students interested in field biology.',
-            content: 'The department is pleased to announce the launch of our new Summer Undergraduate Research Program (SURP), which will provide 20 undergraduates with hands-on research experience in marine and terrestrial ecosystems.',
-            publishDate: '2024-10-20',
-            slug: 'summer-research-program',
-            category: 'Education',
-            image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600'
-          }
-        },
-        {
-          id: 6,
-          attributes: {
-            title: 'Faculty Member Named Fellow of the American Association for the Advancement of Science',
-            excerpt: 'Professor Michael Chen receives prestigious AAAS Fellowship for his contributions to evolutionary biology.',
-            content: 'Professor Michael Chen has been elected as a Fellow of the American Association for the Advancement of Science (AAAS), one of the highest honors in the scientific community, recognizing his distinguished contributions to evolutionary biology and population genetics.',
-            publishDate: '2024-10-15',
-            slug: 'aaas-fellowship',
-            category: 'Awards',
-            image: 'https://images.unsplash.com/photo-1536776877081-d282a0f896e2?w=600'
-          }
-        },
-        {
-          id: 7,
-          attributes: {
-            title: 'Biodiversity Survey Reveals Unexpected Species Richness',
-            excerpt: 'New study shows that understudied habitats contain far more species diversity than previously estimated.',
-            content: 'A comprehensive biodiversity survey conducted by EEMB researchers has revealed that certain terrestrial habitats in the local region contain significantly more species diversity than scientific models had predicted, suggesting new conservation priorities.',
-            publishDate: '2024-10-08',
-            slug: 'biodiversity-survey',
-            category: 'Research',
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600'
-          }
-        },
-        {
-          id: 8,
-          attributes: {
-            title: 'International Collaboration Studies Migratory Bird Populations',
-            excerpt: 'EEMB researchers partner with institutions across four continents to track changing migration patterns.',
-            content: 'Our department is leading a multi-institutional research effort involving colleagues from 12 countries to understand how climate change is affecting migratory bird populations and their critical stopover habitats.',
-            publishDate: '2024-09-30',
-            slug: 'bird-migration-study',
-            category: 'Research',
-            image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600'
-          }
-        }
-      ])
-    } finally {
-      setLoading(false)
-    }
+  // Filter news based on search, year, and topics
+  const filteredNews = useMemo(() => {
+    return (newsData as NewsItem[]).filter(item => {
+      const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            item.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+      const itemYear = new Date(item.date).getFullYear().toString()
+      const matchesYear = selectedYear === 'all' || itemYear === selectedYear
+      const itemTopic = inferTopic(item.title, item.excerpt)
+      const matchesTopic = selectedTopics.length === 0 || selectedTopics.includes(itemTopic)
+      return matchesSearch && matchesYear && matchesTopic
+    })
+  }, [searchTerm, selectedYear, selectedTopics])
+
+  // Featured news for bento grid (first 5 items)
+  const featuredNews = filteredNews.slice(0, 5)
+  // Remaining news for standard grid
+  const remainingNews = filteredNews.slice(5, visibleCount + 5)
+  const hasMore = visibleCount + 5 < filteredNews.length
+
+  const toggleTopic = (topicId: string) => {
+    setSelectedTopics(prev =>
+      prev.includes(topicId)
+        ? prev.filter(t => t !== topicId)
+        : [...prev, topicId]
+    )
   }
 
-  const categories = ['All Categories', 'Research', 'Education', 'Awards', 'Funding', 'Conservation']
+  const clearFilters = () => {
+    setSearchTerm('')
+    setSelectedYear('all')
+    setSelectedTopics([])
+  }
 
-  const filteredNews = news.filter(item => {
-    const matchesSearch = item.attributes.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          item.attributes.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = !selectedCategory || selectedCategory === 'All Categories' || item.attributes.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  const hasActiveFilters = searchTerm || selectedYear !== 'all' || selectedTopics.length > 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
-        <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-warm-50">
+      {/* Compact Hero */}
+      <section className="relative bg-gradient-to-br from-ucsb-navy via-ocean-deep to-ocean-blue text-white py-16 overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+            backgroundSize: '32px 32px',
+          }} />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Latest News</h1>
-            <p className="text-lg md:text-xl text-white/90">
-              Stay informed about our research discoveries, faculty achievements, and departmental updates from the Department of Ecology, Evolution and Marine Biology.
+            <nav className="flex items-center gap-2 text-sm text-white/70 mb-4">
+              <Link href="/" className="hover:text-white transition">Home</Link>
+              <ChevronRight className="w-4 h-4" />
+              <span className="text-white">News</span>
+            </nav>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">
+              Research News
+            </h1>
+            <p className="text-lg text-white/80 max-w-2xl">
+              Discoveries, breakthroughs, and stories from EEMB researchers studying life on Earth.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Search and Filter Section */}
-      <section className="py-8 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
+      {/* Sticky Filter Bar */}
+      <section className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-warm-200 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          {/* Main filter row */}
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+            {/* Search */}
+            <div className="relative flex-1 w-full lg:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-400" />
               <input
                 type="text"
-                placeholder="Search news articles..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-ocean-blue transition"
+                placeholder="Search articles..."
+                className="w-full pl-10 pr-4 py-2.5 text-sm border border-warm-300 rounded-lg focus:ring-2 focus:ring-ocean-blue/20 focus:border-ocean-blue transition bg-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <select
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-ocean-blue transition bg-white min-w-[200px]"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+
+            {/* Year dropdown */}
+            <div className="relative">
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="appearance-none pl-4 pr-10 py-2.5 text-sm border border-warm-300 rounded-lg focus:ring-2 focus:ring-ocean-blue/20 focus:border-ocean-blue transition bg-white cursor-pointer"
+              >
+                <option value="all">All Years</option>
+                {years.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-400 pointer-events-none" />
+            </div>
+
+            {/* Filter toggle for mobile */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="lg:hidden flex items-center gap-2 px-4 py-2.5 text-sm border border-warm-300 rounded-lg hover:bg-warm-50 transition"
             >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
+              <Filter className="w-4 h-4" />
+              Topics
+              {selectedTopics.length > 0 && (
+                <span className="bg-ocean-blue text-white text-xs px-1.5 py-0.5 rounded-full">
+                  {selectedTopics.length}
+                </span>
+              )}
+            </button>
+
+            {/* Topic pills - desktop */}
+            <div className="hidden lg:flex items-center gap-2 flex-wrap">
+              {topics.map(topic => (
+                <button
+                  key={topic.id}
+                  onClick={() => toggleTopic(topic.id)}
+                  className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
+                    selectedTopics.includes(topic.id)
+                      ? `${topic.color} text-white border-transparent`
+                      : `bg-white ${topic.textColor} border-current hover:bg-warm-50`
+                  }`}
+                >
+                  {topic.label}
+                </button>
               ))}
-            </select>
+            </div>
+
+            {/* Clear filters */}
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1.5 text-sm text-warm-500 hover:text-warm-700 transition"
+              >
+                <X className="w-4 h-4" />
+                Clear
+              </button>
+            )}
+          </div>
+
+          {/* Mobile topic pills */}
+          {showFilters && (
+            <div className="lg:hidden flex items-center gap-2 flex-wrap mt-4 pt-4 border-t border-warm-200">
+              {topics.map(topic => (
+                <button
+                  key={topic.id}
+                  onClick={() => toggleTopic(topic.id)}
+                  className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
+                    selectedTopics.includes(topic.id)
+                      ? `${topic.color} text-white border-transparent`
+                      : `bg-white ${topic.textColor} border-current`
+                  }`}
+                >
+                  {topic.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Results count */}
+          <div className="mt-3 text-sm text-warm-500">
+            {filteredNews.length} article{filteredNews.length !== 1 ? 's' : ''}
+            {hasActiveFilters && ' matching your filters'}
           </div>
         </div>
       </section>
 
-      {/* News Grid */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="bg-white rounded-xl overflow-hidden shadow-md animate-pulse">
-                  <div className="h-48 bg-gray-200"></div>
-                  <div className="p-6">
-                    <div className="h-4 bg-gray-200 rounded mb-4 w-2/3"></div>
-                    <div className="h-3 bg-gray-100 rounded mb-2"></div>
-                    <div className="h-3 bg-gray-100 rounded"></div>
+      {/* Bento Grid - Featured Articles */}
+      {featuredNews.length > 0 && (
+        <section className="py-12">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[280px]">
+              {/* Hero Card - 2x2 */}
+              {featuredNews[0] && (
+                <article className="md:col-span-2 md:row-span-2 group relative rounded-2xl overflow-hidden shadow-lg">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+                  <Image
+                    src={featuredNews[0].imageUrl || '/images/news/placeholder.jpg'}
+                    alt={featuredNews[0].title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-8">
+                    <div className="flex items-center gap-3 mb-3">
+                      <TopicBadge topic={inferTopic(featuredNews[0].title, featuredNews[0].excerpt)} />
+                      <time className="text-sm text-white/70">{featuredNews[0].date}</time>
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3 group-hover:text-ucsb-gold transition line-clamp-3">
+                      <Link href={`/news/${featuredNews[0].slug}`} className="hover:underline decoration-2 underline-offset-4">
+                        {featuredNews[0].title}
+                      </Link>
+                    </h2>
+                    <p className="text-white/80 line-clamp-2 mb-4 max-w-xl hidden md:block">
+                      {featuredNews[0].excerpt}
+                    </p>
+                    <Link
+                      href={`/news/${featuredNews[0].slug}`}
+                      className="inline-flex items-center gap-2 text-ucsb-gold font-semibold hover:gap-3 transition-all w-fit"
+                    >
+                      Read Story <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
-                </div>
+                </article>
+              )}
+
+              {/* Medium Cards - 1x1 */}
+              {featuredNews.slice(1, 3).map((item) => (
+                <MediumCard key={item.id} item={item} />
+              ))}
+
+              {/* Compact Cards - horizontal */}
+              {featuredNews.slice(3, 5).map((item) => (
+                <CompactCard key={item.id} item={item} />
               ))}
             </div>
-          ) : filteredNews.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-gray-600 text-lg">No news articles found matching your search criteria.</p>
-            </div>
-          ) : (
-            <>
-              <div className="mb-6 text-gray-600 font-medium">
-                Showing {filteredNews.length} article{filteredNews.length !== 1 ? 's' : ''}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredNews.map(item => (
-                  <article key={item.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all group border border-gray-100">
-                    {item.attributes.image && (
-                      <div className="h-48 overflow-hidden bg-gray-200">
-                        <img
-                          src={item.attributes.image}
-                          alt={item.attributes.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      {item.attributes.category && (
-                        <span className="text-xs font-bold text-white bg-gradient-to-r from-ocean-blue to-ocean-teal px-3 py-1 rounded-full">
-                          {item.attributes.category}
-                        </span>
-                      )}
-                      <h2 className="text-xl font-bold text-ucsb-navy mt-4 mb-3 group-hover:text-ocean-teal transition line-clamp-2">
-                        <Link href={`/news/${item.attributes.slug}`}>
-                          {item.attributes.title}
-                        </Link>
-                      </h2>
-                      <p className="text-gray-600 mb-4 line-clamp-3 text-sm">
-                        {item.attributes.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <time className="text-xs text-gray-500">
-                          {new Date(item.attributes.publishDate).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                        </time>
-                        <Link
-                          href={`/news/${item.attributes.slug}`}
-                          className="text-sm font-semibold text-ocean-blue hover:text-ocean-teal transition"
-                        >
-                          Read More →
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      {/* Newsletter Signup Section */}
-      <section className="py-12 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-3">Stay Updated</h2>
-            <p className="text-lg text-white/90 mb-6">
-              Subscribe to our newsletter to receive the latest news and announcements directly in your inbox.
-            </p>
-            <form className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-ucsb-gold focus:outline-none"
-                required
-              />
+      {/* Standard Grid - Remaining Articles */}
+      {remainingNews.length > 0 && (
+        <section className="py-8 pb-16">
+          <div className="container mx-auto px-4">
+            <h2 className="text-xl font-serif font-bold text-warm-800 mb-6 flex items-center gap-3">
+              <span className="w-8 h-0.5 bg-ocean-blue"></span>
+              More Stories
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {remainingNews.map((item, index) => (
+                <StandardCard key={item.id} item={item} index={index} />
+              ))}
+            </div>
+
+            {hasMore && (
+              <div className="text-center mt-12">
+                <button
+                  onClick={() => setVisibleCount(prev => prev + 9)}
+                  className="inline-flex items-center gap-2 bg-warm-800 text-white px-8 py-3 rounded-xl font-semibold hover:bg-warm-900 transition"
+                >
+                  Load More Articles
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Empty State */}
+      {filteredNews.length === 0 && (
+        <section className="py-24">
+          <div className="container mx-auto px-4 text-center">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 bg-warm-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-warm-400" />
+              </div>
+              <h2 className="text-xl font-serif font-bold text-warm-800 mb-2">No articles found</h2>
+              <p className="text-warm-600 mb-6">
+                Try adjusting your search terms or filters to find what you're looking for.
+              </p>
               <button
-                type="submit"
-                className="bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-bold hover:bg-yellow-400 transition"
+                onClick={clearFilters}
+                className="inline-flex items-center gap-2 text-ocean-blue font-semibold hover:text-ocean-deep transition"
               >
-                Subscribe
+                Clear all filters <X className="w-4 h-4" />
               </button>
-            </form>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Archive Section */}
+      <section className="py-12 bg-warm-100 border-t border-warm-200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-xl font-serif font-bold text-warm-800 mb-6">Browse by Year</h2>
+          <div className="flex flex-wrap gap-2">
+            {years.map(year => {
+              const count = (newsData as NewsItem[]).filter(item =>
+                new Date(item.date).getFullYear().toString() === year
+              ).length
+              return (
+                <button
+                  key={year}
+                  onClick={() => {
+                    setSelectedYear(year)
+                    window.scrollTo({ top: 200, behavior: 'smooth' })
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition border ${
+                    selectedYear === year
+                      ? 'bg-ocean-blue text-white border-ocean-blue'
+                      : 'bg-white text-warm-700 border-warm-200 hover:border-warm-300 hover:shadow-sm'
+                  }`}
+                >
+                  <span className="font-semibold">{year}</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    selectedYear === year ? 'bg-white/20' : 'bg-warm-100'
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </div>
       </section>
     </div>
+  )
+}
+
+// Topic Badge Component
+function TopicBadge({ topic }: { topic: string }) {
+  const topicData = topics.find(t => t.id === topic) || topics[3]
+  return (
+    <span className={`${topicData.color} text-white text-xs font-semibold px-2.5 py-1 rounded-full`}>
+      {topicData.label}
+    </span>
+  )
+}
+
+// Medium Card (1x1 in bento grid)
+function MediumCard({ item }: { item: NewsItem }) {
+  const topic = inferTopic(item.title, item.excerpt)
+
+  return (
+    <article className="group relative rounded-xl overflow-hidden shadow-md bg-white">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent z-10" />
+      <Image
+        src={item.imageUrl || '/images/news/placeholder.jpg'}
+        alt={item.title}
+        fill
+        className="object-cover group-hover:scale-105 transition-transform duration-500"
+      />
+      <div className="absolute inset-0 z-20 flex flex-col justify-end p-5">
+        <div className="flex items-center gap-2 mb-2">
+          <TopicBadge topic={topic} />
+        </div>
+        <h3 className="text-lg font-serif font-bold text-white line-clamp-3 group-hover:text-ucsb-gold transition">
+          <Link href={`/news/${item.slug}`}>
+            {item.title}
+          </Link>
+        </h3>
+        <time className="text-xs text-white/60 mt-2">{item.date}</time>
+      </div>
+    </article>
+  )
+}
+
+// Compact Card (horizontal layout)
+function CompactCard({ item }: { item: NewsItem }) {
+  const topic = inferTopic(item.title, item.excerpt)
+
+  return (
+    <article className="group flex gap-4 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition border border-warm-100">
+      <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden">
+        <Image
+          src={item.imageUrl || '/images/news/placeholder.jpg'}
+          alt={item.title}
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-300"
+        />
+      </div>
+      <div className="flex-1 min-w-0 flex flex-col justify-center">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className={`${topics.find(t => t.id === topic)?.textColor || 'text-warm-600'} text-xs font-semibold`}>
+            {topics.find(t => t.id === topic)?.label || 'Research'}
+          </span>
+        </div>
+        <h3 className="font-semibold text-warm-800 line-clamp-2 text-sm group-hover:text-ocean-blue transition leading-snug">
+          <Link href={`/news/${item.slug}`}>{item.title}</Link>
+        </h3>
+        <time className="text-xs text-warm-400 mt-1.5">{item.date}</time>
+      </div>
+    </article>
+  )
+}
+
+// Standard Card (for grid below bento)
+function StandardCard({ item, index }: { item: NewsItem; index: number }) {
+  const topic = inferTopic(item.title, item.excerpt)
+
+  return (
+    <article
+      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-warm-100"
+      style={{ animationDelay: `${index * 50}ms` }}
+    >
+      <div className="relative h-44 overflow-hidden bg-warm-100">
+        <Image
+          src={item.imageUrl || '/images/news/placeholder.jpg'}
+          alt={item.title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute top-3 left-3">
+          <TopicBadge topic={topic} />
+        </div>
+      </div>
+      <div className="p-5">
+        <time className="text-xs text-warm-500 mb-2 block">{item.date}</time>
+        <h2 className="text-base font-serif font-bold text-warm-800 mb-2 line-clamp-2 group-hover:text-ocean-blue transition leading-snug">
+          <Link href={`/news/${item.slug}`}>
+            {item.title}
+          </Link>
+        </h2>
+        <p className="text-warm-600 text-sm line-clamp-2 mb-3">
+          {item.excerpt}
+        </p>
+        <Link
+          href={`/news/${item.slug}`}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-ocean-blue hover:text-ocean-deep transition"
+        >
+          Read More <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+    </article>
   )
 }

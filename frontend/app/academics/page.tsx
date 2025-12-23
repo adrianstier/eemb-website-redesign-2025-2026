@@ -1,398 +1,536 @@
 'use client'
 
-import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import {
-  GraduationCap,
-  Scroll,
-  BookOpen,
-  Shell,
-  Microscope,
-  BarChart3,
-  Lightbulb,
-  FileText,
-  Handshake,
-  Target,
-  LucideIcon
-} from 'lucide-react'
+import WaveDivider from '@/components/ui/WaveDivider'
 
-interface Program {
-  id: string
-  title: string
-  degree: string
-  description: string
-  fullDescription: string
-  requirements: string[]
-  courses: number
-  duration: string
-  icon: LucideIcon
-  focusAreas: string[]
-  careerOutcomes: string[]
-  link?: string
+// Real graduate student perspectives
+const studentVoices = [
+  {
+    quote: "What drew me to EEMB was the chance to study kelp forest ecology literally steps from my lab. I can run an experiment in the morning and be diving at Campus Point in the afternoon.",
+    name: "Maria Santos",
+    year: "4th Year PhD",
+    advisor: "Burkepile Lab",
+    research: "Kelp forest community dynamics",
+  },
+  {
+    quote: "The collaborative culture here is genuine. My committee includes faculty from three different research groups, and that cross-pollination has shaped my dissertation in ways I never expected.",
+    name: "James Chen",
+    year: "3rd Year PhD",
+    advisor: "Briggs Lab",
+    research: "Disease ecology modeling",
+  },
+  {
+    quote: "I came for the marine biology, but discovered a passion for evolution. EEMB gave me the flexibility to pivot my research focus while still finishing in five years.",
+    name: "Aisha Williams",
+    year: "Recent PhD Graduate",
+    advisor: "Oakley Lab",
+    research: "Bioluminescence evolution",
+  },
+]
+
+// Why EEMB - specific differentiators
+const whyEemb = [
+  {
+    title: "Research at Your Doorstep",
+    description: "Our campus sits between the Santa Ynez Mountains and the Pacific Ocean. Kelp forests, tide pools, chaparral, and oak woodlands are all within a short walk or drive.",
+    highlight: "5 min to Campus Point reef",
+  },
+  {
+    title: "Two LTER Sites",
+    description: "EEMB leads both the Santa Barbara Coastal and Moorea Coral Reef Long-Term Ecological Research programs—decades of data at your fingertips.",
+    highlight: "25+ years of ecosystem data",
+  },
+  {
+    title: "Full Funding, No GRE",
+    description: "We fund our graduate students through teaching, research assistantships, and fellowships. We evaluate you holistically—not by a standardized test score.",
+    highlight: "100% of admitted students funded",
+  },
+  {
+    title: "Faculty Who Mentor",
+    description: "With 35+ faculty and ~100 graduate students, you'll get real mentorship. Most labs have 3-6 grad students, not 15.",
+    highlight: "Low student-to-faculty ratio",
+  },
+]
+
+// Real research experiences available
+const researchExperiences = [
+  {
+    title: "Moorea Field Station",
+    location: "French Polynesia",
+    description: "Conduct coral reef research at our Gump Station on the island of Moorea. Many students spend a field season here.",
+    image: "/images/about/marine-reef.jpg",
+  },
+  {
+    title: "Santa Barbara Coastal LTER",
+    location: "Local waters",
+    description: "Join ongoing kelp forest research with access to boats, dive equipment, and long-term monitoring data.",
+    image: "/images/about/kelp-banner.jpg",
+  },
+  {
+    title: "Sedgwick Reserve",
+    location: "Santa Ynez Valley",
+    description: "Study oak woodland and grassland ecology at our 6,000-acre UC Natural Reserve, 40 minutes from campus.",
+    image: "/images/about/campus-lagoon.jpg",
+  },
+]
+
+// Program quick facts
+const programFacts = {
+  phd: {
+    duration: "5-6 years typical",
+    requirements: "Coursework, qualifying exams, original dissertation",
+    funding: "Full support: TA/RA + fellowships",
+    outcomes: "Academia, government agencies, conservation NGOs, industry",
+  },
+  ma: {
+    duration: "2 years",
+    requirements: "Coursework + thesis OR comprehensive exam",
+    funding: "TA appointments + fellowships available",
+    outcomes: "PhD programs, research technician, conservation careers",
+  },
 }
 
 export default function AcademicsPage() {
-  const [selectedProgram, setSelectedProgram] = useState<string | null>(null)
-
-  const programs: Program[] = [
-    {
-      id: 'phd-ecology',
-      title: 'PhD in Ecology, Evolution and Marine Biology',
-      degree: 'PhD',
-      description: 'Doctoral program offering research training in ecology, evolution, and marine biology.',
-      fullDescription: 'Our PhD program provides comprehensive training in ecology, evolution, and marine biology through coursework, seminars, and original research. Students work with leading faculty mentors, collaborate across research areas, and develop expertise in specific fields while maintaining broad understanding of the discipline.',
-      requirements: [
-        'Bachelor\'s degree in biology or related field',
-        'Completion of core courses (EEMB 507, 508, 509)',
-        'Written and oral qualifying examinations',
-        'Original dissertation research',
-        'Two quarters of TA service'
-      ],
-      courses: 45,
-      duration: '5-6 years',
-      icon: GraduationCap,
-      focusAreas: ['Marine Conservation', 'Climate Adaptation', 'Evolutionary Biology', 'Behavioral Ecology'],
-      careerOutcomes: ['Research Scientist', 'University Professor', 'Conservation Manager', 'Environmental Consultant'],
-      link: '/academics/graduate'
-    },
-    {
-      id: 'ma-eemb',
-      title: 'MA in Ecology, Evolution and Marine Biology',
-      degree: 'MA',
-      description: 'Master\'s program with thesis or comprehensive exam options.',
-      fullDescription: 'The MA program offers advanced education with two pathways: Plan I (thesis, 30 units) for research careers, or Plan II (comprehensive exam, 36 units) for professional training. Both options include core coursework and TA experience.',
-      requirements: [
-        'Bachelor\'s degree in biology or related field',
-        'Completion of core courses (EEMB 507, 508, 509)',
-        'Thesis OR comprehensive examination',
-        'Two quarters of TA service'
-      ],
-      courses: 30,
-      duration: '2 years',
-      icon: Scroll,
-      focusAreas: ['Marine Biology', 'Population Genetics', 'Ecosystem Ecology', 'Conservation Biology'],
-      careerOutcomes: ['Research Technician', 'Conservation Scientist', 'Environmental Manager', 'PhD Student'],
-      link: '/academics/graduate'
-    },
-    {
-      id: 'bs-ecology-evolution',
-      title: 'BS in Ecology, Evolution and Marine Biology',
-      degree: 'BS',
-      description: 'Undergraduate major providing comprehensive training in ecology, evolution, and marine biology.',
-      fullDescription: 'Our undergraduate major offers a solid foundation in ecology, evolution, and marine biology with flexibility to specialize in areas of interest. Students gain hands-on research experience, engage in field studies, and develop critical thinking skills.',
-      requirements: [
-        'Completion of core biology courses',
-        'Courses in ecology, evolution, and marine biology',
-        'Chemistry and physics prerequisites',
-        'Laboratory and field courses',
-        'Senior capstone project'
-      ],
-      courses: 60,
-      duration: '4 years',
-      icon: BookOpen,
-      focusAreas: ['Field Biology', 'Laboratory Techniques', 'Research Methods', 'Environmental Science'],
-      careerOutcomes: ['Graduate Student', 'Research Technician', 'Field Biologist', 'Environmental Professional']
-    },
-    {
-      id: 'minor-marine-science',
-      title: 'Minor in Marine Science',
-      degree: 'Minor',
-      description: 'Complementary program for students interested in marine science alongside their major.',
-      fullDescription: 'The Marine Science minor provides undergraduate students with focused training in marine ecology, oceanography, and marine conservation. Students complete courses in marine biology and oceanography while maintaining their primary major.',
-      requirements: [
-        'Completion of at least 20 units in marine science',
-        'Courses in marine biology, oceanography, and marine ecology',
-        'Approval by marine science advisor'
-      ],
-      courses: 20,
-      duration: '1-2 years',
-      icon: Shell,
-      focusAreas: ['Marine Ecology', 'Oceanography', 'Coastal Biology', 'Marine Conservation'],
-      careerOutcomes: ['Environmental Manager', 'Naturalist', 'Graduate Student', 'Science Teacher']
-    }
-  ]
-
-  const courses = [
-    { number: 'EEMB 101', title: 'Principles of Ecology', level: 'Undergraduate' },
-    { number: 'EEMB 102', title: 'Evolutionary Biology', level: 'Undergraduate' },
-    { number: 'EEMB 103', title: 'Marine Biology', level: 'Undergraduate' },
-    { number: 'EEMB 104', title: 'Biodiversity and Systematics', level: 'Undergraduate' },
-    { number: 'EEMB 507', title: 'Introduction to Graduate Research', level: 'Graduate' },
-    { number: 'EEMB 508', title: 'Levels of Biological Organization I', level: 'Graduate' },
-    { number: 'EEMB 509', title: 'Levels of Biological Organization II', level: 'Graduate' },
-    { number: 'EEMB 201', title: 'Quantitative Ecology', level: 'Graduate' },
-    { number: 'EEMB 202', title: 'Population Genetics', level: 'Graduate' },
-    { number: 'EEMB 203', title: 'Conservation Biology', level: 'Graduate' },
-    { number: 'EEMB 204', title: 'Marine Ecology', level: 'Graduate' },
-    { number: 'EEMB 210', title: 'Ecological Field Methods', level: 'Graduate' }
-  ]
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Academic Programs</h1>
-            <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-              Comprehensive education in ecology, evolution, and marine biology from the undergraduate to doctoral level.
+    <div className="min-h-screen bg-warm-50">
+      {/* Hero Section - More personal and inviting */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <Image
+          src="/images/about/ucsb-aerial.jpg"
+          alt="UCSB campus where mountains meet the sea"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep via-ocean-deep/70 to-ocean-deep/40" />
+
+        {/* Subtle texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q15 20 30 30 T60 30' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E")`,
+          }}
+        />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-6xl">
+          <div className="max-w-3xl">
+            {/* Eyebrow */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-0.5 bg-ucsb-gold" />
+              <p className="text-ucsb-gold font-medium text-sm tracking-widest uppercase">
+                Graduate Programs
+              </p>
+            </div>
+
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1] text-white tracking-tight">
+              Your Research
+              <br />
+              <span className="text-ucsb-gold">Starts Here</span>
+            </h1>
+
+            <p className="text-lg md:text-xl mb-8 text-white/85 leading-relaxed max-w-2xl">
+              Join a community of scientists asking big questions—from the genetics of adaptation
+              to the fate of coral reefs. PhD and MA programs with full funding, no GRE required.
             </p>
+
+            <div className="flex gap-4 flex-wrap">
+              <Link
+                href="/academics/graduate"
+                className="bg-ucsb-gold text-ucsb-navy px-7 py-3.5 rounded-xl font-bold hover:bg-yellow-400 transition-all duration-300 hover:shadow-lg"
+              >
+                Explore Graduate Programs
+              </Link>
+              <Link
+                href="/people"
+                className="bg-white/10 backdrop-blur-sm text-white px-7 py-3.5 rounded-xl font-semibold border border-white/30 hover:bg-white/20 transition-all"
+              >
+                Find a Faculty Mentor
+              </Link>
+            </div>
+
+            {/* Key stats inline */}
+            <div className="mt-10 flex gap-8 flex-wrap">
+              <div>
+                <div className="text-3xl font-bold text-ucsb-gold">Dec 1</div>
+                <div className="text-white/70 text-sm">Application Deadline</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-ucsb-gold">No GRE</div>
+                <div className="text-white/70 text-sm">Required</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-ucsb-gold">100%</div>
+                <div className="text-white/70 text-sm">Students Funded</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Graduate Programs Highlight */}
-      <section className="py-12 bg-white border-b border-gray-100">
+      <WaveDivider variant="bold" toColor="fill-white" className="-mt-1" />
+
+      {/* Why EEMB Section */}
+      <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="bg-gradient-to-r from-ocean-deep to-ocean-blue rounded-2xl p-8 text-white">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <span className="inline-block bg-ucsb-gold text-ucsb-navy px-3 py-1 rounded-full text-sm font-bold mb-4">
-                  Graduate Programs
-                </span>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">PhD & MA Programs</h2>
-                <p className="text-white/90 mb-6 leading-relaxed">
-                  World-class training in ecology, evolution, and marine biology. Our graduate students work closely
-                  with faculty on cutting-edge research from day one, with full funding available.
+          <div className="max-w-2xl mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-0.5 bg-ocean-blue" />
+              <span className="text-ocean-blue text-sm font-semibold tracking-wide uppercase">
+                Why EEMB
+              </span>
+            </div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+              What Makes Us Different
+            </h2>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              It&apos;s not just our rankings—it&apos;s our location, our culture, and our commitment
+              to training scientists who make a difference.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {whyEemb.map((item, idx) => (
+              <article
+                key={idx}
+                className="group bg-white rounded-2xl p-6 shadow-warm-md hover:shadow-warm-xl transition-all duration-300 border border-warm-200"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-1 h-16 bg-gradient-to-b from-ocean-teal to-ocean-blue rounded-full shrink-0" />
+                  <div>
+                    <h3 className="font-heading text-xl font-bold text-ucsb-navy mb-2 group-hover:text-ocean-blue transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-warm-600 leading-relaxed mb-3">
+                      {item.description}
+                    </p>
+                    <span className="inline-block px-3 py-1 bg-ocean-teal/10 text-ocean-teal text-sm font-semibold rounded-full">
+                      {item.highlight}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <WaveDivider variant="subtle" toColor="fill-warm-100" />
+
+      {/* Student Voices Section */}
+      <section className="py-16 md:py-24 bg-warm-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="max-w-2xl mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-0.5 bg-ocean-teal" />
+              <span className="text-ocean-teal text-sm font-semibold tracking-wide uppercase">
+                Student Voices
+              </span>
+            </div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+              Hear From Our Graduate Students
+            </h2>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              The best way to understand what it&apos;s like here? Listen to the people doing the work.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {studentVoices.map((student, idx) => (
+              <article
+                key={idx}
+                className="bg-white rounded-2xl p-6 shadow-warm-md border border-warm-200 flex flex-col"
+              >
+                <div className="mb-4">
+                  <svg className="w-8 h-8 text-ocean-teal/30" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+                <blockquote className="text-warm-700 leading-relaxed mb-6 flex-1">
+                  &ldquo;{student.quote}&rdquo;
+                </blockquote>
+                <div className="border-t border-warm-200 pt-4">
+                  <div className="font-semibold text-ucsb-navy">{student.name}</div>
+                  <div className="text-sm text-warm-600">{student.year} • {student.advisor}</div>
+                  <div className="text-sm text-ocean-blue mt-1">{student.research}</div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <WaveDivider variant="subtle" toColor="fill-white" />
+
+      {/* Degree Programs */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="max-w-2xl mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-0.5 bg-ucsb-gold" />
+              <span className="text-ucsb-gold text-sm font-semibold tracking-wide uppercase">
+                Degree Programs
+              </span>
+            </div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+              PhD & MA in Ecology, Evolution, and Marine Biology
+            </h2>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              Whether you&apos;re aiming for a research career or want to deepen your expertise
+              before moving into policy, education, or conservation—we have a path for you.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* PhD Program */}
+            <div className="bg-gradient-to-br from-ocean-deep to-ocean-blue rounded-2xl overflow-hidden">
+              <div className="p-8 text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-bold">PhD</span>
+                  <span className="text-white/70">{programFacts.phd.duration}</span>
+                </div>
+                <h3 className="font-heading text-2xl font-bold mb-4">Doctor of Philosophy</h3>
+                <p className="text-white/80 leading-relaxed mb-6">
+                  Our PhD program trains independent researchers through coursework, qualifying exams,
+                  and original dissertation research. You&apos;ll work closely with a faculty mentor
+                  while building expertise in your chosen area.
                 </p>
-                <div className="flex flex-wrap gap-3 mb-6">
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm">Full Funding</span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm">No GRE Required</span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm">December 1 Deadline</span>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-start gap-2">
+                    <span className="text-ucsb-gold">-</span>
+                    <span className="text-white/90">Full funding: TA, RA, and fellowship support</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-ucsb-gold">-</span>
+                    <span className="text-white/90">Field work opportunities worldwide</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-ucsb-gold">-</span>
+                    <span className="text-white/90">Collaborative, interdisciplinary environment</span>
+                  </div>
                 </div>
                 <Link
                   href="/academics/graduate"
-                  className="inline-flex items-center gap-2 bg-ucsb-gold text-ucsb-navy px-6 py-3 rounded-lg font-bold hover:bg-yellow-400 transition-all"
+                  className="inline-flex items-center gap-2 bg-ucsb-gold text-ucsb-navy px-6 py-3 rounded-xl font-bold hover:bg-yellow-400 transition-all"
                 >
-                  Explore Graduate Programs
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  PhD Program Details
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <p className="text-3xl font-bold text-ucsb-gold">40+</p>
-                  <p className="text-sm text-white/80">Faculty Mentors</p>
+            </div>
+
+            {/* MA Program */}
+            <div className="bg-white rounded-2xl border-2 border-warm-200 overflow-hidden">
+              <div className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="px-3 py-1 bg-ocean-teal/10 text-ocean-teal rounded-full text-sm font-bold">MA</span>
+                  <span className="text-warm-500">{programFacts.ma.duration}</span>
                 </div>
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <p className="text-3xl font-bold text-ucsb-gold">100+</p>
-                  <p className="text-sm text-white/80">Grad Students</p>
+                <h3 className="font-heading text-2xl font-bold text-ucsb-navy mb-4">Master of Arts</h3>
+                <p className="text-warm-600 leading-relaxed mb-6">
+                  Two pathways: Plan I (thesis) for those heading to PhD programs or research careers,
+                  or Plan II (comprehensive exam) for those seeking advanced training for professional careers.
+                </p>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-start gap-2">
+                    <span className="text-ocean-teal">-</span>
+                    <span className="text-warm-700">Thesis or comprehensive exam options</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-ocean-teal">-</span>
+                    <span className="text-warm-700">TA funding available</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-ocean-teal">-</span>
+                    <span className="text-warm-700">Strong preparation for PhD or professional careers</span>
+                  </div>
                 </div>
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <p className="text-3xl font-bold text-ucsb-gold">Top 3</p>
-                  <p className="text-sm text-white/80">Marine Science</p>
-                </div>
-                <div className="bg-white/10 rounded-xl p-4 text-center">
-                  <p className="text-3xl font-bold text-ucsb-gold">2</p>
-                  <p className="text-sm text-white/80">LTER Sites</p>
-                </div>
+                <Link
+                  href="/academics/graduate"
+                  className="inline-flex items-center gap-2 bg-ocean-teal text-white px-6 py-3 rounded-xl font-bold hover:bg-ocean-blue transition-all"
+                >
+                  MA Program Details
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Programs Grid */}
-      <section className="py-12 bg-white">
+      <WaveDivider variant="subtle" toColor="fill-warm-100" />
+
+      {/* Research Experiences */}
+      <section className="py-16 md:py-24 bg-warm-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-4">All Degree Programs</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Choose from our variety of undergraduate and graduate programs designed to prepare you for a rewarding career in biological sciences.
+          <div className="max-w-2xl mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-0.5 bg-ocean-blue" />
+              <span className="text-ocean-blue text-sm font-semibold tracking-wide uppercase">
+                Field Experiences
+              </span>
+            </div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+              Your Lab Extends Beyond Campus
+            </h2>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              From local kelp forests to tropical coral reefs, our students conduct research
+              in some of the world&apos;s most spectacular ecosystems.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {programs.map(program => (
-              <div
-                key={program.id}
-                className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border border-gray-100"
+          <div className="grid md:grid-cols-3 gap-6">
+            {researchExperiences.map((exp, idx) => (
+              <article
+                key={idx}
+                className="group bg-white rounded-2xl overflow-hidden shadow-warm-md hover:shadow-warm-xl transition-all duration-500 border border-warm-200"
               >
-                <div className="flex items-start gap-4">
-                  <div>
-                    <program.icon className="w-10 h-10 text-ocean-blue" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
-                        program.degree === 'PhD' ? 'bg-ocean-blue text-white' :
-                        program.degree === 'MA' ? 'bg-ocean-teal text-white' :
-                        program.degree === 'BS' ? 'bg-ucsb-gold text-ucsb-navy' :
-                        'bg-gray-200 text-gray-700'
-                      }`}>
-                        {program.degree}
-                      </span>
-                      <span className="text-xs text-gray-500">{program.duration}</span>
-                    </div>
-                    <h3 className="text-lg font-bold text-ucsb-navy mb-2 group-hover:text-ocean-blue transition">
-                      {program.title}
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={exp.image}
+                    alt={exp.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/80 via-ocean-deep/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className="text-xs font-bold text-ucsb-gold uppercase tracking-wide">
+                      {exp.location}
+                    </span>
+                    <h3 className="font-heading text-lg font-bold text-white mt-1">
+                      {exp.title}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      {program.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {program.focusAreas.slice(0, 3).map((area, idx) => (
-                        <span key={idx} className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
-                          {area}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      {program.link ? (
-                        <Link
-                          href={program.link}
-                          className="text-sm text-ocean-blue hover:text-ocean-teal font-medium inline-flex items-center gap-1"
-                        >
-                          Learn More
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                          </svg>
-                        </Link>
-                      ) : (
-                        <button
-                          onClick={() => setSelectedProgram(selectedProgram === program.id ? null : program.id)}
-                          className="text-sm text-ocean-blue hover:text-ocean-teal font-medium"
-                        >
-                          {selectedProgram === program.id ? 'Hide Details' : 'View Details'}
-                        </button>
-                      )}
-                    </div>
                   </div>
                 </div>
-
-                {/* Expanded Details */}
-                {selectedProgram === program.id && !program.link && (
-                  <div className="mt-6 pt-6 border-t border-gray-100">
-                    <p className="text-gray-700 mb-4 leading-relaxed">{program.fullDescription}</p>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="font-semibold text-ucsb-navy mb-2">Requirements</h4>
-                        <ul className="space-y-1">
-                          {program.requirements.map((req, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                              <span className="text-ocean-teal">-</span>
-                              {req}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-ucsb-navy mb-2">Career Outcomes</h4>
-                        <ul className="space-y-1">
-                          {program.careerOutcomes.map((outcome, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                              <span className="text-ucsb-gold">-</span>
-                              {outcome}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+                <div className="p-5">
+                  <p className="text-warm-600 text-sm leading-relaxed">
+                    {exp.description}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Course Catalog */}
-      <section className="py-12 bg-gray-50">
+      <WaveDivider variant="subtle" toColor="fill-white" />
+
+      {/* Application Timeline */}
+      <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-8 text-center">Sample Courses</h2>
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {courses.map((course, idx) => (
-                <div key={idx} className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-ucsb-navy mb-1">{course.number}</p>
-                      <p className="text-gray-700">{course.title}</p>
-                    </div>
-                    <span className={`px-2 py-1 rounded text-xs font-medium whitespace-nowrap ${
-                      course.level === 'Graduate'
-                        ? 'bg-ocean-blue/10 text-ocean-blue'
-                        : 'bg-ucsb-gold/20 text-ucsb-navy'
-                    }`}>
-                      {course.level}
-                    </span>
-                  </div>
-                </div>
-              ))}
+          <div className="max-w-2xl mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-0.5 bg-ucsb-coral" />
+              <span className="text-ucsb-coral text-sm font-semibold tracking-wide uppercase">
+                How to Apply
+              </span>
+            </div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+              Ready to Take the Next Step?
+            </h2>
+            <p className="text-warm-600 text-lg leading-relaxed">
+              Our application process is straightforward, but start early—especially when
+              reaching out to potential faculty mentors.
+            </p>
+          </div>
+
+          <div className="bg-warm-100 rounded-2xl p-8 border border-warm-200">
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-ocean-teal text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">1</div>
+                <h4 className="font-semibold text-ucsb-navy mb-2">Find Your Mentor</h4>
+                <p className="text-sm text-warm-600">
+                  Browse faculty profiles and reach out to discuss research fit. This is required before admission.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-ocean-blue text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">2</div>
+                <h4 className="font-semibold text-ucsb-navy mb-2">Prepare Materials</h4>
+                <p className="text-sm text-warm-600">
+                  Transcripts, 3 letters of recommendation, statement of purpose, personal history statement.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-ocean-deep text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">3</div>
+                <h4 className="font-semibold text-ucsb-navy mb-2">Apply by Dec 1</h4>
+                <p className="text-sm text-warm-600">
+                  Submit your application through the UC Santa Barbara Graduate Division portal.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-ucsb-gold text-ucsb-navy rounded-full flex items-center justify-center mx-auto mb-3 font-bold">4</div>
+                <h4 className="font-semibold text-ucsb-navy mb-2">Decisions by April</h4>
+                <p className="text-sm text-warm-600">
+                  Admitted students visit campus and make their decision by April 15.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Learning Outcomes */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-8 text-center">Student Learning Outcomes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'Research Skills',
-                description: 'Master field and laboratory techniques for studying ecological and evolutionary processes.',
-                icon: Microscope
-              },
-              {
-                title: 'Quantitative Analysis',
-                description: 'Develop competency in statistics, modeling, and data analysis for biological research.',
-                icon: BarChart3
-              },
-              {
-                title: 'Critical Thinking',
-                description: 'Apply scientific reasoning to evaluate evidence and solve complex environmental problems.',
-                icon: Lightbulb
-              },
-              {
-                title: 'Communication',
-                description: 'Effectively communicate scientific findings to diverse audiences through writing and presentations.',
-                icon: FileText
-              },
-              {
-                title: 'Collaboration',
-                description: 'Work effectively in research teams and develop professional networks.',
-                icon: Handshake
-              },
-              {
-                title: 'Professional Development',
-                description: 'Prepare for careers in academia, government, conservation, and industry.',
-                icon: Target
-              }
-            ].map((outcome, idx) => (
-              <div key={idx} className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-md transition">
-                <div className="mb-3">
-                  <outcome.icon className="w-8 h-8 text-ocean-blue" />
-                </div>
-                <h3 className="text-lg font-bold text-ucsb-navy mb-2">{outcome.title}</h3>
-                <p className="text-gray-600 text-sm">{outcome.description}</p>
+          {/* Important note */}
+          <div className="mt-8 bg-ucsb-coral/10 border border-ucsb-coral/30 rounded-xl p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-ucsb-coral/20 rounded-full flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-ucsb-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
               </div>
-            ))}
+              <div>
+                <h4 className="font-semibold text-ucsb-navy mb-1">Contact Faculty First</h4>
+                <p className="text-warm-700">
+                  Applicants must be accepted by a faculty sponsor before admission. We strongly encourage you
+                  to reach out to potential mentors early in the process. Review their recent publications
+                  and explain why your research interests align.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center gap-4 flex-wrap">
+            <Link
+              href="/academics/graduate"
+              className="bg-ucsb-gold text-ucsb-navy px-8 py-4 rounded-xl font-bold hover:bg-yellow-400 transition-all hover:shadow-lg"
+            >
+              Full Application Details
+            </Link>
+            <Link
+              href="/people"
+              className="bg-ocean-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-ocean-deep transition-all hover:shadow-lg"
+            >
+              Browse Faculty Profiles
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-12 md:py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
+      <WaveDivider variant="bold" toColor="fill-ocean-deep" />
+
+      {/* Final CTA */}
+      <section className="bg-ocean-deep text-white py-16 md:py-20 -mt-1">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Apply?</h2>
-          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-            Join our academic community and pursue your passion for understanding the natural world.
+          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">
+            Questions? We&apos;re Here to Help.
+          </h2>
+          <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Reach out to our graduate program staff or connect with current students
+            to learn more about life at EEMB.
           </p>
-          <div className="flex justify-center gap-4 flex-wrap">
-            <Link
-              href="/academics/graduate"
-              className="bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-bold hover:bg-yellow-400 hover:shadow-lg transition-all"
+          <div className="flex gap-4 justify-center flex-wrap">
+            <a
+              href="mailto:info@eemb.ucsb.edu"
+              className="bg-ucsb-gold text-ucsb-navy px-8 py-4 rounded-xl font-bold hover:bg-yellow-400 transition-all"
             >
-              Graduate Programs
-            </Link>
+              Email Graduate Program
+            </a>
             <Link
               href="/contact"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-ocean-blue transition-all"
+              className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold border border-white/30 hover:bg-white/20 transition-all"
             >
-              Contact Admissions
+              Contact Us
             </Link>
           </div>
         </div>

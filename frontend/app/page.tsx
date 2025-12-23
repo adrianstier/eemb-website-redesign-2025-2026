@@ -1,4 +1,5 @@
 import HeroSection from '@/components/HeroSection'
+import QuickNav from '@/components/QuickNav'
 import WhoWeAre from '@/components/WhoWeAre'
 import ResearchThemes from '@/components/ResearchThemes'
 import FeaturedFaculty from '@/components/FeaturedFaculty'
@@ -6,13 +7,13 @@ import FacultyQuote from '@/components/FacultyQuote'
 import FeaturedNews from '@/components/FeaturedNews'
 import UpcomingEvents from '@/components/UpcomingEvents'
 import PartnersSection from '@/components/PartnersSection'
-import WaveDivider from '@/components/ui/WaveDivider'
 import Link from 'next/link'
 
 export default function HomePage() {
   return (
     <div className="bg-white">
       <HeroSection />
+      <QuickNav />
       <WhoWeAre />
       <ResearchThemes />
       <FeaturedFaculty />
