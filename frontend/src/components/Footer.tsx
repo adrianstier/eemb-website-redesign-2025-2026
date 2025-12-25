@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import WaveDivider from './ui/WaveDivider'
 
 export default function Footer() {
   const quickLinks = [
@@ -29,7 +28,7 @@ export default function Footer() {
       ),
     },
     {
-      label: 'Twitter',
+      label: 'X (Twitter)',
       href: '#',
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -46,140 +45,154 @@ export default function Footer() {
         </svg>
       ),
     },
+    {
+      label: 'YouTube',
+      href: '#',
+      icon: (
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      ),
+    },
   ]
 
   return (
-    <>
-      {/* Wave transition to footer */}
-      <WaveDivider variant="bold" toColor="fill-ocean-deep" />
+    <footer className="relative bg-ocean-midnight text-white overflow-hidden">
+      {/* Decorative wave transition */}
+      <div className="absolute -top-px left-0 right-0">
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto" preserveAspectRatio="none">
+          <path d="M0 80V40C240 60 480 80 720 60C960 40 1200 20 1440 40V80H0Z" className="fill-ocean-midnight" />
+        </svg>
+      </div>
 
-      <footer className="bg-ocean-deep text-white -mt-1">
-        {/* Subtle topographic pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 Q25 40 50 50 T100 50' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M0 70 Q25 60 50 70 T100 70' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M0 30 Q25 20 50 30 T100 30' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E")`,
-          }}
-        />
+      {/* Background elements */}
+      <div className="absolute inset-0 topo-pattern opacity-[0.03]" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-bioluminescent/5 rounded-full blur-3xl" />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
-            {/* Brand column */}
-            <div className="lg:col-span-1">
-              <h3 className="font-heading text-2xl font-bold mb-4 tracking-tight">EEMB</h3>
-              <p className="text-white/70 text-sm leading-relaxed mb-5">
-                Department of Ecology, Evolution and Marine Biology at UC Santa Barbara.
-              </p>
-              <div className="text-white/60 text-sm leading-relaxed">
-                <p>University of California, Santa Barbara</p>
-                <p>Santa Barbara, CA 93106-9620</p>
+      <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-7xl py-20 md:py-24 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
+          {/* Brand column */}
+          <div className="lg:col-span-1">
+            {/* Logo */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
+                <span className="font-heading text-xl font-bold text-white">E</span>
               </div>
-
-              {/* UCSB affiliation badge */}
-              <div className="mt-6 inline-flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg border border-white/10">
-                <div className="w-6 h-6 bg-ucsb-gold rounded flex items-center justify-center">
-                  <span className="text-ocean-deep text-xs font-bold">UC</span>
-                </div>
-                <span className="text-xs text-white/70">UC Santa Barbara</span>
+              <div>
+                <h3 className="font-heading text-xl font-bold tracking-tight">EEMB</h3>
+                <p className="text-[10px] text-white/40 tracking-wider uppercase">UC Santa Barbara</p>
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h4 className="font-heading font-semibold text-ucsb-gold mb-5 text-sm uppercase tracking-wider">
-                Quick Links
-              </h4>
-              <ul className="space-y-3">
-                {quickLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2 group"
-                    >
-                      <span className="w-1 h-1 bg-ocean-teal/50 rounded-full group-hover:bg-ucsb-gold transition-colors" />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <p className="text-white/60 text-sm leading-relaxed mb-6">
+              Department of Ecology, Evolution and Marine Biology. Where the Santa Ynez Mountains meet the Pacific.
+            </p>
 
-            {/* Resources */}
-            <div>
-              <h4 className="font-heading font-semibold text-ucsb-gold mb-5 text-sm uppercase tracking-wider">
-                Resources
-              </h4>
-              <ul className="space-y-3">
-                {resourceLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2 group"
-                    >
-                      <span className="w-1 h-1 bg-ocean-teal/50 rounded-full group-hover:bg-ucsb-gold transition-colors" />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Connect */}
-            <div>
-              <h4 className="font-heading font-semibold text-ucsb-gold mb-5 text-sm uppercase tracking-wider">
-                Connect
-              </h4>
-              <div className="flex gap-3 mb-6">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-200 border border-white/10 hover:border-white/20"
-                    aria-label={social.label}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
-              <div className="space-y-2">
-                <a
-                  href="mailto:eemb@lifesci.ucsb.edu"
-                  className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  eemb@lifesci.ucsb.edu
-                </a>
-                <a
-                  href="tel:+18058933511"
-                  className="text-white/70 hover:text-white transition-colors duration-200 text-sm flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  (805) 893-3511
-                </a>
-              </div>
+            <div className="text-white/40 text-sm space-y-1">
+              <p>University of California, Santa Barbara</p>
+              <p>Santa Barbara, CA 93106-9620</p>
             </div>
           </div>
 
-          {/* Bottom bar */}
-          <div className="border-t border-white/10 mt-14 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-white/50 text-sm">
-              &copy; {new Date().getFullYear()} The Regents of the University of California. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <Link href="/privacy" className="text-white/50 hover:text-white/80 transition-colors text-sm">
-                Privacy Policy
-              </Link>
-              <Link href="/accessibility" className="text-white/50 hover:text-white/80 transition-colors text-sm">
-                Accessibility
-              </Link>
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-heading font-semibold text-bioluminescent mb-6 text-sm tracking-wider uppercase">
+              Quick Links
+            </h4>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-white/60 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 bg-ocean-teal/40 rounded-full group-hover:bg-bioluminescent transition-colors" />
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4 className="font-heading font-semibold text-bioluminescent mb-6 text-sm tracking-wider uppercase">
+              Resources
+            </h4>
+            <ul className="space-y-3">
+              {resourceLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-white/60 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2 group"
+                  >
+                    <span className="w-1.5 h-1.5 bg-ocean-teal/40 rounded-full group-hover:bg-bioluminescent transition-colors" />
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Connect */}
+          <div>
+            <h4 className="font-heading font-semibold text-bioluminescent mb-6 text-sm tracking-wider uppercase">
+              Connect
+            </h4>
+
+            {/* Social links */}
+            <div className="flex gap-3 mb-8">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-white/50 hover:bg-bioluminescent/20 hover:text-bioluminescent transition-all duration-300 border border-white/10 hover:border-bioluminescent/30"
+                  aria-label={social.label}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+
+            {/* Contact info */}
+            <div className="space-y-3">
+              <a
+                href="mailto:eemb@lifesci.ucsb.edu"
+                className="text-white/60 hover:text-white transition-colors duration-300 text-sm flex items-center gap-3 group"
+              >
+                <svg className="w-5 h-5 text-ocean-teal/60 group-hover:text-bioluminescent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                eemb@lifesci.ucsb.edu
+              </a>
+              <a
+                href="tel:+18058933511"
+                className="text-white/60 hover:text-white transition-colors duration-300 text-sm flex items-center gap-3 group"
+              >
+                <svg className="w-5 h-5 text-ocean-teal/60 group-hover:text-bioluminescent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                (805) 893-3511
+              </a>
             </div>
           </div>
         </div>
-      </footer>
-    </>
+
+        {/* Bottom bar */}
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-white/40 text-sm">
+            &copy; {new Date().getFullYear()} The Regents of the University of California. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-white/40 hover:text-white/70 transition-colors text-sm">
+              Privacy Policy
+            </Link>
+            <Link href="/accessibility" className="text-white/40 hover:text-white/70 transition-colors text-sm">
+              Accessibility
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
   )
 }

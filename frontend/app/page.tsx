@@ -11,66 +11,82 @@ import Link from 'next/link'
 
 export default function HomePage() {
   return (
-    <div className="bg-white">
+    <div className="bg-warm-50">
+      {/* Hero with cinematic intro */}
       <HeroSection />
+
+      {/* Quick navigation for different visitor types */}
       <QuickNav />
+
+      {/* About section with asymmetric layout */}
       <WhoWeAre />
+
+      {/* Research areas - magazine style */}
       <ResearchThemes />
+
+      {/* Featured faculty - dynamic grid */}
       <FeaturedFaculty />
+
+      {/* Faculty testimonial - immersive quote */}
       <FacultyQuote />
 
       {/* News and Events side by side */}
-      <section className="py-16 md:py-24 bg-warm-100">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+      <section className="py-20 md:py-28 bg-warm-100 relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 topo-pattern opacity-20" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-ocean-blue/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-ocean-teal/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl relative">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
-            {/* News */}
+            {/* News Column */}
             <div>
-              <div className="flex justify-between items-center mb-8">
+              <div className="flex justify-between items-end mb-8">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-6 h-0.5 bg-ucsb-coral" />
-                    <span className="text-ucsb-coral text-xs font-semibold tracking-wide uppercase">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-px w-10 bg-gradient-to-r from-ocean-blue to-transparent" />
+                    <span className="text-ocean-blue text-xs font-semibold tracking-[0.2em] uppercase">
                       News
                     </span>
                   </div>
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-ucsb-navy">
-                    Latest News
+                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-ocean-deep">
+                    Latest Updates
                   </h2>
                 </div>
                 <Link
                   href="/news"
-                  className="group text-sm text-ocean-blue hover:text-ocean-deep transition-colors font-medium flex items-center gap-1"
+                  className="group flex items-center gap-2 text-sm text-ocean-blue hover:text-ocean-deep transition-colors font-semibold"
                 >
                   All news
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
               <FeaturedNews />
             </div>
 
-            {/* Events */}
+            {/* Events Column */}
             <div>
-              <div className="flex justify-between items-center mb-8">
+              <div className="flex justify-between items-end mb-8">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-6 h-0.5 bg-ocean-teal" />
-                    <span className="text-ocean-teal text-xs font-semibold tracking-wide uppercase">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-px w-10 bg-gradient-to-r from-ocean-teal to-transparent" />
+                    <span className="text-ocean-teal text-xs font-semibold tracking-[0.2em] uppercase">
                       Events
                     </span>
                   </div>
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-ucsb-navy">
+                  <h2 className="font-heading text-2xl md:text-3xl font-bold text-ocean-deep">
                     Upcoming Events
                   </h2>
                 </div>
                 <Link
                   href="/calendar"
-                  className="group text-sm text-ocean-blue hover:text-ocean-deep transition-colors font-medium flex items-center gap-1"
+                  className="group flex items-center gap-2 text-sm text-ocean-teal hover:text-ocean-deep transition-colors font-semibold"
                 >
                   Full calendar
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
@@ -80,58 +96,73 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Graduate Programs CTA - refined design */}
-      <section className="relative py-20 md:py-28 bg-ocean-deep overflow-hidden">
-        {/* Subtle background pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q15 20 30 30 T60 30' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M0 45 Q15 35 30 45 T60 45' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M0 15 Q15 5 30 15 T60 15' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E")`,
-          }}
-        />
+      {/* Graduate Programs CTA - immersive dark section */}
+      <section className="relative py-24 md:py-32 bg-ocean-deep overflow-hidden">
+        {/* Animated wave background */}
+        <div className="absolute inset-0">
+          <svg className="absolute bottom-0 left-0 right-0 text-white/[0.02] h-80" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,197.3C960,213,1056,203,1152,181.3C1248,160,1344,128,1392,112L1440,96L1440,320L0,320Z">
+              <animate
+                attributeName="d"
+                dur="12s"
+                repeatCount="indefinite"
+                values="
+                  M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,197.3C960,213,1056,203,1152,181.3C1248,160,1344,128,1392,112L1440,96L1440,320L0,320Z;
+                  M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,128C672,117,768,139,864,160C960,181,1056,203,1152,192C1248,181,1344,139,1392,117.3L1440,96L1440,320L0,320Z;
+                  M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,197.3C960,213,1056,203,1152,181.3C1248,160,1344,128,1392,112L1440,96L1440,320L0,320Z
+                "
+              />
+            </path>
+          </svg>
+        </div>
 
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-ocean-blue/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-ucsb-gold/5 rounded-full blur-3xl" />
+        {/* Decorative orbs */}
+        <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-bioluminescent/5 rounded-full blur-3xl animate-float-slow" />
+        <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-ucsb-gold/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl relative">
-          <div className="grid md:grid-cols-5 gap-10 items-center">
+        {/* Subtle pattern */}
+        <div className="absolute inset-0 topo-pattern opacity-[0.02]" />
+
+        <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl relative">
+          <div className="grid md:grid-cols-5 gap-12 lg:gap-16 items-center">
             {/* Left content */}
             <div className="md:col-span-3 text-white">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-0.5 bg-ucsb-gold" />
-                <span className="text-ucsb-gold text-sm font-semibold tracking-wide uppercase">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-0.5 bg-gradient-to-r from-ucsb-gold to-transparent" />
+                <span className="text-ucsb-gold text-sm font-semibold tracking-[0.2em] uppercase">
                   Graduate Programs
                 </span>
               </div>
 
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-                Interested in
+              <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-[1.1]">
+                Shape the future of
                 <br />
-                <span className="text-ucsb-gold">Graduate School?</span>
+                <span className="bg-gradient-to-r from-ucsb-gold via-sunset-400 to-ucsb-gold bg-clip-text text-transparent">
+                  ecological science
+                </span>
               </h2>
 
-              <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed max-w-lg">
-                We offer PhD and MS programs with full funding. Our students work closely with faculty on research from day one.
+              <p className="text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-lg">
+                Join a community of scholars at the forefront of discovery. Our PhD and MS programs offer full funding, world-class mentorship, and access to extraordinary research ecosystems.
               </p>
 
               <div className="flex gap-4 flex-wrap">
                 <Link
-                  href="/academics"
-                  className="group bg-ucsb-gold text-ucsb-navy px-7 py-3.5 rounded-xl font-bold hover:bg-yellow-400 transition-all duration-300 hover:shadow-lg hover:shadow-ucsb-gold/20 focus:ring-2 focus:ring-ucsb-gold focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none"
+                  href="/academics/graduate"
+                  className="group bg-ucsb-gold text-ocean-deep px-8 py-4 rounded-xl font-bold hover:shadow-glow-gold transition-all duration-300 focus:ring-2 focus:ring-ucsb-gold focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none"
                 >
-                  <span className="flex items-center gap-2">
-                    Learn About Programs
-                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <span className="flex items-center gap-3">
+                    Explore Programs
+                    <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </span>
                 </Link>
                 <Link
                   href="/contact"
-                  className="bg-white/10 backdrop-blur-sm text-white px-7 py-3.5 rounded-xl font-semibold border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all duration-300 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none"
+                  className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold border border-white/20 hover:bg-white/15 hover:border-white/40 transition-all duration-300 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none"
                 >
-                  Contact Us
+                  Contact Graduate Advisor
                 </Link>
               </div>
             </div>
@@ -139,17 +170,19 @@ export default function HomePage() {
             {/* Right - Stats */}
             <div className="md:col-span-2">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                  <div className="font-heading text-4xl font-bold text-ucsb-gold mb-1">100%</div>
-                  <div className="text-white/70 text-sm">Funding for PhD students</div>
+                <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-bioluminescent/30 transition-all duration-500">
+                  <div className="font-heading text-4xl lg:text-5xl font-bold text-ucsb-gold mb-2 group-hover:scale-105 transition-transform">100%</div>
+                  <div className="text-white/60 text-sm">Funding for PhD students</div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                  <div className="font-heading text-4xl font-bold text-ucsb-gold mb-1">5 yrs</div>
-                  <div className="text-white/70 text-sm">Average time to PhD</div>
+                <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-bioluminescent/30 transition-all duration-500">
+                  <div className="font-heading text-4xl lg:text-5xl font-bold text-bioluminescent mb-2 group-hover:scale-105 transition-transform">5 yrs</div>
+                  <div className="text-white/60 text-sm">Average time to PhD</div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 col-span-2">
-                  <div className="font-heading text-4xl font-bold text-ucsb-gold mb-1">Top 10</div>
-                  <div className="text-white/70 text-sm">Ecology program nationally</div>
+                <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-bioluminescent/30 transition-all duration-500 col-span-2">
+                  <div className="flex items-baseline gap-3">
+                    <div className="font-heading text-4xl lg:text-5xl font-bold text-white group-hover:scale-105 transition-transform">Top 10</div>
+                    <div className="text-white/60 text-sm">Ecology program nationally</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,6 +190,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Research Partners */}
       <PartnersSection />
     </div>
   )
