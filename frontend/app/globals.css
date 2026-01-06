@@ -49,11 +49,17 @@
   }
 
   h1 {
-    @apply text-display font-bold;
+    @apply font-bold;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
   }
 
   h2 {
-    @apply text-display-sm font-bold;
+    @apply font-bold;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
 
   h3 {
@@ -72,12 +78,13 @@
 
   /* Link styles */
   a {
-    @apply transition-all duration-300 ease-spring;
+    @apply transition-all duration-300 ease-out;
   }
 
-  /* Selection colors - bioluminescent theme */
+  /* Selection colors - ocean theme */
   ::selection {
-    @apply bg-bioluminescent/20 text-ocean-deep;
+    @apply text-ocean-deep;
+    background-color: rgba(34, 211, 238, 0.2);
   }
 
   /* Focus styles - consistent, accessible */
@@ -117,13 +124,18 @@
 
   /* Display text - for hero headlines */
   .text-display-hero {
-    @apply font-heading text-display-xl font-bold tracking-tight;
+    @apply font-heading font-bold tracking-tight;
+    font-size: clamp(3rem, 8vw, 5.5rem);
     line-height: 1.05;
+    letter-spacing: -0.03em;
   }
 
   /* Section title with accent */
   .section-title {
-    @apply font-heading text-display-sm font-bold text-ocean-deep mb-6;
+    @apply font-heading font-bold text-ocean-deep mb-6;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
 
   /* Lead text - intro paragraphs */
@@ -153,7 +165,8 @@
 
   .link-underline::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-full h-0.5 bg-bioluminescent origin-left;
+    @apply absolute bottom-0 left-0 w-full h-0.5 origin-left;
+    background-color: #22d3ee;
     transform: scaleX(0);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -170,7 +183,7 @@
   .card {
     @apply bg-white rounded-3xl border border-warm-200;
     @apply shadow-warm-md;
-    @apply transition-all duration-500 ease-spring;
+    @apply transition-all duration-500 ease-out;
   }
 
   .card:hover {
@@ -198,7 +211,7 @@
   .btn {
     @apply inline-flex items-center justify-center gap-2;
     @apply px-7 py-3.5 rounded-2xl font-semibold;
-    @apply transition-all duration-300 ease-spring;
+    @apply transition-all duration-300 ease-out;
     @apply focus:ring-2 focus:ring-offset-2 focus:outline-none;
     @apply relative overflow-hidden;
   }
@@ -288,7 +301,8 @@
   }
 
   .badge-bioluminescent {
-    @apply badge bg-bioluminescent/10 text-ocean-teal;
+    @apply badge text-ocean-teal;
+    background-color: rgba(34, 211, 238, 0.1);
   }
 
   /* ============================================
@@ -404,7 +418,8 @@
   }
 
   .text-gradient-ocean {
-    @apply bg-gradient-to-r from-ocean-blue via-ocean-teal to-bioluminescent bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, #0369a1, #0d9488, #22d3ee);
   }
 
   .text-gradient-gold {
@@ -453,7 +468,7 @@
      ============================================ */
 
   .hover-lift {
-    @apply transition-all duration-500 ease-spring;
+    @apply transition-all duration-500 ease-out;
   }
 
   .hover-lift:hover {
@@ -465,7 +480,7 @@
   }
 
   .hover-scale {
-    @apply transition-transform duration-500 ease-spring;
+    @apply transition-transform duration-500 ease-out;
   }
 
   .hover-scale:hover {
@@ -474,7 +489,7 @@
 
   /* Image zoom on hover */
   .group-hover-zoom {
-    @apply transition-transform duration-700 ease-spring;
+    @apply transition-transform duration-700 ease-out;
   }
 
   .group:hover .group-hover-zoom {

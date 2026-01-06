@@ -14,7 +14,72 @@ interface Faculty {
     slug: string
     photo_url?: string
     researchInterests?: string[]
+    research_areas?: string  // "ecology", "evolution", "marine-biology" or combinations
   }
+}
+
+// Helper to get primary research area from faculty
+function getPrimaryArea(f: Faculty): 'ecology' | 'evolution' | 'marine-biology' | 'other' {
+  const areas = f.attributes.research_areas?.toLowerCase() || ''
+  // Check for pure areas first, then combinations
+  if (areas === 'evolution') return 'evolution'
+  if (areas === 'ecology') return 'ecology'
+  if (areas === 'marine-biology') return 'marine-biology'
+  if (areas.includes('evolution')) return 'evolution'
+  if (areas.includes('ecology')) return 'ecology'
+  if (areas.includes('marine-biology')) return 'marine-biology'
+  return 'other'
+}
+
+// Select faculty ensuring balanced representation across Ecology, Evolution, and Marine Biology
+function selectBalancedFaculty(allFaculty: Faculty[]): Faculty[] {
+  const coreTitles = ['Professor', 'Associate Professor', 'Assistant Professor', 'Distinguished Professor']
+  const coreFaculty = allFaculty.filter((f: Faculty) =>
+    coreTitles.includes(f.attributes.title) && f.attributes.photo_url
+  )
+
+  // Group by primary research area
+  const byArea: Record<string, Faculty[]> = {
+    'ecology': [],
+    'evolution': [],
+    'marine-biology': []
+  }
+
+  coreFaculty.forEach(f => {
+    const area = getPrimaryArea(f)
+    if (area !== 'other' && byArea[area]) {
+      byArea[area].push(f)
+    }
+  })
+
+  // Shuffle each group
+  Object.keys(byArea).forEach(key => {
+    byArea[key] = byArea[key].sort(() => 0.5 - Math.random())
+  })
+
+  // Select to ensure representation: 2 ecology, 2 evolution, 1 marine (or adjust based on availability)
+  const selected: Faculty[] = []
+  const targetPerArea = { 'ecology': 2, 'evolution': 2, 'marine-biology': 1 }
+
+  // First pass: get target number from each area
+  Object.entries(targetPerArea).forEach(([area, target]) => {
+    const available = byArea[area].slice(0, target)
+    selected.push(...available)
+    // Remove selected from pool
+    byArea[area] = byArea[area].slice(target)
+  })
+
+  // If we don't have 5, fill from remaining pools
+  while (selected.length < 5) {
+    const remainingAreas = Object.keys(byArea).filter(a => byArea[a].length > 0)
+    if (remainingAreas.length === 0) break
+    const randomArea = remainingAreas[Math.floor(Math.random() * remainingAreas.length)]
+    const next = byArea[randomArea].shift()
+    if (next) selected.push(next)
+  }
+
+  // Final shuffle to mix the order
+  return selected.sort(() => 0.5 - Math.random())
 }
 
 function useInView(threshold = 0.2) {
@@ -53,12 +118,9 @@ export default function FeaturedFaculty() {
         const data = await response.json()
 
         if (data.data && data.data.length > 0) {
-          const coreTitles = ['Professor', 'Associate Professor', 'Assistant Professor', 'Distinguished Professor']
-          const coreFaculty = data.data.filter((f: Faculty) =>
-            coreTitles.includes(f.attributes.title)
-          )
-          const shuffled = coreFaculty.sort(() => 0.5 - Math.random())
-          setFaculty(shuffled.slice(0, 5))
+          // Use balanced selection to ensure representation across Ecology, Evolution, and Marine Biology
+          const balanced = selectBalancedFaculty(data.data)
+          setFaculty(balanced)
         }
       } catch (error) {
         console.error('Error fetching faculty:', error)

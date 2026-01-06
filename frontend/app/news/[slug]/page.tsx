@@ -272,7 +272,7 @@ export default function NewsArticlePage({ params }: { params: { slug: string } |
             </div>
 
             {/* Title with text shadow for readability */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold max-w-4xl leading-[1.15] tracking-tight drop-shadow-lg" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.5), 0 4px 40px rgba(0,0,0,0.3)' }}>
+            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold max-w-4xl leading-[1.15] tracking-tight drop-shadow-lg" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.5), 0 4px 40px rgba(0,0,0,0.3)' }}>
               {article.title}
             </h1>
           </div>

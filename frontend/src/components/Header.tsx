@@ -2,12 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const pathname = usePathname()
+
+  // Pages that have light backgrounds and need dark text in header
+  const lightBackgroundPages = ['/news', '/people', '/support', '/contact', '/calendar', '/dei', '/good-news', '/memoriam']
+  const isLightPage = lightBackgroundPages.some(page => pathname.startsWith(page))
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,12 +46,15 @@ export default function Header() {
     { href: '/contact', label: 'Contact' },
   ]
 
+  // Determine if we should show solid header (scrolled or light page without scroll)
+  const showSolidHeader = scrolled || isLightPage
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-spring ${
         hidden ? '-translate-y-full' : 'translate-y-0'
       } ${
-        scrolled
+        showSolidHeader
           ? 'bg-ocean-deep/95 backdrop-blur-xl shadow-ocean py-2'
           : 'bg-transparent py-4'
       }`}
@@ -57,7 +66,7 @@ export default function Header() {
             {/* Logo mark */}
             <div className="relative">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                scrolled ? 'bg-white/10' : 'bg-white/5'
+                showSolidHeader ? 'bg-white/10' : 'bg-white/5'
               } group-hover:bg-bioluminescent/20`}>
                 <span className="font-heading text-xl font-bold text-white tracking-tight">
                   E

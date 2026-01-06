@@ -1,9 +1,21 @@
-# EEMB UCSB Website Redesign
+# EEMB Website Redesign
 
-Modern, accessible department website for UCSB's Ecology, Evolution & Marine Biology department.
+**Modern, accessible department website for UC Santa Barbara's Ecology, Evolution & Marine Biology department.**
 
-**Status:** Active Development (~70% Complete)
-**Stack:** Next.js 14 + Strapi 4 + TypeScript + Tailwind CSS
+Where the Santa Ynez Mountains meet the Pacific—and where scientists ask questions that matter for the future of life on Earth.
+
+---
+
+## Brand: Pacific Naturalism
+
+Our design system reflects EEMB's unique identity:
+
+- **Ocean-inspired color palette**: Deep navy, Pacific teal, warm neutrals
+- **Distinctive typography**: Fraunces (headings) + DM Sans (body)
+- **Place-based imagery**: Real research sites and organisms
+- **Authoritative but accessible**: Academic rigor without elitism
+
+See [CLAUDE.md](CLAUDE.md) for full brand guidelines.
 
 ---
 
@@ -20,7 +32,7 @@ Modern, accessible department website for UCSB's Ecology, Evolution & Marine Bio
 cd backend
 npm install
 npm run develop
-# Admin panel: http://localhost:1337/admin
+# Admin: http://localhost:1337/admin
 
 # Frontend (Next.js)
 cd frontend
@@ -31,130 +43,137 @@ npm run dev
 
 ---
 
+## Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| **Frontend** | Next.js 14, React 18, TypeScript | App Router, RSC support |
+| **Styling** | Tailwind CSS | Pacific Naturalism design system |
+| **CMS** | Strapi 4 | Headless content management |
+| **Database** | SQLite (dev) / PostgreSQL (prod) | Content storage |
+| **Testing** | Playwright, Jest | E2E and unit tests |
+
+---
+
 ## Project Structure
 
 ```
 eemb-website-redesign-2025-2026/
-├── backend/          # Strapi CMS (API + Admin)
-├── frontend/         # Next.js 14 (App Router)
-├── scripts/          # Data import & automation (57+ scripts)
-├── scraping/         # Web scraping tools
-├── docs/             # Documentation & guides
-│   ├── archive/      # Historical reports
-│   └── *.md          # Active guides
-├── planning documents/  # Architecture & roadmap
-├── README.md         # This file
-├── PROJECT_CONTEXT.md   # Detailed project state
-└── EXECUTIVE_SUMMARY.md # High-level overview
+├── backend/              # Strapi CMS
+├── frontend/             # Next.js 14
+│   ├── app/              # Pages (App Router)
+│   ├── src/components/   # React components
+│   └── public/images/    # Static assets
+├── scripts/              # Data import tools
+├── docs/                 # Documentation
+├── CLAUDE.md             # AI assistant context & brand guide
+└── README.md             # This file
 ```
 
 ---
 
-## Current State
+## Current Status
 
-### What's Working
+### Complete
+- 119 people profiles (89% photo coverage)
+- 32 pages implemented
+- Pacific Naturalism design system v4.0
+- Responsive layouts tested
+- Admin dashboard with JWT auth
 
-| Feature | Status | Details |
-|---------|--------|---------|
-| **People Directory** | Complete | 119 records, search/filter/sort, 89% photo coverage |
-| **Faculty Profiles** | Complete | Photos, bios, research interests, academic links |
-| **Homepage** | Complete | 9 components, responsive, ocean gradient theme |
-| **Admin Dashboard** | Complete | JWT auth, CRUD for all people types |
-| **Strapi Backend** | Complete | 12 content types, REST + GraphQL APIs |
-| **32 Pages** | Complete | All routes implemented |
-
-### What Needs Content
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| News Articles | Schema ready | 0 records - need content |
-| Events/Calendar | Schema ready | 0 records - need content |
-| Alumni Directory | Schema ready | 0 records - need data collection |
-| In Memoriam | Schema ready | 0 records - need 5 profiles |
-| DEI Content | Schema ready | 0 records - need committee info |
+### Content Needed
+- News articles (schema ready)
+- Events/calendar (schema ready)
+- Alumni directory (schema ready)
 
 ### Infrastructure Pending
-
-- [ ] Cloudinary credentials (using direct URLs currently)
-- [ ] PostgreSQL migration (using SQLite for dev)
-- [ ] Production deployment (Vercel + Railway)
-
----
-
-## Key URLs (Development)
-
-- **Frontend:** http://localhost:3000
-- **Strapi Admin:** http://localhost:1337/admin
-- **API:** http://localhost:1337/api
+- Cloudinary integration
+- PostgreSQL migration
+- Production deployment
 
 ---
 
-## Data Summary
+## Design System
 
-| Content Type | Records | Photo Coverage |
-|--------------|---------|----------------|
-| Faculty | 65 | 94% (61/65) |
-| Graduate Students | 35 | 91% (32/35) |
-| Staff | 19 | 68% (13/19) |
-| **Total People** | **119** | **89%** |
+### Color Palette
 
----
+```
+Primary Ocean:
+  ocean-deep:     #002244  (headers, footer)
+  ocean-teal:     #0d9488  (accents)
+  bioluminescent: #22d3ee  (highlights)
 
-## Tech Stack
+Warm Neutrals:
+  warm-50:  #FEFDFB  (background)
+  warm-600: #6B6156  (body text)
 
-**Backend:**
-- Strapi 4.25.0 (Headless CMS)
-- SQLite (dev) / PostgreSQL (prod-ready)
-- REST + GraphQL APIs
+Brand:
+  ucsb-gold: #FEBC11  (CTAs)
+```
 
-**Frontend:**
-- Next.js 14 (App Router)
-- React 18 + TypeScript
-- Tailwind CSS
-- React Query + Axios
+### Typography
 
-**Testing:**
-- Playwright (E2E)
-- Jest (Unit)
+- **Headings**: Fraunces (serif, characterful)
+- **Body**: DM Sans (clean, readable)
+
+### Key Components
+
+| Component | Usage |
+|-----------|-------|
+| Hero sections | Research, Academics, About pages |
+| Compact headers | People, News, Support pages |
+| Person cards | Faculty/student grids |
+| Research cards | Theme showcases |
 
 ---
 
 ## Documentation
 
-- [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) - Detailed project state & tech details
-- [EXECUTIVE_SUMMARY.md](EXECUTIVE_SUMMARY.md) - High-level overview & rationale
-- [docs/ADMIN_SETUP_GUIDE.md](docs/ADMIN_SETUP_GUIDE.md) - Admin panel guide
-- [docs/EVENTS_SYSTEM_GUIDE.md](docs/EVENTS_SYSTEM_GUIDE.md) - Events implementation
-- [planning documents/](planning%20documents/) - Architecture & roadmap
+- [CLAUDE.md](CLAUDE.md) - Brand guide & AI assistant context
+- [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) - Technical details
+- [EXECUTIVE_SUMMARY.md](EXECUTIVE_SUMMARY.md) - High-level overview
+- [docs/](docs/) - Admin guides & system documentation
 
 ---
 
 ## Scripts
 
 ```bash
-# Run Playwright tests
+# Development
+cd frontend && npm run dev
+cd backend && npm run develop
+
+# Testing
 cd frontend && npx playwright test
 
-# Import data
-node scripts/comprehensive-people-import.js
-
-# Validate links
-node scripts/validate-faculty-links.js
-
-# Database queries
+# Database
 sqlite3 backend/.tmp/data.db "SELECT COUNT(*) FROM faculties"
+
+# Data import
+node scripts/comprehensive-people-import.js
 ```
 
 ---
 
 ## Contributing
 
-1. Read [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) first
-2. Create feature branch from `main`
-3. Follow existing code patterns
-4. Run tests before committing
-5. Use commit format: `[scope] description`
+1. Read [CLAUDE.md](CLAUDE.md) for brand guidelines
+2. Review [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) for technical context
+3. Create feature branch from `main`
+4. Follow Pacific Naturalism design patterns
+5. Test on mobile (375px) and desktop
 
 ---
 
-**Last Updated:** November 26, 2025
+## Key URLs (Development)
+
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Strapi Admin | http://localhost:1337/admin |
+| API | http://localhost:1337/api |
+
+---
+
+**Status:** Active Development
+**Last Updated:** January 2026

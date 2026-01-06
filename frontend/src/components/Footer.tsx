@@ -84,8 +84,11 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="text-white/60 text-sm leading-relaxed mb-6">
-              Department of Ecology, Evolution and Marine Biology. Where the Santa Ynez Mountains meet the Pacific.
+            <p className="text-white/60 text-sm leading-relaxed mb-2">
+              Department of Ecology, Evolution & Marine Biology
+            </p>
+            <p className="text-bioluminescent/80 text-sm font-medium italic mb-6">
+              Research that matters for the future of life on Earth.
             </p>
 
             <div className="text-white/40 text-sm space-y-1">

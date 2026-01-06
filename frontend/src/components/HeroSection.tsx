@@ -4,13 +4,38 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-// Rotating headlines that showcase the breadth of the department
+// Rotating headlines with matching background images
 const headlines = [
-  { text: "Kelp forests", color: "text-bioluminescent" },
-  { text: "Coral reefs", color: "text-sunset-400" },
-  { text: "Evolutionary origins", color: "text-ucsb-gold" },
-  { text: "Ecosystem dynamics", color: "text-kelp-400" },
-  { text: "Climate adaptation", color: "text-ocean-light" },
+  {
+    text: "Kelp forests",
+    color: "text-bioluminescent",
+    image: "/images/about/kelp-banner.jpg",
+    caption: "Macrocystis pyrifera · Santa Barbara Channel"
+  },
+  {
+    text: "Coral reefs",
+    color: "text-sunset-400",
+    image: "/images/about/coral-reef.jpg",
+    caption: "Moorea Coral Reef · French Polynesia"
+  },
+  {
+    text: "Evolutionary origins",
+    color: "text-ucsb-gold",
+    image: "/images/about/evolution-flower.jpg",
+    caption: "Aquilegia · Columbine flower evolution"
+  },
+  {
+    text: "Ecosystem dynamics",
+    color: "text-kelp-400",
+    image: "/images/about/campus-lagoon.jpg",
+    caption: "Campus Lagoon · UC Santa Barbara"
+  },
+  {
+    text: "Climate adaptation",
+    color: "text-ocean-light",
+    image: "/images/about/marine-reef.jpg",
+    caption: "Marine ecosystems · Climate research"
+  },
 ]
 
 // Floating organic shapes for visual interest
@@ -25,7 +50,9 @@ function FloatingOrb({ className, delay = 0 }: { className?: string; delay?: num
 
 export default function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [previousIndex, setPreviousIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(true)
+  const [isImageTransitioning, setIsImageTransitioning] = useState(false)
   const [scrollY, setScrollY] = useState(0)
 
   // Parallax effect
@@ -37,45 +64,62 @@ export default function HeroSection() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Rotating text
+  // Rotating text and images
   useEffect(() => {
     const interval = setInterval(() => {
       setIsVisible(false)
+      setIsImageTransitioning(true)
+
       setTimeout(() => {
+        setPreviousIndex(currentIndex)
         setCurrentIndex((prev) => (prev + 1) % headlines.length)
         setIsVisible(true)
+
+        // Reset image transition after new image loads
+        setTimeout(() => {
+          setIsImageTransitioning(false)
+        }, 800)
       }, 400)
-    }, 4000)
+    }, 5000)
     return () => clearInterval(interval)
-  }, [])
+  }, [currentIndex])
 
   return (
     <section className="relative min-h-[100vh] flex items-center overflow-hidden bg-ocean-midnight">
-      {/* Parallax Background Image */}
-      <div
-        className="absolute inset-0 w-full h-[120%] -top-[10%]"
-        style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-      >
-        <Image
-          src="/images/about/kelp-banner.jpg"
-          alt="Giant kelp forest in the Santa Barbara Channel"
-          fill
-          className="object-cover scale-110"
-          priority
-        />
-      </div>
+      {/* Background Images - Crossfade Effect */}
+      {headlines.map((headline, index) => (
+        <div
+          key={headline.text}
+          className={`absolute inset-0 w-full h-[120%] -top-[10%] transition-opacity duration-1000 ease-in-out ${
+            index === currentIndex
+              ? 'opacity-100 z-[1]'
+              : index === previousIndex && isImageTransitioning
+                ? 'opacity-100 z-[0]'
+                : 'opacity-0 z-[0]'
+          }`}
+          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+        >
+          <Image
+            src={headline.image}
+            alt={headline.text}
+            fill
+            className="object-cover scale-110"
+            priority={index === 0}
+          />
+        </div>
+      ))}
 
       {/* Cinematic gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ocean-midnight via-ocean-midnight/70 to-ocean-midnight/30" />
-      <div className="absolute inset-0 bg-gradient-to-r from-ocean-midnight/80 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ocean-midnight via-ocean-midnight/70 to-ocean-midnight/30 z-[2]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-ocean-midnight/80 via-transparent to-transparent z-[2]" />
 
       {/* Animated organic shapes - bioluminescent accents */}
-      <FloatingOrb className="w-[600px] h-[600px] bg-bioluminescent/20 -top-40 -right-40" delay={0} />
-      <FloatingOrb className="w-[400px] h-[400px] bg-ocean-teal/30 bottom-20 -left-32" delay={2} />
-      <FloatingOrb className="w-[300px] h-[300px] bg-ucsb-gold/20 top-1/3 right-1/4" delay={4} />
+      <FloatingOrb className="w-[600px] h-[600px] bg-bioluminescent/20 -top-40 -right-40 z-[3]" delay={0} />
+      <FloatingOrb className="w-[400px] h-[400px] bg-ocean-teal/30 bottom-20 -left-32 z-[3]" delay={2} />
+      <FloatingOrb className="w-[300px] h-[300px] bg-ucsb-gold/20 top-1/3 right-1/4 z-[3]" delay={4} />
 
       {/* Topographic pattern overlay */}
-      <div className="absolute inset-0 topo-pattern opacity-20" />
+      <div className="absolute inset-0 topo-pattern opacity-20 z-[3]" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-5 sm:px-6 lg:px-8 py-24 md:py-32 max-w-7xl">
@@ -161,10 +205,39 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Photo credit - subtle */}
-      <p className="absolute bottom-6 right-6 text-white/20 text-xs font-light z-10">
-        <span className="italic">Macrocystis pyrifera</span> · Santa Barbara Channel
+      {/* Photo credit - dynamic based on current image */}
+      <p
+        className={`absolute bottom-6 right-6 text-white/30 text-xs font-light z-10 transition-all duration-500 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        }`}
+      >
+        <span className="italic">{headlines[currentIndex].caption}</span>
       </p>
+
+      {/* Image indicators */}
+      <div className="absolute bottom-24 right-6 z-10 flex flex-col gap-2">
+        {headlines.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setIsVisible(false)
+              setIsImageTransitioning(true)
+              setTimeout(() => {
+                setPreviousIndex(currentIndex)
+                setCurrentIndex(index)
+                setIsVisible(true)
+                setTimeout(() => setIsImageTransitioning(false), 800)
+              }, 400)
+            }}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex
+                ? 'bg-white scale-125'
+                : 'bg-white/30 hover:bg-white/60'
+            }`}
+            aria-label={`View ${headlines[index].text}`}
+          />
+        ))}
+      </div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
