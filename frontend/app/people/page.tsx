@@ -3,45 +3,43 @@
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import type { Faculty, Staff, GraduateStudent } from '@/lib/supabase/types'
 
+// Unified person type for display
 interface Person {
   id: number
-  attributes: {
-    firstName: string
-    lastName: string
-    fullName: string
-    slug?: string
-    title?: string
-    email: string
-    phone?: string
-    office?: string
-    bio?: string
-    shortBio?: string
-    researchInterests?: string[]
-    degreeProgram?: string
-    yearEntered?: number
-    expectedGraduation?: number
-    active: boolean
-    department?: string
-    photo_url?: string
-    labWebsite?: string
-    personalWebsite?: string
-    googleScholar?: string
-    orcid?: string
-    twitter?: string
-    linkedin?: string
-    research_areas?: string
-    advisor?: {
-      data?: {
-        id: number
-        attributes: {
-          fullName: string
-          lastName: string
-          slug?: string
-        }
-      }
-    }
-  }
+  first_name: string
+  last_name: string
+  full_name: string | null
+  slug: string | null
+  title?: string | null
+  email: string
+  phone?: string | null
+  office?: string | null
+  bio?: string | null
+  short_bio?: string | null
+  research_interests?: string[] | null
+  degree_program?: string | null
+  year_entered?: number | null
+  expected_graduation?: number | null
+  active: boolean
+  department?: string | null
+  photo_url?: string | null
+  lab_website?: string | null
+  personal_website?: string | null
+  google_scholar?: string | null
+  orcid?: string | null
+  twitter?: string | null
+  linkedin?: string | null
+  research_areas?: string
+  advisor?: {
+    id: number
+    full_name: string | null
+    last_name: string
+    slug: string | null
+  } | null
+  person_type: 'faculty' | 'staff' | 'student'
 }
 
 type CategoryTab = 'all' | 'faculty' | 'researchers' | 'adjunct' | 'emeriti' | 'lecturers' | 'staff' | 'students'
@@ -80,25 +78,93 @@ export default function PeoplePage() {
       setLoading(true)
       setError(null)
 
+      const supabase = createClient()
+
+      // Fetch all data in parallel
       const [facultyRes, staffRes, studentsRes] = await Promise.all([
-        fetch('http://localhost:1337/api/faculties?pagination[limit]=200'),
-        fetch('http://localhost:1337/api/staff-members?pagination[limit]=100'),
-        fetch('http://localhost:1337/api/graduate-students?pagination[limit]=100&populate=advisor')
+        supabase.from('faculty').select('*').order('last_name'),
+        supabase.from('staff').select('*').eq('active', true).order('last_name'),
+        supabase.from('graduate_students').select('*, advisor:faculty!graduate_students_advisor_id_fkey(id, full_name, last_name, slug)').eq('active', true).order('last_name')
       ])
 
-      if (!facultyRes.ok || !staffRes.ok || !studentsRes.ok) {
-        throw new Error('Failed to fetch people data')
-      }
+      if (facultyRes.error) throw new Error(facultyRes.error.message)
+      if (staffRes.error) throw new Error(staffRes.error.message)
+      if (studentsRes.error) throw new Error(studentsRes.error.message)
 
-      const [facultyData, staffData, studentsData] = await Promise.all([
-        facultyRes.json(),
-        staffRes.json(),
-        studentsRes.json()
-      ])
+      // Transform faculty data
+      const transformedFaculty: Person[] = (facultyRes.data || []).map((f: Faculty) => ({
+        id: f.id,
+        first_name: f.first_name,
+        last_name: f.last_name,
+        full_name: f.full_name,
+        slug: f.slug,
+        title: f.title,
+        email: f.email,
+        phone: f.phone,
+        office: f.office,
+        bio: f.bio,
+        short_bio: f.short_bio,
+        research_interests: Array.isArray(f.research_interests) ? f.research_interests as string[] : null,
+        active: f.active,
+        department: f.department,
+        photo_url: f.photo_url,
+        lab_website: f.lab_website,
+        google_scholar: f.google_scholar,
+        orcid: f.orcid,
+        person_type: 'faculty' as const
+      }))
 
-      setFaculty(facultyData.data || [])
-      setStaff(staffData.data || [])
-      setStudents(studentsData.data || [])
+      // Transform staff data
+      const transformedStaff: Person[] = (staffRes.data || []).map((s: Staff) => ({
+        id: s.id,
+        first_name: s.first_name,
+        last_name: s.last_name,
+        full_name: s.full_name,
+        slug: s.slug,
+        title: s.title,
+        email: s.email,
+        phone: s.phone,
+        office: s.office,
+        bio: s.bio,
+        short_bio: s.short_bio,
+        active: s.active,
+        department: s.department,
+        photo_url: s.photo_url,
+        linkedin: s.linkedin,
+        person_type: 'staff' as const
+      }))
+
+      // Transform student data
+      const transformedStudents: Person[] = (studentsRes.data || []).map((s: GraduateStudent & { advisor?: { id: number; full_name: string | null; last_name: string; slug: string | null } }) => ({
+        id: s.id,
+        first_name: s.first_name,
+        last_name: s.last_name,
+        full_name: s.full_name,
+        slug: s.slug,
+        email: s.email,
+        phone: s.phone,
+        office: s.office,
+        bio: s.bio,
+        short_bio: s.short_bio,
+        research_interests: Array.isArray(s.research_interests) ? s.research_interests as string[] : null,
+        degree_program: s.degree_program,
+        year_entered: s.year_entered,
+        expected_graduation: s.expected_graduation,
+        active: s.active,
+        photo_url: s.photo_url,
+        lab_website: s.lab_website,
+        personal_website: s.personal_website,
+        google_scholar: s.google_scholar,
+        orcid: s.orcid,
+        twitter: s.twitter,
+        linkedin: s.linkedin,
+        advisor: s.advisor || null,
+        person_type: 'student' as const
+      }))
+
+      setFaculty(transformedFaculty)
+      setStaff(transformedStaff)
+      setStudents(transformedStudents)
     } catch (error) {
       console.error('Error fetching people:', error)
       setError('Failed to load people data. Please try again later.')
@@ -116,7 +182,7 @@ export default function PeoplePage() {
       people = [...faculty, ...staff, ...students]
     } else if (activeCategory === 'faculty') {
       people = faculty.filter(person => {
-        const title = person.attributes.title?.toLowerCase() || ''
+        const title = person.title?.toLowerCase() || ''
         return !title.includes('emeritus') &&
                !title.includes('lecturer') &&
                !title.includes('adjunct') &&
@@ -125,20 +191,20 @@ export default function PeoplePage() {
       })
     } else if (activeCategory === 'researchers') {
       people = faculty.filter(person => {
-        const title = person.attributes.title?.toLowerCase() || ''
-        return title.includes('research professor') || title.includes('research biologist')
+        const title = person.title?.toLowerCase() || ''
+        return title.includes('research professor') || title.includes('research biologist') || title.includes('postdoctoral')
       })
     } else if (activeCategory === 'adjunct') {
       people = faculty.filter(person =>
-        person.attributes.title?.toLowerCase().includes('adjunct')
+        person.title?.toLowerCase().includes('adjunct')
       )
     } else if (activeCategory === 'emeriti') {
       people = faculty.filter(person =>
-        person.attributes.title?.toLowerCase().includes('emeritus')
+        person.title?.toLowerCase().includes('emeritus')
       )
     } else if (activeCategory === 'lecturers') {
       people = faculty.filter(person => {
-        const title = person.attributes.title?.toLowerCase() || ''
+        const title = person.title?.toLowerCase() || ''
         return title.includes('lecturer') || title.includes('teaching professor')
       })
     } else if (activeCategory === 'staff') {
@@ -151,11 +217,11 @@ export default function PeoplePage() {
     if (searchTerm) {
       const search = searchTerm.toLowerCase().trim()
       people = people.filter(person => {
-        const fullName = person.attributes.fullName?.toLowerCase() || ''
-        const email = person.attributes.email?.toLowerCase() || ''
-        const title = person.attributes.title?.toLowerCase() || ''
-        const research = person.attributes.researchInterests?.join(' ').toLowerCase() || ''
-        const degreeProgram = person.attributes.degreeProgram?.toLowerCase() || ''
+        const fullName = person.full_name?.toLowerCase() || ''
+        const email = person.email?.toLowerCase() || ''
+        const title = person.title?.toLowerCase() || ''
+        const research = person.research_interests?.join(' ').toLowerCase() || ''
+        const degreeProgram = person.degree_program?.toLowerCase() || ''
 
         return fullName.includes(search) ||
                email.includes(search) ||
@@ -168,7 +234,7 @@ export default function PeoplePage() {
     // Filter by research area (from state)
     if (activeResearchArea !== 'all' && activeCategory === 'faculty') {
       people = people.filter(person => {
-        const areas = person.attributes.research_areas || ''
+        const areas = person.research_areas || ''
         return areas.includes(activeResearchArea)
       })
     }
@@ -179,46 +245,46 @@ export default function PeoplePage() {
     switch (sortOption) {
       case 'name-asc':
         sortedPeople.sort((a, b) =>
-          a.attributes.lastName.localeCompare(b.attributes.lastName)
+          a.last_name.localeCompare(b.last_name)
         )
         break
       case 'name-desc':
         sortedPeople.sort((a, b) =>
-          b.attributes.lastName.localeCompare(a.attributes.lastName)
+          b.last_name.localeCompare(a.last_name)
         )
         break
       case 'title-asc':
         sortedPeople.sort((a, b) => {
-          const titleA = a.attributes.title || a.attributes.degreeProgram || ''
-          const titleB = b.attributes.title || b.attributes.degreeProgram || ''
+          const titleA = a.title || a.degree_program || ''
+          const titleB = b.title || b.degree_program || ''
           return titleA.localeCompare(titleB)
         })
         break
       case 'title-desc':
         sortedPeople.sort((a, b) => {
-          const titleA = a.attributes.title || a.attributes.degreeProgram || ''
-          const titleB = b.attributes.title || b.attributes.degreeProgram || ''
+          const titleA = a.title || a.degree_program || ''
+          const titleB = b.title || b.degree_program || ''
           return titleB.localeCompare(titleA)
         })
         break
       case 'email-asc':
         sortedPeople.sort((a, b) =>
-          (a.attributes.email || '').localeCompare(b.attributes.email || '')
+          (a.email || '').localeCompare(b.email || '')
         )
         break
       case 'email-desc':
         sortedPeople.sort((a, b) =>
-          (b.attributes.email || '').localeCompare(a.attributes.email || '')
+          (b.email || '').localeCompare(a.email || '')
         )
         break
       case 'office-asc':
         sortedPeople.sort((a, b) =>
-          (a.attributes.office || '').localeCompare(b.attributes.office || '')
+          (a.office || '').localeCompare(b.office || '')
         )
         break
       case 'office-desc':
         sortedPeople.sort((a, b) =>
-          (b.attributes.office || '').localeCompare(a.attributes.office || '')
+          (b.office || '').localeCompare(a.office || '')
         )
         break
       case 'recent':
@@ -264,23 +330,23 @@ export default function PeoplePage() {
   }
 
   const getInitials = (person: Person) => {
-    const first = person.attributes.firstName?.[0] || ''
-    const last = person.attributes.lastName?.[0] || ''
+    const first = person.first_name?.[0] || ''
+    const last = person.last_name?.[0] || ''
     return (first + last).toUpperCase()
   }
 
   const renderPersonCard = (person: Person, index: number) => {
     const hasImageError = imageErrors.has(person.id)
-    const isStudent = !!person.attributes.degreeProgram
-    const hasSocialLinks = person.attributes.labWebsite || person.attributes.googleScholar || person.attributes.orcid || person.attributes.personalWebsite || person.attributes.twitter || person.attributes.linkedin
+    const isStudent = person.person_type === 'student'
+    const hasSocialLinks = person.lab_website || person.google_scholar || person.orcid || person.personal_website || person.twitter || person.linkedin
 
     return (
       <article
-        key={person.id}
+        key={`${person.person_type}-${person.id}`}
         className="group relative bg-white rounded-3xl border border-warm-200 hover:border-ocean-teal/30 shadow-warm-sm hover:shadow-warm-xl transition-all duration-500 overflow-hidden animate-fade-in-up"
         style={{ animationDelay: `${index * 50}ms` }}
         role="article"
-        aria-label={`${person.attributes.fullName} profile`}
+        aria-label={`${person.full_name} profile`}
       >
         {/* Gradient accent on hover */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-ocean-teal to-bioluminescent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -293,12 +359,10 @@ export default function PeoplePage() {
           <div className="relative w-24 h-24 mx-auto mb-4">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-ocean-teal to-bioluminescent opacity-20 blur-lg group-hover:opacity-40 transition-opacity duration-500" />
             <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:scale-105 transition-transform duration-500">
-              {person.attributes.photo_url && !hasImageError ? (
+              {person.photo_url && !hasImageError ? (
                 <img
-                  src={person.attributes.photo_url.startsWith('http')
-                    ? person.attributes.photo_url
-                    : `http://localhost:1337${person.attributes.photo_url}`}
-                  alt={person.attributes.fullName}
+                  src={person.photo_url}
+                  alt={person.full_name || ''}
                   className="w-full h-full object-cover"
                   loading="lazy"
                   onError={() => handleImageError(person.id)}
@@ -315,72 +379,72 @@ export default function PeoplePage() {
 
           {/* Name */}
           <h3 className="font-heading text-lg font-bold text-ocean-deep text-center mb-1 group-hover:text-ocean-blue transition-colors duration-300">
-            {person.attributes.fullName}
+            {person.full_name}
           </h3>
 
           {/* Title/Program Info */}
           <div className="text-center mb-4">
-            {person.attributes.title && (
+            {person.title && (
               <p className="text-sm text-ocean-teal font-medium">
-                {person.attributes.title}
+                {person.title}
               </p>
             )}
             {isStudent && (
               <>
                 <p className="text-sm text-ocean-teal font-medium">
-                  {person.attributes.degreeProgram} Student
-                  {person.attributes.yearEntered && (
-                    <span className="text-warm-500 font-normal"> · {person.attributes.yearEntered}</span>
+                  {person.degree_program} Student
+                  {person.year_entered && (
+                    <span className="text-warm-500 font-normal"> · {person.year_entered}</span>
                   )}
                 </p>
-                {person.attributes.expectedGraduation && (
+                {person.expected_graduation && (
                   <p className="text-xs text-warm-500 mt-0.5">
-                    Expected {person.attributes.expectedGraduation}
+                    Expected {person.expected_graduation}
                   </p>
                 )}
               </>
             )}
-            {person.attributes.advisor?.data && (
+            {person.advisor && (
               <p className="text-xs mt-1">
-                {person.attributes.advisor.data.attributes.slug ? (
+                {person.advisor.slug ? (
                   <Link
-                    href={`/people/faculty/${person.attributes.advisor.data.attributes.slug}`}
+                    href={`/people/faculty/${person.advisor.slug}`}
                     className="text-ocean-teal hover:text-ocean-deep hover:underline"
                   >
-                    {person.attributes.advisor.data.attributes.lastName} Lab
+                    {person.advisor.last_name} Lab
                   </Link>
                 ) : (
-                  <span className="text-warm-500">{person.attributes.advisor.data.attributes.lastName} Lab</span>
+                  <span className="text-warm-500">{person.advisor.last_name} Lab</span>
                 )}
               </p>
             )}
           </div>
 
           {/* Short Bio */}
-          {person.attributes.shortBio && (
+          {person.short_bio && (
             <p className="text-sm text-warm-600 text-center leading-relaxed mb-4 line-clamp-3">
-              {person.attributes.shortBio}
+              {person.short_bio}
             </p>
           )}
 
           {/* Contact Icons */}
           <div className="flex items-center justify-center gap-2 mb-4">
-            {person.attributes.email && (
+            {person.email && (
               <a
-                href={`mailto:${person.attributes.email}`}
+                href={`mailto:${person.email}`}
                 className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 hover:bg-ocean-teal text-warm-500 hover:text-white transition-all duration-300"
                 aria-label="Email"
-                title={person.attributes.email}
+                title={person.email}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </a>
             )}
-            {person.attributes.office && (
+            {person.office && (
               <div
                 className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 text-warm-500 cursor-help"
-                title={person.attributes.office}
+                title={person.office}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -388,12 +452,12 @@ export default function PeoplePage() {
                 </svg>
               </div>
             )}
-            {person.attributes.phone && (
+            {person.phone && (
               <a
-                href={`tel:${person.attributes.phone}`}
+                href={`tel:${person.phone}`}
                 className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 hover:bg-ocean-teal text-warm-500 hover:text-white transition-all duration-300"
                 aria-label="Phone"
-                title={person.attributes.phone}
+                title={person.phone}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -405,9 +469,9 @@ export default function PeoplePage() {
           {/* Social Links */}
           {hasSocialLinks && (
             <div className="flex items-center justify-center gap-2 pt-4 border-t border-warm-200 flex-wrap">
-              {person.attributes.labWebsite && (
+              {person.lab_website && (
                 <a
-                  href={person.attributes.labWebsite}
+                  href={person.lab_website}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-kelp-500 text-warm-500 hover:text-white transition-all duration-300"
@@ -418,9 +482,9 @@ export default function PeoplePage() {
                   </svg>
                 </a>
               )}
-              {person.attributes.googleScholar && (
+              {person.google_scholar && (
                 <a
-                  href={person.attributes.googleScholar}
+                  href={person.google_scholar}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-blue-600 text-warm-500 hover:text-white transition-all duration-300"
@@ -431,9 +495,9 @@ export default function PeoplePage() {
                   </svg>
                 </a>
               )}
-              {person.attributes.orcid && (
+              {person.orcid && (
                 <a
-                  href={`https://orcid.org/${person.attributes.orcid}`}
+                  href={`https://orcid.org/${person.orcid}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-[#A6CE39] text-warm-500 hover:text-white transition-all duration-300"
@@ -449,9 +513,9 @@ export default function PeoplePage() {
                   </svg>
                 </a>
               )}
-              {person.attributes.twitter && (
+              {person.twitter && (
                 <a
-                  href={person.attributes.twitter.startsWith('http') ? person.attributes.twitter : `https://twitter.com/${person.attributes.twitter}`}
+                  href={person.twitter.startsWith('http') ? person.twitter : `https://twitter.com/${person.twitter}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-black text-warm-500 hover:text-white transition-all duration-300"
@@ -462,9 +526,9 @@ export default function PeoplePage() {
                   </svg>
                 </a>
               )}
-              {person.attributes.linkedin && (
+              {person.linkedin && (
                 <a
-                  href={person.attributes.linkedin.startsWith('http') ? person.attributes.linkedin : `https://linkedin.com/in/${person.attributes.linkedin}`}
+                  href={person.linkedin.startsWith('http') ? person.linkedin : `https://linkedin.com/in/${person.linkedin}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-[#0077B5] text-warm-500 hover:text-white transition-all duration-300"
@@ -479,11 +543,11 @@ export default function PeoplePage() {
           )}
 
           {/* View Profile Button */}
-          {person.attributes.slug && (
+          {person.slug && (
             <Link
-              href={person.attributes.degreeProgram
-                ? `/people/students/${person.attributes.slug}`
-                : `/people/faculty/${person.attributes.slug}`
+              href={person.person_type === 'student'
+                ? `/people/students/${person.slug}`
+                : `/people/faculty/${person.slug}`
               }
               className="mt-4 block w-full text-center px-4 py-2.5 bg-gradient-to-r from-ocean-teal to-ocean-blue text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-ocean-teal/25 hover:-translate-y-0.5"
             >
@@ -515,7 +579,7 @@ export default function PeoplePage() {
         return faculty.length + staff.length + students.length
       case 'faculty':
         return faculty.filter(person => {
-          const title = person.attributes.title?.toLowerCase() || ''
+          const title = person.title?.toLowerCase() || ''
           return !title.includes('emeritus') &&
                  !title.includes('lecturer') &&
                  !title.includes('adjunct') &&
@@ -524,20 +588,20 @@ export default function PeoplePage() {
         }).length
       case 'researchers':
         return faculty.filter(person => {
-          const title = person.attributes.title?.toLowerCase() || ''
-          return title.includes('research professor') || title.includes('research biologist')
+          const title = person.title?.toLowerCase() || ''
+          return title.includes('research professor') || title.includes('research biologist') || title.includes('postdoctoral')
         }).length
       case 'adjunct':
         return faculty.filter(person =>
-          person.attributes.title?.toLowerCase().includes('adjunct')
+          person.title?.toLowerCase().includes('adjunct')
         ).length
       case 'emeriti':
         return faculty.filter(person =>
-          person.attributes.title?.toLowerCase().includes('emeritus')
+          person.title?.toLowerCase().includes('emeritus')
         ).length
       case 'lecturers':
         return faculty.filter(person => {
-          const title = person.attributes.title?.toLowerCase() || ''
+          const title = person.title?.toLowerCase() || ''
           return title.includes('lecturer') || title.includes('teaching professor')
         }).length
       case 'staff':
@@ -785,17 +849,15 @@ export default function PeoplePage() {
                         <tbody className="divide-y divide-warm-100">
                           {filteredAndSortedPeople.map((person, index) => (
                             <tr
-                              key={`${person.id}-${person.attributes.email || index}`}
+                              key={`${person.person_type}-${person.id}-${index}`}
                               className="hover:bg-warm-50 transition-colors duration-200 group"
                             >
                               <td className="px-6 py-4">
                                 <div className="flex items-center gap-4">
-                                  {person.attributes.photo_url && !imageErrors.has(person.id) ? (
+                                  {person.photo_url && !imageErrors.has(person.id) ? (
                                     <img
-                                      src={person.attributes.photo_url.startsWith('http')
-                                        ? person.attributes.photo_url
-                                        : `http://localhost:1337${person.attributes.photo_url}`}
-                                      alt={person.attributes.fullName}
+                                      src={person.photo_url}
+                                      alt={person.full_name || ''}
                                       className="w-12 h-12 rounded-full object-cover border-2 border-warm-200 group-hover:border-ocean-teal transition-colors"
                                       onError={() => handleImageError(person.id)}
                                     />
@@ -806,33 +868,33 @@ export default function PeoplePage() {
                                       </span>
                                     </div>
                                   )}
-                                  {person.attributes.slug ? (
+                                  {person.slug ? (
                                     <Link
-                                      href={person.attributes.degreeProgram
-                                        ? `/people/students/${person.attributes.slug}`
-                                        : `/people/faculty/${person.attributes.slug}`
+                                      href={person.person_type === 'student'
+                                        ? `/people/students/${person.slug}`
+                                        : `/people/faculty/${person.slug}`
                                       }
                                       className="font-semibold text-ocean-deep hover:text-ocean-teal transition-colors"
                                     >
-                                      {person.attributes.fullName}
+                                      {person.full_name}
                                     </Link>
                                   ) : (
-                                    <span className="font-semibold text-ocean-deep">{person.attributes.fullName}</span>
+                                    <span className="font-semibold text-ocean-deep">{person.full_name}</span>
                                   )}
                                 </div>
                               </td>
                               <td className="px-6 py-4 text-sm text-warm-600">
-                                {person.attributes.title || (person.attributes.degreeProgram ? `${person.attributes.degreeProgram} Student` : '—')}
+                                {person.title || (person.degree_program ? `${person.degree_program} Student` : '—')}
                               </td>
                               <td className="px-6 py-4 text-sm hidden md:table-cell">
-                                {person.attributes.email ? (
-                                  <a href={`mailto:${person.attributes.email}`} className="text-ocean-teal hover:text-ocean-deep hover:underline">
-                                    {person.attributes.email}
+                                {person.email ? (
+                                  <a href={`mailto:${person.email}`} className="text-ocean-teal hover:text-ocean-deep hover:underline">
+                                    {person.email}
                                   </a>
                                 ) : '—'}
                               </td>
                               <td className="px-6 py-4 text-sm text-warm-500 hidden lg:table-cell">
-                                {person.attributes.office || '—'}
+                                {person.office || '—'}
                               </td>
                             </tr>
                           ))}
