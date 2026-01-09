@@ -15,12 +15,12 @@ export default async function FacultyProfilePage() {
   // Get user's role and linked faculty record
   const { data: userRole } = await supabase
     .from('user_roles')
-    .select('*, faculty:faculty_id(*)')
+    .select('*')
     .eq('user_id', user.id)
     .single()
 
   // If no user role or not faculty, show message
-  if (!userRole || !userRole.faculty_id) {
+  if (!userRole || userRole.person_type !== 'faculty' || !userRole.person_id) {
     return (
       <div className="min-h-screen bg-warm-50 py-12">
         <div className="container mx-auto px-4 max-w-2xl">
@@ -57,7 +57,7 @@ export default async function FacultyProfilePage() {
   const { data: faculty, error } = await supabase
     .from('faculty')
     .select('*')
-    .eq('id', userRole.faculty_id)
+    .eq('id', userRole.person_id)
     .single()
 
   if (error || !faculty) {

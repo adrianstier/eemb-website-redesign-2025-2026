@@ -7,16 +7,15 @@ import Link from 'next/link'
 
 interface Faculty {
   id: number
-  full_name: string
-  first_name: string | null
-  last_name: string | null
-  title: string | null
-  email: string | null
+  full_name: string | null
+  first_name: string
+  last_name: string
+  title: string
+  email: string
   phone: string | null
   office: string | null
   photo_url: string | null
-  research_summary: string | null
-  education: string | null
+  bio: string | null
   lab_website: string | null
   google_scholar: string | null
   orcid: string | null
@@ -29,13 +28,11 @@ interface FacultyProfileFormProps {
 
 export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps) {
   const [formData, setFormData] = useState({
-    full_name: faculty.full_name || '',
-    title: faculty.title || '',
+    full_name: faculty.full_name || `${faculty.first_name} ${faculty.last_name}`,
     email: faculty.email || '',
     phone: faculty.phone || '',
     office: faculty.office || '',
-    research_summary: faculty.research_summary || '',
-    education: faculty.education || '',
+    research_summary: faculty.bio || '',
     lab_website: faculty.lab_website || '',
     google_scholar: faculty.google_scholar || '',
     orcid: faculty.orcid || '',
@@ -60,12 +57,10 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
       .from('faculty')
       .update({
         full_name: formData.full_name,
-        title: formData.title,
         email: formData.email,
         phone: formData.phone || null,
         office: formData.office || null,
-        research_summary: formData.research_summary || null,
-        education: formData.education || null,
+        bio: formData.research_summary || null,
         lab_website: formData.lab_website || null,
         google_scholar: formData.google_scholar || null,
         orcid: formData.orcid || null,
@@ -112,7 +107,7 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
             <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-warm-100">
               <Image
                 src={faculty.photo_url}
-                alt={faculty.full_name}
+                alt={faculty.full_name || `${faculty.first_name} ${faculty.last_name}`}
                 fill
                 className="object-cover"
               />
@@ -144,12 +139,11 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
             </label>
             <input
               type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="e.g., Professor, Associate Professor"
-              className="w-full px-4 py-3 border border-warm-300 rounded-xl focus:ring-2 focus:ring-ocean-blue/20 focus:border-ocean-blue transition"
+              value={faculty.title}
+              readOnly
+              className="w-full px-4 py-3 border border-warm-200 rounded-xl bg-warm-50 text-warm-500 cursor-not-allowed"
             />
+            <p className="text-xs text-warm-500 mt-1">Contact admin to change title</p>
           </div>
 
           <div>
@@ -223,31 +217,6 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
         </div>
       </div>
 
-      {/* Education */}
-      <div className="bg-white rounded-2xl shadow-warm-lg p-6 border border-warm-200">
-        <h2 className="text-xl font-serif font-bold text-ocean-deep mb-6 flex items-center gap-2">
-          <svg className="w-5 h-5 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M12 14l9-5-9-5-9 5 9 5z" />
-            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-          </svg>
-          Education
-        </h2>
-
-        <div>
-          <label className="block text-sm font-medium text-warm-700 mb-2">
-            Education History
-          </label>
-          <textarea
-            name="education"
-            value={formData.education}
-            onChange={handleChange}
-            rows={4}
-            placeholder="List your degrees, institutions, and years..."
-            className="w-full px-4 py-3 border border-warm-300 rounded-xl focus:ring-2 focus:ring-ocean-blue/20 focus:border-ocean-blue transition resize-y"
-          />
-        </div>
-      </div>
 
       {/* External Links */}
       <div className="bg-white rounded-2xl shadow-warm-lg p-6 border border-warm-200">

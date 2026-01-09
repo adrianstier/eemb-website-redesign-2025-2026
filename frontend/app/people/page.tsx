@@ -135,7 +135,7 @@ export default function PeoplePage() {
       }))
 
       // Transform student data
-      const transformedStudents: Person[] = (studentsRes.data || []).map((s: GraduateStudent & { advisor?: { id: number; full_name: string | null; last_name: string; slug: string | null } }) => ({
+      const transformedStudents: Person[] = (studentsRes.data || []).map((s: GraduateStudent & { advisor: { id: number; full_name: string | null; last_name: string; slug: string | null } | null }) => ({
         id: s.id,
         first_name: s.first_name,
         last_name: s.last_name,

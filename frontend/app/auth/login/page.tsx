@@ -7,8 +7,8 @@ import { Suspense } from 'react'
 
 function LoginContent() {
   const searchParams = useSearchParams()
-  const error = searchParams.get('error')
-  const next = searchParams.get('next') || '/'
+  const error = searchParams?.get('error')
+  const next = searchParams?.get('next') || '/'
 
   const handleGoogleLogin = async () => {
     const supabase = createClient()

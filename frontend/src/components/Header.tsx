@@ -13,7 +13,7 @@ export default function Header() {
 
   // Pages that have light backgrounds and need dark text in header
   const lightBackgroundPages = ['/news', '/people', '/support', '/contact', '/calendar', '/dei', '/good-news', '/memoriam']
-  const isLightPage = lightBackgroundPages.some(page => pathname.startsWith(page))
+  const isLightPage = lightBackgroundPages.some(page => pathname?.startsWith(page))
 
   useEffect(() => {
     const handleScroll = () => {

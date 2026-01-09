@@ -23,7 +23,7 @@ export async function GET(request: Request) {
           .single()
 
         // If no role exists, check if they're a faculty member by email
-        if (!userRole) {
+        if (!userRole && user.email) {
           const { data: faculty } = await supabase
             .from('faculty')
             .select('id, email')
@@ -36,9 +36,9 @@ export async function GET(request: Request) {
               .from('user_roles')
               .insert({
                 user_id: user.id,
-                email: user.email,
                 role: 'faculty',
-                faculty_id: faculty.id
+                person_type: 'faculty',
+                person_id: faculty.id
               })
           }
         }
