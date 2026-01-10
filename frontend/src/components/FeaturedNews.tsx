@@ -1,18 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
-
-interface NewsItem {
-  id: number
-  attributes: {
-    title: string
-    excerpt: string
-    publishDate: string
-    slug: string
-    category?: string
-  }
-}
+import type { NewsArticle } from '@/lib/supabase/types'
 
 function useInView(threshold = 0.2) {
   const ref = useRef<HTMLDivElement>(null)
@@ -47,58 +37,21 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
   default: { bg: 'bg-warm-200', text: 'text-warm-600', border: 'border-warm-300' },
 }
 
-export default function FeaturedNews() {
-  const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(true)
+interface FeaturedNewsProps {
+  initialNews?: NewsArticle[]
+}
+
+export default function FeaturedNews({ initialNews = [] }: FeaturedNewsProps) {
+  const [news, setNews] = useState<NewsArticle[]>([])
+  const [loading, setLoading] = useState(!initialNews.length)
   const { ref, isInView } = useInView(0.1)
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch('http://localhost:1337/api/news-articles?pagination[limit]=3&sort=publishDate:desc')
-        const data = await response.json()
-        setNews(data.data || [])
-      } catch (error) {
-        console.error('Error fetching news:', error)
-        setNews([
-          {
-            id: 1,
-            attributes: {
-              title: 'EEMB Researchers Discover New Marine Species',
-              excerpt: 'A team of marine biologists has identified a new species of coral in the Santa Barbara Channel.',
-              publishDate: '2024-11-10',
-              slug: 'new-marine-species',
-              category: 'Research'
-            }
-          },
-          {
-            id: 2,
-            attributes: {
-              title: 'Graduate Student Wins National Science Award',
-              excerpt: 'PhD candidate receives prestigious NSF fellowship for climate adaptation research.',
-              publishDate: '2024-11-08',
-              slug: 'graduate-award',
-              category: 'Awards'
-            }
-          },
-          {
-            id: 3,
-            attributes: {
-              title: 'New Grant Funds Climate Research',
-              excerpt: 'EEMB receives $2.5 million to study ecosystem responses to ocean temperature changes.',
-              publishDate: '2024-11-05',
-              slug: 'climate-grant',
-              category: 'Funding'
-            }
-          }
-        ])
-      } finally {
-        setLoading(false)
-      }
+    if (initialNews.length > 0) {
+      setNews(initialNews.slice(0, 3))
+      setLoading(false)
     }
-
-    fetchNews()
-  }, [])
+  }, [initialNews])
 
   if (loading) {
     return (
@@ -118,10 +71,22 @@ export default function FeaturedNews() {
     )
   }
 
+  if (news.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl p-8 border border-warm-200 text-center">
+        <p className="text-warm-500">No news articles available</p>
+        <Link href="/news" className="text-ocean-blue hover:underline text-sm mt-2 inline-block">
+          View news archive →
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <div ref={ref} className="space-y-4">
       {news.map((item, index) => {
-        const colors = categoryColors[item.attributes.category || 'default'] || categoryColors.default
+        const colors = categoryColors[item.category || 'default'] || categoryColors.default
+        const publishDate = item.publish_date ? new Date(item.publish_date) : null
 
         return (
           <article
@@ -136,35 +101,39 @@ export default function FeaturedNews() {
 
             <div className="relative flex gap-4">
               {/* Date badge */}
-              <div className="flex-shrink-0 w-14 text-center">
-                <div className="bg-gradient-to-br from-ocean-deep to-ocean-blue rounded-xl p-3 shadow-md">
-                  <div className="text-[10px] text-white/70 uppercase font-semibold tracking-wider">
-                    {new Date(item.attributes.publishDate).toLocaleDateString('en-US', { month: 'short' })}
-                  </div>
-                  <div className="text-2xl font-heading font-bold text-white">
-                    {new Date(item.attributes.publishDate).getDate()}
+              {publishDate && (
+                <div className="flex-shrink-0 w-14 text-center">
+                  <div className="bg-gradient-to-br from-ocean-deep to-ocean-blue rounded-xl p-3 shadow-md">
+                    <div className="text-[10px] text-white/70 uppercase font-semibold tracking-wider">
+                      {publishDate.toLocaleDateString('en-US', { month: 'short' })}
+                    </div>
+                    <div className="text-2xl font-heading font-bold text-white">
+                      {publishDate.getDate()}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Content */}
               <div className="flex-1 min-w-0">
                 {/* Category tag */}
-                {item.attributes.category && (
+                {item.category && (
                   <span className={`inline-block text-[10px] font-semibold tracking-wider uppercase px-2.5 py-1 rounded-full ${colors.bg} ${colors.text} border ${colors.border} mb-2`}>
-                    {item.attributes.category}
+                    {item.category}
                   </span>
                 )}
 
                 <h3 className="font-heading font-bold text-ocean-deep text-base leading-snug mb-2 group-hover:text-ocean-blue transition-colors duration-300">
-                  <Link href={`/news/${item.attributes.slug}`} className="line-clamp-2">
-                    {item.attributes.title}
+                  <Link href={`/news/${item.slug}`} className="line-clamp-2">
+                    {item.title}
                   </Link>
                 </h3>
 
-                <p className="text-sm text-warm-500 line-clamp-1 leading-relaxed">
-                  {item.attributes.excerpt}
-                </p>
+                {item.excerpt && (
+                  <p className="text-sm text-warm-500 line-clamp-1 leading-relaxed">
+                    {item.excerpt}
+                  </p>
+                )}
               </div>
 
               {/* Arrow indicator */}

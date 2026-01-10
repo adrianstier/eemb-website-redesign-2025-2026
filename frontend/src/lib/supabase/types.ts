@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: number
+          ip_address: unknown
+          new_data: Json | null
+          old_data: Json | null
+          record_id: number | null
+          table_name: string
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: number
+          ip_address?: unknown
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: number | null
+          table_name: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: number
+          ip_address?: unknown
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: number | null
+          table_name?: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: number
+          ip_address: unknown
+          message: string
+          name: string
+          responded_at: string | null
+          responded_by: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: number
+          ip_address?: unknown
+          message: string
+          name: string
+          responded_at?: string | null
+          responded_by?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: number
+          ip_address?: unknown
+          message?: string
+          name?: string
+          responded_at?: string | null
+          responded_by?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           all_day: boolean | null
@@ -111,6 +192,8 @@ export type Database = {
       }
       faculty: {
         Row: {
+          accepting_students: boolean | null
+          accepting_students_note: string | null
           active: boolean
           bio: string | null
           created_at: string | null
@@ -136,6 +219,8 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          accepting_students?: boolean | null
+          accepting_students_note?: string | null
           active?: boolean
           bio?: string | null
           created_at?: string | null
@@ -161,6 +246,8 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          accepting_students?: boolean | null
+          accepting_students_note?: string | null
           active?: boolean
           bio?: string | null
           created_at?: string | null
@@ -402,6 +489,36 @@ export type Database = {
           },
         ]
       }
+      profile_versions: {
+        Row: {
+          change_reason: string | null
+          changed_at: string | null
+          changed_by: string | null
+          data: Json
+          entity_id: number
+          entity_type: string
+          id: number
+        }
+        Insert: {
+          change_reason?: string | null
+          changed_at?: string | null
+          changed_by?: string | null
+          data: Json
+          entity_id: number
+          entity_type: string
+          id?: number
+        }
+        Update: {
+          change_reason?: string | null
+          changed_at?: string | null
+          changed_by?: string | null
+          data?: Json
+          entity_id?: number
+          entity_type?: string
+          id?: number
+        }
+        Relationships: []
+      }
       research_areas: {
         Row: {
           category: Database["public"]["Enums"]["research_category"] | null
@@ -533,6 +650,44 @@ export type Database = {
           },
           {
             foreignKeyName: "student_research_areas_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "graduate_students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_testimonials: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          featured: boolean | null
+          id: number
+          quote: string
+          student_id: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          id?: number
+          quote: string
+          student_id?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          id?: number
+          quote?: string
+          student_id?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_testimonials_student_id_fkey"
             columns: ["student_id"]
             isOneToOne: false
             referencedRelation: "graduate_students"
@@ -745,3 +900,7 @@ export type NewsArticle = Tables<"news_articles">
 export type Event = Tables<"events">
 export type ResearchArea = Tables<"research_areas">
 export type UserRole = Tables<"user_roles">
+export type StudentTestimonial = Tables<"student_testimonials">
+export type ContactSubmission = Tables<"contact_submissions">
+export type AuditLog = Tables<"audit_log">
+export type ProfileVersion = Tables<"profile_versions">

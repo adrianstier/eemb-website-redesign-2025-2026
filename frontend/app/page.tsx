@@ -8,8 +8,18 @@ import FeaturedNews from '@/components/FeaturedNews'
 import UpcomingEvents from '@/components/UpcomingEvents'
 import PartnersSection from '@/components/PartnersSection'
 import Link from 'next/link'
+import { getAllFaculty, getUpcomingEvents, getAllNews } from '@/lib/data'
 
-export default function HomePage() {
+export const revalidate = 900 // Revalidate every 15 minutes
+
+export default async function HomePage() {
+  // Fetch data server-side in parallel
+  const [faculty, events, news] = await Promise.all([
+    getAllFaculty(),
+    getUpcomingEvents({ limit: 5 }),
+    getAllNews({ limit: 5 })
+  ])
+
   return (
     <div className="bg-warm-50">
       {/* Hero with cinematic intro */}
@@ -25,7 +35,7 @@ export default function HomePage() {
       <ResearchThemes />
 
       {/* Featured faculty - dynamic grid */}
-      <FeaturedFaculty />
+      <FeaturedFaculty initialFaculty={faculty} />
 
       {/* Faculty testimonial - immersive quote */}
       <FacultyQuote />
@@ -63,7 +73,7 @@ export default function HomePage() {
                   </svg>
                 </Link>
               </div>
-              <FeaturedNews />
+              <FeaturedNews initialNews={news} />
             </div>
 
             {/* Events Column */}
@@ -90,7 +100,7 @@ export default function HomePage() {
                   </svg>
                 </Link>
               </div>
-              <UpcomingEvents />
+              <UpcomingEvents initialEvents={events} />
             </div>
           </div>
         </div>

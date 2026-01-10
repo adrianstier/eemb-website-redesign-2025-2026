@@ -1,18 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
-
-interface Event {
-  id: number
-  attributes: {
-    title: string
-    startDate: string
-    location?: string
-    eventType?: string
-    slug: string
-  }
-}
+import type { EventWithHost } from '@/lib/data'
 
 function useInView(threshold = 0.2) {
   const ref = useRef<HTMLDivElement>(null)
@@ -47,59 +37,21 @@ const eventTypeColors: Record<string, { accent: string; bg: string }> = {
   default: { accent: 'bg-warm-400', bg: 'bg-warm-200' },
 }
 
-export default function UpcomingEvents() {
-  const [events, setEvents] = useState<Event[]>([])
-  const [loading, setLoading] = useState(true)
+interface UpcomingEventsProps {
+  initialEvents?: EventWithHost[]
+}
+
+export default function UpcomingEvents({ initialEvents = [] }: UpcomingEventsProps) {
+  const [events, setEvents] = useState<EventWithHost[]>([])
+  const [loading, setLoading] = useState(!initialEvents.length)
   const { ref, isInView } = useInView(0.1)
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const now = new Date().toISOString()
-        const response = await fetch(`http://localhost:1337/api/events?filters[startDate][$gte]=${now}&pagination[limit]=3&sort=startDate:asc`)
-        const data = await response.json()
-        setEvents(data.data || [])
-      } catch (error) {
-        console.error('Error fetching events:', error)
-        setEvents([
-          {
-            id: 1,
-            attributes: {
-              title: 'EEMB Seminar: Ocean Acidification',
-              startDate: '2024-11-15T15:00:00Z',
-              location: 'LSB 1001',
-              eventType: 'Seminar',
-              slug: 'ocean-acidification-seminar'
-            }
-          },
-          {
-            id: 2,
-            attributes: {
-              title: 'Graduate Student Symposium',
-              startDate: '2024-11-20T09:00:00Z',
-              location: 'MSI Auditorium',
-              eventType: 'Symposium',
-              slug: 'graduate-symposium'
-            }
-          },
-          {
-            id: 3,
-            attributes: {
-              title: 'Thesis Defense: Jane Doe',
-              startDate: '2024-11-22T14:00:00Z',
-              location: 'LSB 2320',
-              eventType: 'Defense',
-              slug: 'thesis-defense-doe'
-            }
-          }
-        ])
-      } finally {
-        setLoading(false)
-      }
+    if (initialEvents.length > 0) {
+      setEvents(initialEvents.slice(0, 3))
+      setLoading(false)
     }
-
-    fetchEvents()
-  }, [])
+  }, [initialEvents])
 
   if (loading) {
     return (
@@ -119,11 +71,22 @@ export default function UpcomingEvents() {
     )
   }
 
+  if (events.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl p-8 border border-warm-200 text-center">
+        <p className="text-warm-500">No upcoming events scheduled</p>
+        <Link href="/calendar" className="text-ocean-teal hover:underline text-sm mt-2 inline-block">
+          View past events →
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <div ref={ref} className="space-y-4">
       {events.map((event, index) => {
-        const colors = eventTypeColors[event.attributes.eventType || 'default'] || eventTypeColors.default
-        const eventDate = new Date(event.attributes.startDate)
+        const colors = eventTypeColors[event.event_type || 'default'] || eventTypeColors.default
+        const eventDate = new Date(event.start_date)
 
         return (
           <article
@@ -154,9 +117,9 @@ export default function UpcomingEvents() {
               <div className="flex-1 min-w-0">
                 {/* Event type & time */}
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  {event.attributes.eventType && (
+                  {event.event_type && (
                     <span className={`inline-block text-[10px] font-semibold tracking-wider uppercase px-2.5 py-1 rounded-full ${colors.bg} text-ocean-deep`}>
-                      {event.attributes.eventType}
+                      {event.event_type}
                     </span>
                   )}
                   <span className="text-[11px] text-warm-400 font-medium">
@@ -165,19 +128,19 @@ export default function UpcomingEvents() {
                 </div>
 
                 <h3 className="font-heading font-bold text-ocean-deep text-base leading-snug mb-2 group-hover:text-ocean-teal transition-colors duration-300">
-                  <Link href={`/events/${event.attributes.slug}`} className="line-clamp-2">
-                    {event.attributes.title}
+                  <Link href={`/events/${event.slug}`} className="line-clamp-2">
+                    {event.title}
                   </Link>
                 </h3>
 
                 {/* Location */}
-                {event.attributes.location && (
+                {event.location && (
                   <p className="text-sm text-warm-500 flex items-center gap-1.5">
                     <svg className="w-4 h-4 text-warm-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    {event.attributes.location}
+                    {event.location}
                   </p>
                 )}
               </div>

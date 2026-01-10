@@ -3,43 +3,26 @@
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-
-interface Faculty {
-  id: number
-  attributes: {
-    fullName: string
-    lastName: string
-    title: string
-    shortBio: string
-    slug: string
-    photo_url?: string
-    researchInterests?: string[]
-    research_areas?: string  // "ecology", "evolution", "marine-biology" or combinations
-  }
-}
+import type { FacultyWithResearch } from '@/lib/data'
 
 // Helper to get primary research area from faculty
-function getPrimaryArea(f: Faculty): 'ecology' | 'evolution' | 'marine-biology' | 'other' {
-  const areas = f.attributes.research_areas?.toLowerCase() || ''
-  // Check for pure areas first, then combinations
-  if (areas === 'evolution') return 'evolution'
-  if (areas === 'ecology') return 'ecology'
-  if (areas === 'marine-biology') return 'marine-biology'
+function getPrimaryArea(f: FacultyWithResearch): 'ecology' | 'evolution' | 'marine-biology' | 'other' {
+  const areas = f.research_areas?.map(a => a.category?.toLowerCase() || a.name.toLowerCase()).join(' ') || ''
   if (areas.includes('evolution')) return 'evolution'
   if (areas.includes('ecology')) return 'ecology'
-  if (areas.includes('marine-biology')) return 'marine-biology'
+  if (areas.includes('marine')) return 'marine-biology'
   return 'other'
 }
 
 // Select faculty ensuring balanced representation across Ecology, Evolution, and Marine Biology
-function selectBalancedFaculty(allFaculty: Faculty[]): Faculty[] {
+function selectBalancedFaculty(allFaculty: FacultyWithResearch[]): FacultyWithResearch[] {
   const coreTitles = ['Professor', 'Associate Professor', 'Assistant Professor', 'Distinguished Professor']
-  const coreFaculty = allFaculty.filter((f: Faculty) =>
-    coreTitles.includes(f.attributes.title) && f.attributes.photo_url
+  const coreFaculty = allFaculty.filter((f) =>
+    coreTitles.includes(f.title) && f.photo_url
   )
 
   // Group by primary research area
-  const byArea: Record<string, Faculty[]> = {
+  const byArea: Record<string, FacultyWithResearch[]> = {
     'ecology': [],
     'evolution': [],
     'marine-biology': []
@@ -58,14 +41,13 @@ function selectBalancedFaculty(allFaculty: Faculty[]): Faculty[] {
   })
 
   // Select to ensure representation: 2 ecology, 2 evolution, 1 marine (or adjust based on availability)
-  const selected: Faculty[] = []
+  const selected: FacultyWithResearch[] = []
   const targetPerArea = { 'ecology': 2, 'evolution': 2, 'marine-biology': 1 }
 
   // First pass: get target number from each area
   Object.entries(targetPerArea).forEach(([area, target]) => {
     const available = byArea[area].slice(0, target)
     selected.push(...available)
-    // Remove selected from pool
     byArea[area] = byArea[area].slice(target)
   })
 
@@ -106,31 +88,22 @@ function useInView(threshold = 0.2) {
   return { ref, isInView }
 }
 
-export default function FeaturedFaculty() {
-  const [faculty, setFaculty] = useState<Faculty[]>([])
-  const [loading, setLoading] = useState(true)
+interface FeaturedFacultyProps {
+  initialFaculty?: FacultyWithResearch[]
+}
+
+export default function FeaturedFaculty({ initialFaculty = [] }: FeaturedFacultyProps) {
+  const [faculty, setFaculty] = useState<FacultyWithResearch[]>([])
+  const [loading, setLoading] = useState(!initialFaculty.length)
   const { ref, isInView } = useInView(0.1)
 
   useEffect(() => {
-    const fetchFaculty = async () => {
-      try {
-        const response = await fetch('http://localhost:1337/api/faculties?pagination[limit]=100')
-        const data = await response.json()
-
-        if (data.data && data.data.length > 0) {
-          // Use balanced selection to ensure representation across Ecology, Evolution, and Marine Biology
-          const balanced = selectBalancedFaculty(data.data)
-          setFaculty(balanced)
-        }
-      } catch (error) {
-        console.error('Error fetching faculty:', error)
-      } finally {
-        setLoading(false)
-      }
+    if (initialFaculty.length > 0) {
+      const balanced = selectBalancedFaculty(initialFaculty)
+      setFaculty(balanced)
+      setLoading(false)
     }
-
-    fetchFaculty()
-  }, [])
+  }, [initialFaculty])
 
   if (loading) {
     return (
@@ -162,6 +135,7 @@ export default function FeaturedFaculty() {
 
   const featured = faculty[0]
   const others = faculty.slice(1, 5)
+  const featuredName = featured.full_name || `${featured.first_name} ${featured.last_name}`
 
   return (
     <section ref={ref} className="py-24 md:py-32 bg-white relative overflow-hidden">
@@ -178,7 +152,7 @@ export default function FeaturedFaculty() {
                 Our People
               </span>
             </div>
-            <h2 className="font-heading text-display-sm font-bold text-ocean-deep">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-ocean-deep">
               Faculty driving discovery
             </h2>
           </div>
@@ -186,7 +160,7 @@ export default function FeaturedFaculty() {
             href="/people"
             className="group inline-flex items-center gap-3 text-ocean-blue font-semibold hover:gap-4 transition-all duration-300"
           >
-            View all 25 faculty
+            View all faculty
             <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -197,21 +171,19 @@ export default function FeaturedFaculty() {
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Featured faculty - larger card */}
           <div className={`lg:col-span-5 transition-all duration-1000 delay-100 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-            <Link href={`/people/faculty/${featured.attributes.slug}`} className="group block">
+            <Link href={`/people/faculty/${featured.slug}`} className="group block">
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-warm-100 shadow-warm-lg">
-                {featured.attributes.photo_url ? (
+                {featured.photo_url ? (
                   <Image
-                    src={featured.attributes.photo_url.startsWith('http')
-                      ? featured.attributes.photo_url
-                      : `http://localhost:1337${featured.attributes.photo_url}`}
-                    alt={`Portrait of ${featured.attributes.fullName}`}
+                    src={featured.photo_url}
+                    alt={`Portrait of ${featuredName}`}
                     fill
-                    className="object-cover transition-transform duration-700 ease-spring group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-ocean-deep to-ocean-blue flex items-center justify-center">
-                    <span className="text-7xl font-heading font-bold text-white/20">
-                      {featured.attributes.fullName.split(' ').map(n => n[0]).join('')}
+                    <span className="text-7xl font-display font-bold text-white/20">
+                      {featured.first_name[0]}{featured.last_name[0]}
                     </span>
                   </div>
                 )}
@@ -220,13 +192,13 @@ export default function FeaturedFaculty() {
 
                 {/* Content overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <h3 className="font-heading text-2xl font-bold text-white mb-2">
-                    {featured.attributes.fullName}
+                  <h3 className="font-display text-2xl font-bold text-white mb-2">
+                    {featuredName}
                   </h3>
-                  <p className="text-white/70 mb-3">{featured.attributes.title}</p>
-                  {featured.attributes.shortBio && (
+                  <p className="text-white/70 mb-3">{featured.title}</p>
+                  {featured.short_bio && (
                     <p className="text-white/50 text-sm leading-relaxed line-clamp-2">
-                      {featured.attributes.shortBio}
+                      {featured.short_bio}
                     </p>
                   )}
                 </div>
@@ -237,41 +209,42 @@ export default function FeaturedFaculty() {
           {/* Other faculty - 2x2 grid */}
           <div className="lg:col-span-7">
             <div className="grid grid-cols-2 gap-6">
-              {others.map((member, index) => (
-                <Link
-                  key={member.id}
-                  href={`/people/faculty/${member.attributes.slug}`}
-                  className={`group transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                  style={{ transitionDelay: `${(index + 2) * 100}ms` }}
-                >
-                  <div className="relative aspect-square rounded-2xl overflow-hidden bg-warm-100 shadow-warm-md group-hover:shadow-warm-xl transition-all duration-500">
-                    {member.attributes.photo_url ? (
-                      <Image
-                        src={member.attributes.photo_url.startsWith('http')
-                          ? member.attributes.photo_url
-                          : `http://localhost:1337${member.attributes.photo_url}`}
-                        alt={`Portrait of ${member.attributes.fullName}`}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-spring group-hover:scale-110"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-ocean-deep to-ocean-blue flex items-center justify-center">
-                        <span className="text-4xl font-heading font-bold text-white/20">
-                          {member.attributes.fullName.split(' ').map(n => n[0]).join('')}
-                        </span>
-                      </div>
-                    )}
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-ocean-deep/0 group-hover:bg-ocean-deep/20 transition-colors duration-500" />
-                  </div>
-                  <div className="mt-4">
-                    <h3 className="font-heading font-bold text-ocean-deep group-hover:text-ocean-blue transition-colors leading-tight">
-                      {member.attributes.fullName}
-                    </h3>
-                    <p className="text-sm text-warm-500 mt-1">{member.attributes.title}</p>
-                  </div>
-                </Link>
-              ))}
+              {others.map((member, index) => {
+                const memberName = member.full_name || `${member.first_name} ${member.last_name}`
+                return (
+                  <Link
+                    key={member.id}
+                    href={`/people/faculty/${member.slug}`}
+                    className={`group transition-all duration-1000 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                    style={{ transitionDelay: `${(index + 2) * 100}ms` }}
+                  >
+                    <div className="relative aspect-square rounded-2xl overflow-hidden bg-warm-100 shadow-warm-md group-hover:shadow-warm-xl transition-all duration-500">
+                      {member.photo_url ? (
+                        <Image
+                          src={member.photo_url}
+                          alt={`Portrait of ${memberName}`}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-ocean-deep to-ocean-blue flex items-center justify-center">
+                          <span className="text-4xl font-display font-bold text-white/20">
+                            {member.first_name[0]}{member.last_name[0]}
+                          </span>
+                        </div>
+                      )}
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-ocean-deep/0 group-hover:bg-ocean-deep/20 transition-colors duration-500" />
+                    </div>
+                    <div className="mt-4">
+                      <h3 className="font-display font-bold text-ocean-deep group-hover:text-ocean-blue transition-colors leading-tight">
+                        {memberName}
+                      </h3>
+                      <p className="text-sm text-warm-500 mt-1">{member.title}</p>
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </div>

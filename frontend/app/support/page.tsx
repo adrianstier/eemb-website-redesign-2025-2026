@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import {
   PhoneIcon,
@@ -10,6 +10,17 @@ import {
   ChevronRightIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline'
+
+// Types
+interface Person {
+  name: string
+  title: string
+  email: string
+  phone?: string
+  office?: string
+  responsibilities?: string
+  image?: string
+}
 
 export default function SupportPage() {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['leadership']))
@@ -26,46 +37,12 @@ export default function SupportPage() {
     })
   }
 
-  // Types
-  interface Person {
-    name: string
-    title: string
-    email: string
-    phone?: string
-    office?: string
-    responsibilities?: string
-    image?: string
-  }
-
-  // Leadership with photos from API
-  const [leadership, setLeadership] = useState<Person[]>([
+  // Leadership with photos - statically defined
+  const leadership: Person[] = [
     { name: 'Todd Oakley', title: 'Department Chair', email: 'oakley@ucsb.edu', phone: '805-893-4715', office: 'Life Sciences 4101' },
     { name: 'Hillary Young', title: 'Vice Chair, Resources', email: 'hillary.young@lifesci.ucsb.edu', phone: '805-893-4681', office: 'Noble Hall 2116' },
     { name: 'Stephen Proulx', title: 'Vice Chair, Curriculum', email: 'sproul@ucsb.edu', office: 'Life Sciences 4109' },
-  ])
-
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        const response = await fetch('http://localhost:1337/api/faculties?filters[lastName][$in][0]=Oakley&filters[lastName][$in][1]=Young&filters[lastName][$in][2]=Proulx')
-        const data = await response.json()
-        if (data.data) {
-          setLeadership(prev => prev.map(leader => {
-            const match = data.data.find((f: { attributes: { lastName: string; photo_url?: string } }) =>
-              leader.name.includes(f.attributes.lastName)
-            )
-            if (match?.attributes?.photo_url) {
-              return { ...leader, image: match.attributes.photo_url }
-            }
-            return leader
-          }))
-        }
-      } catch {
-        // Photos are optional
-      }
-    }
-    fetchPhotos()
-  }, [])
+  ]
 
   // Administrative Staff
   const adminStaff: Person[] = [

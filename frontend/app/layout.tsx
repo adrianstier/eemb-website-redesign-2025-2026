@@ -3,6 +3,7 @@ import { DM_Sans, Fraunces } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 // Body font - warm, friendly, highly readable
 const dmSans = DM_Sans({
@@ -32,6 +33,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className={`${dmSans.variable} ${fraunces.variable} font-sans antialiased`}>
         {/* Skip to main content link for accessibility */}
         <a
