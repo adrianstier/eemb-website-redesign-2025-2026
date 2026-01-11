@@ -7,8 +7,25 @@ export type EventWithHost = Event & {
   host: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug'> | null
 }
 
+// Type for nested select result
+type EventWithNestedHost = Event & {
+  host_faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug'> | null
+}
+
+/**
+ * Transform the nested Supabase result into our EventWithHost type
+ */
+function transformEventWithHost(event: EventWithNestedHost): EventWithHost {
+  const { host_faculty, ...rest } = event
+  return {
+    ...rest,
+    host: host_faculty
+  }
+}
+
 /**
  * Get upcoming events (not canceled)
+ * Uses a single query with nested selects (no N+1 problem)
  */
 export async function getUpcomingEvents(options?: {
   limit?: number
@@ -20,7 +37,15 @@ export async function getUpcomingEvents(options?: {
 
   let query = supabase
     .from('events')
-    .select('*')
+    .select(`
+      *,
+      host_faculty:host_faculty_id(
+        id,
+        first_name,
+        last_name,
+        slug
+      )
+    `)
     .gte('start_date', now)
     .or('canceled.is.null,canceled.eq.false')
     .order('start_date', { ascending: true })
@@ -40,27 +65,12 @@ export async function getUpcomingEvents(options?: {
     return []
   }
 
-  // Get host info for each event
-  const eventsWithHost = await Promise.all(
-    events.map(async (event) => {
-      let host: EventWithHost['host'] = null
-      if (event.host_faculty_id) {
-        const { data: hostData } = await supabase
-          .from('faculty')
-          .select('id, first_name, last_name, slug')
-          .eq('id', event.host_faculty_id)
-          .single()
-        host = hostData
-      }
-      return { ...event, host }
-    })
-  )
-
-  return eventsWithHost
+  return (events as EventWithNestedHost[] || []).map(transformEventWithHost)
 }
 
 /**
  * Get past events
+ * Uses a single query with nested selects
  */
 export async function getPastEvents(options?: {
   limit?: number
@@ -73,7 +83,15 @@ export async function getPastEvents(options?: {
 
   let query = supabase
     .from('events')
-    .select('*')
+    .select(`
+      *,
+      host_faculty:host_faculty_id(
+        id,
+        first_name,
+        last_name,
+        slug
+      )
+    `)
     .lt('start_date', now)
     .or('canceled.is.null,canceled.eq.false')
     .order('start_date', { ascending: false })
@@ -97,34 +115,27 @@ export async function getPastEvents(options?: {
     return []
   }
 
-  // Get host info for each event
-  const eventsWithHost = await Promise.all(
-    events.map(async (event) => {
-      let host: EventWithHost['host'] = null
-      if (event.host_faculty_id) {
-        const { data: hostData } = await supabase
-          .from('faculty')
-          .select('id, first_name, last_name, slug')
-          .eq('id', event.host_faculty_id)
-          .single()
-        host = hostData
-      }
-      return { ...event, host }
-    })
-  )
-
-  return eventsWithHost
+  return (events as EventWithNestedHost[] || []).map(transformEventWithHost)
 }
 
 /**
  * Get a single event by slug
+ * Uses a single query with nested selects
  */
 export async function getEventBySlug(slug: string): Promise<EventWithHost | null> {
   const supabase = await createClient()
 
   const { data: event, error } = await supabase
     .from('events')
-    .select('*')
+    .select(`
+      *,
+      host_faculty:host_faculty_id(
+        id,
+        first_name,
+        last_name,
+        slug
+      )
+    `)
     .eq('slug', slug)
     .single()
 
@@ -133,22 +144,12 @@ export async function getEventBySlug(slug: string): Promise<EventWithHost | null
     return null
   }
 
-  // Get host info
-  let host: EventWithHost['host'] = null
-  if (event.host_faculty_id) {
-    const { data: hostData } = await supabase
-      .from('faculty')
-      .select('id, first_name, last_name, slug')
-      .eq('id', event.host_faculty_id)
-      .single()
-    host = hostData
-  }
-
-  return { ...event, host }
+  return transformEventWithHost(event as EventWithNestedHost)
 }
 
 /**
  * Get featured events (for homepage)
+ * Uses a single query with nested selects
  */
 export async function getFeaturedEvents(limit: number = 3): Promise<EventWithHost[]> {
   const supabase = await createClient()
@@ -157,7 +158,15 @@ export async function getFeaturedEvents(limit: number = 3): Promise<EventWithHos
 
   const { data: events, error } = await supabase
     .from('events')
-    .select('*')
+    .select(`
+      *,
+      host_faculty:host_faculty_id(
+        id,
+        first_name,
+        last_name,
+        slug
+      )
+    `)
     .gte('start_date', now)
     .eq('featured', true)
     .or('canceled.is.null,canceled.eq.false')
@@ -168,27 +177,12 @@ export async function getFeaturedEvents(limit: number = 3): Promise<EventWithHos
     return []
   }
 
-  // Get host info for each event
-  const eventsWithHost = await Promise.all(
-    events.map(async (event) => {
-      let host: EventWithHost['host'] = null
-      if (event.host_faculty_id) {
-        const { data: hostData } = await supabase
-          .from('faculty')
-          .select('id, first_name, last_name, slug')
-          .eq('id', event.host_faculty_id)
-          .single()
-        host = hostData
-      }
-      return { ...event, host }
-    })
-  )
-
-  return eventsWithHost
+  return (events as EventWithNestedHost[] || []).map(transformEventWithHost)
 }
 
 /**
  * Get events by date range (for calendar view)
+ * Uses a single query with nested selects
  */
 export async function getEventsByDateRange(
   startDate: string,
@@ -198,7 +192,15 @@ export async function getEventsByDateRange(
 
   const { data: events, error } = await supabase
     .from('events')
-    .select('*')
+    .select(`
+      *,
+      host_faculty:host_faculty_id(
+        id,
+        first_name,
+        last_name,
+        slug
+      )
+    `)
     .gte('start_date', startDate)
     .lte('start_date', endDate)
     .or('canceled.is.null,canceled.eq.false')
@@ -209,34 +211,27 @@ export async function getEventsByDateRange(
     return []
   }
 
-  // Get host info for each event
-  const eventsWithHost = await Promise.all(
-    events.map(async (event) => {
-      let host: EventWithHost['host'] = null
-      if (event.host_faculty_id) {
-        const { data: hostData } = await supabase
-          .from('faculty')
-          .select('id, first_name, last_name, slug')
-          .eq('id', event.host_faculty_id)
-          .single()
-        host = hostData
-      }
-      return { ...event, host }
-    })
-  )
-
-  return eventsWithHost
+  return (events as EventWithNestedHost[] || []).map(transformEventWithHost)
 }
 
 /**
  * Get all events (for calendar view)
+ * Uses a single query with nested selects
  */
 export async function getAllEvents(): Promise<EventWithHost[]> {
   const supabase = await createClient()
 
   const { data: events, error } = await supabase
     .from('events')
-    .select('*')
+    .select(`
+      *,
+      host_faculty:host_faculty_id(
+        id,
+        first_name,
+        last_name,
+        slug
+      )
+    `)
     .or('canceled.is.null,canceled.eq.false')
     .order('start_date', { ascending: true })
 
@@ -245,23 +240,7 @@ export async function getAllEvents(): Promise<EventWithHost[]> {
     return []
   }
 
-  // Get host info for each event
-  const eventsWithHost = await Promise.all(
-    events.map(async (event) => {
-      let host: EventWithHost['host'] = null
-      if (event.host_faculty_id) {
-        const { data: hostData } = await supabase
-          .from('faculty')
-          .select('id, first_name, last_name, slug')
-          .eq('id', event.host_faculty_id)
-          .single()
-        host = hostData
-      }
-      return { ...event, host }
-    })
-  )
-
-  return eventsWithHost
+  return (events as EventWithNestedHost[] || []).map(transformEventWithHost)
 }
 
 /**
