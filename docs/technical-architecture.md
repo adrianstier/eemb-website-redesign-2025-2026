@@ -1,7 +1,7 @@
 # Technical Architecture Document
 ## EEMB Website Redesign - Phase 1
 
-**Document Version:** 1.0
+**Document Version:** 2.0
 **Date:** January 10, 2026
 **Prepared By:** Tech Lead
 **Project:** EEMB Website Redesign 2025-2026
@@ -11,17 +11,44 @@
 
 ## Executive Summary
 
-This document defines the technical architecture for the EEMB website Phase 1 implementation. The architecture builds on the existing Next.js 14 + Supabase foundation, addressing gaps identified during the Strapi→Supabase migration and aligning with UX requirements.
+This document defines the technical architecture for the EEMB website Phase 1 implementation, incorporating validated UX requirements and providing implementation specifications for the Database Engineer and development team. The architecture builds on the existing Next.js 14 + Supabase foundation, addressing gaps identified during UX design validation.
 
 **Key Architecture Decisions:**
-- Server-first data fetching with Next.js App Router
+- Server-first data fetching with Next.js App Router (React Server Components)
 - Supabase as sole backend (complete Strapi deprecation)
-- Admin-only content management (no faculty self-service)
-- ISR caching with webhook-triggered revalidation
-- API routes for forms and server-side operations
+- Admin-only content management via authenticated dashboard
+- ISR caching with webhook-triggered on-demand revalidation
+- API routes for forms, webhooks, and admin CRUD operations
+- TipTap rich text editor for content management
+- Client-side faculty search (optimal for <200 records)
 
-**Current State:** 60% complete (schema + UI done, data layer incomplete)
+**Current State:** 60% complete (design system + UI components done, data layer gaps identified)
 **Target State:** Production-ready Phase 1 launch
+
+### UX Requirements Validation Summary
+
+| UX Requirement | Technical Feasibility | Implementation Approach |
+|---------------|----------------------|------------------------|
+| Hero image rotation (5 themes) | ✅ Feasible | Client-side state + preloaded images |
+| Faculty search/filter | ✅ Feasible | Client-side filtering (Supabase RPC optional) |
+| "Accepting students" badge | ✅ Feasible | New column on faculty table |
+| Student testimonials | ✅ Feasible | New table with student relationship |
+| Research theme cross-navigation | ✅ Feasible | Many-to-many faculty↔research_areas |
+| Contact form with email | ✅ Feasible | API route + Resend email service |
+| prefers-reduced-motion | ✅ Feasible | CSS media query + Tailwind variant |
+| Admin-only editing | ✅ Feasible (simplified from self-service) | Role-based access via Supabase Auth |
+
+### Responses to UX Design Questions (Section 10.4)
+
+The UX Engineer raised five technical questions. Here are the architectural decisions:
+
+| Question | Decision | Rationale |
+|----------|----------|-----------|
+| **1. Faculty self-service auth** | **Admin-only editing (no faculty self-service in Phase 1)** | Simplifies auth architecture; faculty updates coordinated through designated admin. Magic link auth reserved for admin users only. Self-service can be Phase 2 enhancement. |
+| **2. Faculty search fuzzy matching** | **No fuzzy matching in Phase 1; exact + prefix match** | Supabase `ilike` provides adequate UX for ~25 faculty. Full-text search with Supabase's built-in capabilities if needed. |
+| **3. Image file size limits** | **5MB max per upload; auto-resize to 800x800 for faculty, 1920x1080 for heroes** | Prevents abuse; Next.js Image handles optimization. Supabase Storage used for uploads. |
+| **4. Analytics tracking events** | **GA4 with custom events: `faculty_profile_view`, `research_theme_explore`, `apply_click`, `contact_submit`** | Standard page_view automatic; custom events track recruitment funnel. |
+| **5. Cache strategy for news/events** | **15-minute ISR + on-demand revalidation webhook** | Balances freshness with performance. Supabase webhooks trigger revalidation on content changes. |
 
 ---
 
@@ -40,6 +67,8 @@ This document defines the technical architecture for the EEMB website Phase 1 im
 11. [Development Standards](#11-development-standards)
 12. [Migration Plan](#12-migration-plan)
 13. [Implementation Priorities](#13-implementation-priorities)
+14. [UX Implementation Specifications](#14-ux-implementation-specifications)
+15. [Database Engineer Handoff](#15-database-engineer-handoff)
 
 ---
 
@@ -1385,6 +1414,699 @@ The codebase currently has legacy Strapi code that needs removal:
 
 ---
 
+## 14. UX Implementation Specifications
+
+This section provides technical implementation details for UX requirements from the design documentation.
+
+### 14.1 Animation & Motion
+
+#### Reduced Motion Support
+
+All animations must respect user preferences:
+
+```typescript
+// tailwind.config.ts - already configured
+module.exports = {
+  theme: {
+    extend: {
+      // Animations are defined
+    }
+  }
+}
+
+// Component implementation pattern
+// Use motion-safe variant for animations
+<div className="motion-safe:animate-fade-in-up motion-reduce:opacity-100">
+  {/* Content */}
+</div>
+```
+
+```css
+/* globals.css - add reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-float,
+  .animate-float-slow,
+  .animate-glow-pulse,
+  .animate-wave {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+```
+
+#### Scroll-Triggered Animations
+
+Use Intersection Observer for reveal-on-scroll:
+
+```typescript
+// hooks/useScrollAnimation.ts
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+
+export function useScrollAnimation(threshold = 0.2) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
+
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold }
+    )
+
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
+
+    return () => observer.disconnect()
+  }, [threshold])
+
+  return { ref, isVisible }
+}
+```
+
+### 14.2 Component Implementation Specifications
+
+#### StudentTestimonial Component
+
+```typescript
+// components/features/testimonials/StudentTestimonial.tsx
+interface StudentTestimonialProps {
+  quote: string
+  name: string
+  program: 'PhD' | 'MS'
+  year: string
+  photo: string
+  researchArea: string
+  advisor?: string
+}
+
+// Styling requirements:
+// - Card variant: glass (bg-white/80 backdrop-blur)
+// - Quote: text-lg md:text-xl text-warm-700 italic
+// - Name: font-semibold text-ocean-deep
+// - Meta: text-sm text-warm-600
+// - Photo: 200x200, rounded-full, object-cover
+// - Animation: fade-in-up on scroll
+```
+
+#### AcceptingStudentsBadge Component
+
+```typescript
+// components/ui/AcceptingStudentsBadge.tsx
+interface AcceptingStudentsBadgeProps {
+  isAccepting: boolean
+  note?: string
+}
+
+// Accepting state:
+// - className: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-kelp-400/10 text-kelp-600"
+// - Icon: CheckCircle (lucide-react)
+
+// Not accepting state:
+// - className: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-warm-200 text-warm-500"
+// - Icon: MinusCircle (lucide-react)
+```
+
+#### Enhanced FacultyCard Component
+
+Data requirements for enhanced faculty card display:
+
+```typescript
+interface EnhancedFacultyCardData {
+  id: number
+  slug: string
+  first_name: string
+  last_name: string
+  title: string
+  photo_url: string
+  research_focus: string // 1-2 line summary
+  accepting_students: boolean
+  accepting_students_note?: string
+  research_areas: Array<{
+    id: number
+    name: string
+    slug: string
+    category: 'Ecology' | 'Evolution' | 'Marine Biology'
+  }>
+}
+```
+
+### 14.3 Accessibility Implementation
+
+#### Skip Navigation
+
+```typescript
+// app/layout.tsx - Add as first element in body
+<a
+  href="#main-content"
+  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-ucsb-gold focus:text-ocean-deep focus:px-4 focus:py-2 focus:rounded-lg focus:ring-2 focus:ring-ocean-teal"
+>
+  Skip to main content
+</a>
+
+// In page content:
+<main id="main-content" tabIndex={-1}>
+```
+
+#### ARIA Requirements by Component
+
+| Component | ARIA Implementation |
+|-----------|-------------------|
+| Mobile menu button | `aria-expanded={isOpen}`, `aria-controls="mobile-menu"`, `aria-label="Toggle navigation"` |
+| Mobile menu | `id="mobile-menu"`, `aria-labelledby="mobile-menu-button"` |
+| Hero carousel | Container: `aria-live="polite"`, `aria-atomic="true"` |
+| Carousel indicators | `aria-label="View slide N"`, `aria-current="true"` for active |
+| Faculty search | `role="search"`, input with `aria-label="Search faculty"` |
+| Filter buttons | `aria-pressed={isSelected}` |
+| Loading states | Container: `aria-busy="true"` |
+| External links | Include `(opens in new tab)` in aria-label or visible text |
+
+#### Focus Management
+
+```css
+/* Focus ring pattern - consistent across all interactive elements */
+.focus-ring {
+  @apply focus:ring-2 focus:ring-ocean-teal focus:ring-offset-2 focus:outline-none;
+}
+
+/* Dark background variant */
+.focus-ring-dark {
+  @apply focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none;
+}
+```
+
+### 14.4 Image Optimization Guidelines
+
+| Image Type | Dimensions | Next.js sizes Prop | Priority |
+|-----------|-----------|-------------------|----------|
+| Hero background | 1920x1080 max | `100vw` | `priority` for first image |
+| Faculty photo (profile) | 400x400 | `(max-width: 640px) 200px, 400px` | — |
+| Faculty photo (card) | 200x200 | `200px` | — |
+| News featured | 1200x630 | `(max-width: 768px) 100vw, 50vw` | — |
+| Card thumbnail | 600x400 | `(max-width: 640px) 100vw, 300px` | — |
+
+```typescript
+// Standard image pattern
+<Image
+  src={imageUrl}
+  alt={descriptiveAlt}
+  width={400}
+  height={400}
+  sizes="(max-width: 640px) 200px, 400px"
+  className="object-cover"
+  placeholder="blur"
+  blurDataURL={blurPlaceholder} // Generate with plaiceholder or similar
+/>
+```
+
+### 14.5 Form Validation Pattern
+
+All forms use Zod for validation:
+
+```typescript
+// lib/schemas/contact.ts
+import { z } from 'zod'
+
+export const contactSchema = z.object({
+  name: z.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must be less than 100 characters'),
+  email: z.string()
+    .email('Please enter a valid email address'),
+  subject: z.string()
+    .max(200, 'Subject must be less than 200 characters')
+    .optional(),
+  message: z.string()
+    .min(10, 'Message must be at least 10 characters')
+    .max(5000, 'Message must be less than 5000 characters'),
+})
+
+export type ContactFormData = z.infer<typeof contactSchema>
+```
+
+Form error display pattern:
+
+```typescript
+// Accessible error display
+{error && (
+  <p
+    id={`${fieldName}-error`}
+    role="alert"
+    className="mt-1 text-sm text-red-600"
+  >
+    {error}
+  </p>
+)}
+```
+
+---
+
+## 15. Database Engineer Handoff
+
+This section provides comprehensive specifications for the Database Engineer to implement schema migrations.
+
+### 15.1 Migration Priority Order
+
+Execute migrations in this order to maintain referential integrity:
+
+| Order | Migration | Dependencies | Complexity |
+|-------|-----------|--------------|------------|
+| 1 | Add `accepting_students` columns to `faculty` | None | Low |
+| 2 | Create `student_testimonials` table | `graduate_students` exists | Low |
+| 3 | Create `contact_submissions` table | None | Low |
+| 4 | Create `audit_log` table | `auth.users` exists | Medium |
+| 5 | Create `profile_versions` table | `auth.users` exists | Medium |
+| 6 | Create database functions | All tables exist | Medium |
+| 7 | Configure RLS policies | All tables exist | Medium |
+| 8 | Create indexes | All tables exist | Low |
+
+### 15.2 Complete Migration Scripts
+
+#### Migration 1: Faculty Accepting Students
+
+```sql
+-- Migration: 001_add_accepting_students_to_faculty
+-- Description: Add accepting_students flag and note to faculty table
+
+ALTER TABLE faculty
+  ADD COLUMN IF NOT EXISTS accepting_students BOOLEAN DEFAULT false,
+  ADD COLUMN IF NOT EXISTS accepting_students_note TEXT;
+
+-- Add index for filtering
+CREATE INDEX IF NOT EXISTS idx_faculty_accepting_students
+  ON faculty(accepting_students)
+  WHERE accepting_students = true AND active = true;
+
+COMMENT ON COLUMN faculty.accepting_students IS 'Whether faculty member is currently accepting new graduate students';
+COMMENT ON COLUMN faculty.accepting_students_note IS 'Optional note about student availability (e.g., "Fall 2026 only")';
+```
+
+#### Migration 2: Student Testimonials
+
+```sql
+-- Migration: 002_create_student_testimonials
+-- Description: Create table for graduate student testimonials
+
+CREATE TABLE IF NOT EXISTS student_testimonials (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER REFERENCES graduate_students(id) ON DELETE SET NULL,
+
+  -- Content
+  quote TEXT NOT NULL CHECK (char_length(quote) >= 50 AND char_length(quote) <= 1000),
+
+  -- Display settings
+  featured BOOLEAN DEFAULT false,
+  display_order INTEGER DEFAULT 0,
+
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE student_testimonials ENABLE ROW LEVEL SECURITY;
+
+-- Public read access
+CREATE POLICY "Public read access"
+  ON student_testimonials
+  FOR SELECT
+  USING (true);
+
+-- Admin write access
+CREATE POLICY "Admin write access"
+  ON student_testimonials
+  FOR ALL
+  USING (is_admin());
+
+-- Indexes
+CREATE INDEX idx_student_testimonials_featured
+  ON student_testimonials(featured, display_order)
+  WHERE featured = true;
+
+CREATE INDEX idx_student_testimonials_student
+  ON student_testimonials(student_id);
+
+-- Updated_at trigger
+CREATE TRIGGER update_student_testimonials_updated_at
+  BEFORE UPDATE ON student_testimonials
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+COMMENT ON TABLE student_testimonials IS 'Graduate student testimonials for recruitment pages';
+```
+
+#### Migration 3: Contact Submissions
+
+```sql
+-- Migration: 003_create_contact_submissions
+-- Description: Create table for contact form submissions
+
+CREATE TABLE IF NOT EXISTS contact_submissions (
+  id SERIAL PRIMARY KEY,
+
+  -- Submitter info
+  name TEXT NOT NULL CHECK (char_length(name) >= 2 AND char_length(name) <= 100),
+  email TEXT NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+  subject TEXT CHECK (char_length(subject) <= 200),
+  message TEXT NOT NULL CHECK (char_length(message) >= 10 AND char_length(message) <= 5000),
+
+  -- Status tracking
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'responded', 'archived')),
+  responded_at TIMESTAMPTZ,
+  responded_by UUID REFERENCES auth.users(id),
+
+  -- Metadata
+  ip_address INET,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
+
+-- Public insert (anyone can submit)
+CREATE POLICY "Public insert"
+  ON contact_submissions
+  FOR INSERT
+  WITH CHECK (true);
+
+-- Admin read/update
+CREATE POLICY "Admin read"
+  ON contact_submissions
+  FOR SELECT
+  USING (is_admin());
+
+CREATE POLICY "Admin update"
+  ON contact_submissions
+  FOR UPDATE
+  USING (is_admin());
+
+-- Indexes
+CREATE INDEX idx_contact_submissions_status
+  ON contact_submissions(status, created_at DESC);
+
+CREATE INDEX idx_contact_submissions_created
+  ON contact_submissions(created_at DESC);
+
+COMMENT ON TABLE contact_submissions IS 'Contact form submissions from website visitors';
+```
+
+#### Migration 4: Audit Log
+
+```sql
+-- Migration: 004_create_audit_log
+-- Description: Create comprehensive audit logging table
+
+CREATE TABLE IF NOT EXISTS audit_log (
+  id SERIAL PRIMARY KEY,
+
+  -- Actor
+  user_id UUID REFERENCES auth.users(id),
+  user_email TEXT, -- Denormalized for historical reference
+
+  -- Action
+  action TEXT NOT NULL CHECK (action IN ('create', 'update', 'delete', 'login', 'logout')),
+  table_name TEXT NOT NULL,
+  record_id INTEGER,
+
+  -- Data (before/after for updates)
+  old_data JSONB,
+  new_data JSONB,
+
+  -- Request context
+  ip_address INET,
+  user_agent TEXT,
+
+  -- Timestamp
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
+
+-- Admin read only
+CREATE POLICY "Admin read"
+  ON audit_log
+  FOR SELECT
+  USING (is_admin());
+
+-- No direct insert policy - use service role for writes
+
+-- Indexes for common queries
+CREATE INDEX idx_audit_log_user
+  ON audit_log(user_id, created_at DESC);
+
+CREATE INDEX idx_audit_log_table
+  ON audit_log(table_name, record_id, created_at DESC);
+
+CREATE INDEX idx_audit_log_action
+  ON audit_log(action, created_at DESC);
+
+CREATE INDEX idx_audit_log_created
+  ON audit_log(created_at DESC);
+
+COMMENT ON TABLE audit_log IS 'Comprehensive audit trail for all admin actions';
+```
+
+#### Migration 5: Profile Versions
+
+```sql
+-- Migration: 005_create_profile_versions
+-- Description: Create version history for profile content
+
+CREATE TABLE IF NOT EXISTS profile_versions (
+  id SERIAL PRIMARY KEY,
+
+  -- Entity reference
+  entity_type TEXT NOT NULL CHECK (entity_type IN ('faculty', 'staff', 'graduate_student')),
+  entity_id INTEGER NOT NULL,
+
+  -- Snapshot
+  data JSONB NOT NULL,
+
+  -- Change info
+  changed_by UUID REFERENCES auth.users(id),
+  change_reason TEXT,
+
+  -- Timestamp
+  changed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE profile_versions ENABLE ROW LEVEL SECURITY;
+
+-- Admin only access
+CREATE POLICY "Admin access"
+  ON profile_versions
+  FOR ALL
+  USING (is_admin());
+
+-- Indexes
+CREATE INDEX idx_profile_versions_entity
+  ON profile_versions(entity_type, entity_id, changed_at DESC);
+
+CREATE INDEX idx_profile_versions_changed_by
+  ON profile_versions(changed_by, changed_at DESC);
+
+COMMENT ON TABLE profile_versions IS 'Historical snapshots of profile data for rollback capability';
+```
+
+#### Migration 6: Database Functions
+
+```sql
+-- Migration: 006_create_database_functions
+-- Description: Create helper functions for application use
+
+-- Function: Check if current user is admin
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM user_roles
+    WHERE user_id = auth.uid()
+    AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+
+-- Function: Update updated_at column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function: Log audit entry (called from application via service role)
+CREATE OR REPLACE FUNCTION log_audit(
+  p_user_id UUID,
+  p_user_email TEXT,
+  p_action TEXT,
+  p_table_name TEXT,
+  p_record_id INTEGER,
+  p_old_data JSONB,
+  p_new_data JSONB,
+  p_ip_address INET,
+  p_user_agent TEXT
+)
+RETURNS void AS $$
+BEGIN
+  INSERT INTO audit_log (
+    user_id, user_email, action, table_name, record_id,
+    old_data, new_data, ip_address, user_agent
+  ) VALUES (
+    p_user_id, p_user_email, p_action, p_table_name, p_record_id,
+    p_old_data, p_new_data, p_ip_address, p_user_agent
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Save profile version
+CREATE OR REPLACE FUNCTION save_profile_version(
+  p_entity_type TEXT,
+  p_entity_id INTEGER,
+  p_data JSONB,
+  p_changed_by UUID,
+  p_change_reason TEXT
+)
+RETURNS void AS $$
+BEGIN
+  INSERT INTO profile_versions (
+    entity_type, entity_id, data, changed_by, change_reason
+  ) VALUES (
+    p_entity_type, p_entity_id, p_data, p_changed_by, p_change_reason
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function: Get faculty by research area
+CREATE OR REPLACE FUNCTION get_faculty_by_research_area(p_area_slug TEXT)
+RETURNS TABLE (
+  id INTEGER,
+  first_name TEXT,
+  last_name TEXT,
+  slug TEXT,
+  title faculty_title,
+  photo_url TEXT,
+  bio TEXT,
+  accepting_students BOOLEAN
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    f.id,
+    f.first_name,
+    f.last_name,
+    f.slug,
+    f.title,
+    f.photo_url,
+    f.bio,
+    f.accepting_students
+  FROM faculty f
+  JOIN faculty_research_areas fra ON f.id = fra.faculty_id
+  JOIN research_areas ra ON fra.research_area_id = ra.id
+  WHERE ra.slug = p_area_slug
+    AND f.active = true
+  ORDER BY f.last_name, f.first_name;
+END;
+$$ LANGUAGE plpgsql STABLE;
+```
+
+### 15.3 Data Validation Constraints
+
+Ensure these constraints are enforced at the database level:
+
+| Table | Column | Constraint |
+|-------|--------|-----------|
+| `faculty` | `email` | Valid email format |
+| `faculty` | `photo_url` | Not null for active faculty |
+| `student_testimonials` | `quote` | 50-1000 characters |
+| `contact_submissions` | `name` | 2-100 characters |
+| `contact_submissions` | `email` | Valid email format |
+| `contact_submissions` | `message` | 10-5000 characters |
+
+### 15.4 Index Recommendations
+
+Beyond the indexes created in migrations, add these for query optimization:
+
+```sql
+-- Faculty queries
+CREATE INDEX IF NOT EXISTS idx_faculty_active_name
+  ON faculty(last_name, first_name)
+  WHERE active = true;
+
+-- News queries
+CREATE INDEX IF NOT EXISTS idx_news_published
+  ON news_articles(publish_date DESC)
+  WHERE published = true;
+
+-- Events queries
+CREATE INDEX IF NOT EXISTS idx_events_upcoming
+  ON events(start_date)
+  WHERE start_date > NOW() AND canceled = false;
+
+-- Full-text search on faculty (if needed later)
+CREATE INDEX IF NOT EXISTS idx_faculty_search
+  ON faculty
+  USING gin(to_tsvector('english', coalesce(first_name, '') || ' ' || coalesce(last_name, '') || ' ' || coalesce(bio, '')));
+```
+
+### 15.5 Supabase Webhook Configuration
+
+Configure database webhooks in Supabase Dashboard for cache revalidation:
+
+| Table | Events | Webhook URL |
+|-------|--------|-------------|
+| `faculty` | INSERT, UPDATE, DELETE | `https://eemb.ucsb.edu/api/revalidate` |
+| `graduate_students` | INSERT, UPDATE, DELETE | `https://eemb.ucsb.edu/api/revalidate` |
+| `news_articles` | INSERT, UPDATE, DELETE | `https://eemb.ucsb.edu/api/revalidate` |
+| `events` | INSERT, UPDATE, DELETE | `https://eemb.ucsb.edu/api/revalidate` |
+| `research_areas` | INSERT, UPDATE, DELETE | `https://eemb.ucsb.edu/api/revalidate` |
+
+Webhook configuration:
+```json
+{
+  "headers": {
+    "x-webhook-secret": "${REVALIDATION_SECRET}"
+  }
+}
+```
+
+### 15.6 Testing Checklist for Database Engineer
+
+Before marking migrations complete:
+
+- [ ] All migrations execute without errors
+- [ ] RLS policies tested: public can read, only admin can write
+- [ ] Foreign key constraints work correctly
+- [ ] Indexes created and verified with `EXPLAIN ANALYZE`
+- [ ] `is_admin()` function returns correct results
+- [ ] Triggers fire correctly (updated_at)
+- [ ] Audit logging works via service role
+- [ ] Contact form insert works for anonymous users
+- [ ] Rollback scripts tested (keep in version control)
+
+---
+
 ## Appendix A: Environment Variables
 
 ```env
@@ -1427,12 +2149,57 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 ---
 
+## Appendix C: Tech Lead Sign-Off
+
+### UX Design Validation Confirmation
+
+**Tech Lead confirms:**
+- [x] Technical feasibility validated for all UX requirements
+- [x] Database schema aligned with data requirements
+- [x] Infrastructure decisions documented with rationale
+- [x] Development guidelines established
+- [x] Migration plan defined with priorities
+- [x] Database Engineer handoff section complete
+
+### Critical Path Dependencies
+
+```
+Phase 1 Critical Path:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Database Migrations (Days 1-2)                                              │
+│   → Data Access Layer (Days 2-3)                                           │
+│     → API Routes (Days 3-4)                                                │
+│       → Page Conversions (Days 4-6)                                        │
+│         → Admin Dashboard (Days 7-10)                                      │
+│           → Testing & Polish (Days 11-14)                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Risk Mitigation Decisions
+
+| Risk | Decision |
+|------|----------|
+| Content maintenance burden | Admin-only editing (no faculty self-service in Phase 1) |
+| Authentication complexity | Magic links for admin only; no SSO integration |
+| Image hosting costs | Supabase Storage with 5MB limits; Next.js optimization |
+| Search performance | Client-side filtering for <200 records |
+| Cache staleness | 15-minute ISR + on-demand webhook revalidation |
+
+---
+
 ## Document History
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | January 10, 2026 | Tech Lead | Initial architecture document |
+| 2.0 | January 10, 2026 | Tech Lead | Added UX validation, Database Engineer handoff, implementation specifications |
 
 ---
 
-*This Technical Architecture Document is ready for team implementation. Next step: Database Engineer executes schema migrations.*
+*This Technical Architecture Document is ready for team implementation.*
+
+**Next Steps:**
+1. Database Engineer executes schema migrations (Section 15)
+2. Frontend Developer begins page conversions using data access layer
+3. Full Stack Developer implements admin dashboard with TipTap editor
+4. QA Engineer prepares E2E test suite based on UX user journeys

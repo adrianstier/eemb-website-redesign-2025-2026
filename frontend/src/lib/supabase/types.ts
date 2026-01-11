@@ -727,7 +727,95 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_admin: { Args: never; Returns: boolean }
+      get_faculty_by_research_area: {
+        Args: { p_area_slug: string }
+        Returns: {
+          accepting_students: boolean
+          accepting_students_note: string
+          bio: string
+          first_name: string
+          id: number
+          last_name: string
+          photo_url: string
+          slug: string
+          title: Database["public"]["Enums"]["faculty_title"]
+        }[]
+      }
+      get_featured_testimonials: {
+        Args: { p_limit?: number }
+        Returns: {
+          advisor_name: string
+          degree_program: Database["public"]["Enums"]["degree_program"]
+          id: number
+          photo_url: string
+          quote: string
+          student_name: string
+          year_entered: number
+        }[]
+      }
+      get_recent_news: {
+        Args: {
+          p_category?: Database["public"]["Enums"]["news_category"]
+          p_limit?: number
+        }
+        Returns: {
+          category: Database["public"]["Enums"]["news_category"]
+          excerpt: string
+          faculty_names: string
+          featured: boolean
+          id: number
+          image_url: string
+          publish_date: string
+          slug: string
+          subtitle: string
+          title: string
+        }[]
+      }
+      get_upcoming_events: {
+        Args: {
+          p_event_type?: Database["public"]["Enums"]["event_type"]
+          p_limit?: number
+        }
+        Returns: {
+          end_date: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          featured: boolean
+          host_faculty_name: string
+          id: number
+          location: string
+          short_description: string
+          slug: string
+          speaker: string
+          speaker_affiliation: string
+          start_date: string
+          title: string
+        }[]
+      }
+      is_admin: { Args: Record<PropertyKey, never>; Returns: boolean }
+      log_audit: {
+        Args: {
+          p_action: string
+          p_ip_address?: unknown
+          p_new_data?: Json
+          p_old_data?: Json
+          p_record_id: number
+          p_table_name: string
+          p_user_agent?: string
+          p_user_email: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
+      save_profile_version: {
+        Args: {
+          p_change_reason?: string
+          p_changed_by?: string
+          p_data: Json
+          p_entity_id: number
+          p_entity_type: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       degree_program: "PhD" | "MS" | "Combined BS-MS"

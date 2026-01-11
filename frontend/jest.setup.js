@@ -4,7 +4,7 @@
 // Import testing libraries
 import '@testing-library/jest-dom'
 
-// Mock next/router
+// Mock next/router (Pages Router - legacy)
 jest.mock('next/router', () => ({
   useRouter() {
     return {
@@ -25,6 +25,29 @@ jest.mock('next/router', () => ({
       },
       isFallback: false,
     }
+  },
+}))
+
+// Mock next/navigation (App Router)
+jest.mock('next/navigation', () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+    }
+  },
+  usePathname() {
+    return '/'
+  },
+  useSearchParams() {
+    return new URLSearchParams()
+  },
+  useParams() {
+    return {}
   },
 }))
 

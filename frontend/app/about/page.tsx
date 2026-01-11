@@ -166,19 +166,19 @@ export default function AboutPage() {
               <p className="text-xs font-semibold text-ocean-teal uppercase tracking-wide">Our Advantage</p>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-4">Why EEMB at UCSB?</h2>
-            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+            <p className="text-warm-600 max-w-3xl mx-auto text-lg">
               No other ecology program offers our unique combination of location, facilities, and research culture.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyEEMB.map((item, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-200">
+              <div key={index} className="bg-white rounded-xl p-6 border border-warm-200 shadow-md hover:shadow-xl transition-all duration-200">
                 <div className="mb-4">
                   <item.icon className="w-10 h-10 text-ocean-blue" />
                 </div>
                 <h3 className="text-lg font-bold text-ucsb-navy mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+                <p className="text-warm-600 text-sm leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
@@ -205,7 +205,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission - Rewritten to be EEMB-specific */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-warm-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
@@ -213,7 +213,7 @@ export default function AboutPage() {
                 <p className="text-xs font-semibold text-ocean-teal uppercase tracking-wide">Our Purpose</p>
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-6">What We Do</h2>
-              <div className="space-y-4 text-gray-700 leading-relaxed">
+              <div className="space-y-4 text-warm-700 leading-relaxed">
                 <p>
                   We study <strong>how living organisms interact with their environments and with each other</strong>—from the behavior and physiology of individual organisms to the functioning of entire ecosystems.
                 </p>
@@ -245,7 +245,7 @@ export default function AboutPage() {
               <p className="text-xs font-semibold text-ucsb-coral uppercase tracking-wide">Research Impact</p>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-4">Research That Matters</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-warm-600 max-w-2xl mx-auto">
               Our faculty lead groundbreaking research addressing critical environmental challenges.
             </p>
           </div>
@@ -264,7 +264,7 @@ export default function AboutPage() {
                   <h3 className="absolute bottom-4 left-4 right-4 text-xl font-bold text-white">{highlight.area}</h3>
                 </div>
                 <div className="p-5 bg-white">
-                  <p className="text-gray-600 text-sm leading-relaxed">{highlight.description}</p>
+                  <p className="text-warm-600 text-sm leading-relaxed">{highlight.description}</p>
                 </div>
               </div>
             ))}
@@ -314,7 +314,7 @@ export default function AboutPage() {
               <p className="text-xs font-semibold text-ocean-teal uppercase tracking-wide">Our Facilities</p>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-4">World-Class Research Infrastructure</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-warm-600 max-w-2xl mx-auto">
               Access to premier research centers, long-term study sites, and natural reserves.
             </p>
           </div>
@@ -334,7 +334,7 @@ export default function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{center.description}</p>
+                <p className="text-warm-600 text-sm leading-relaxed">{center.description}</p>
               </a>
             ))}
           </div>
@@ -342,14 +342,14 @@ export default function AboutPage() {
       </section>
 
       {/* History Timeline */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-warm-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <div className="text-center mb-12">
             <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal/10 rounded-full">
               <p className="text-xs font-semibold text-ocean-teal uppercase tracking-wide">Our Story</p>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-ucsb-navy mb-3">Six Decades of Discovery</h2>
-            <p className="text-gray-600">From a small biology department to a globally recognized research powerhouse</p>
+            <p className="text-warm-600">From a small biology department to a globally recognized research powerhouse</p>
           </div>
 
           <div className="relative">
@@ -361,9 +361,9 @@ export default function AboutPage() {
                   <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-ocean-teal to-ocean-blue rounded-full flex items-center justify-center shadow-lg z-10">
                     <milestone.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
                   </div>
-                  <div className="flex-1 bg-white rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
+                  <div className="flex-1 bg-white rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow duration-200 border border-warm-200">
                     <p className="text-xl font-bold text-ocean-teal mb-2">{milestone.year}</p>
-                    <p className="text-gray-700 text-sm leading-relaxed">{milestone.event}</p>
+                    <p className="text-warm-700 text-sm leading-relaxed">{milestone.event}</p>
                   </div>
                 </div>
               </div>
@@ -395,7 +395,7 @@ export default function AboutPage() {
                 <div className="text-3xl md:text-4xl font-bold text-ocean-blue mb-2">
                   {stat.number}
                 </div>
-                <p className="text-xs md:text-sm text-gray-600 font-medium">{stat.label}</p>
+                <p className="text-xs md:text-sm text-warm-600 font-medium">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -403,7 +403,7 @@ export default function AboutPage() {
       </section>
 
       {/* Leadership Section */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-warm-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <div className="text-center mb-12">
             <div className="inline-block mb-3 px-3 py-1 bg-ocean-teal/10 rounded-full">
@@ -426,7 +426,7 @@ export default function AboutPage() {
                 </div>
                 <p className="text-xs font-semibold text-ocean-teal uppercase tracking-wide mb-2">{leader.role}</p>
                 <h3 className="text-lg font-bold text-ucsb-navy">{leader.name}</h3>
-                <p className="text-gray-500 text-sm mb-4">{leader.title}</p>
+                <p className="text-warm-500 text-sm mb-4">{leader.title}</p>
                 <Link href={`/people/faculty/${leader.slug}`} className="inline-flex items-center gap-1 text-ocean-blue font-semibold text-sm hover:gap-2 hover:text-ocean-teal transition-all">
                   View Profile
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -457,8 +457,8 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-800">Department Address</p>
-                    <p className="text-gray-600 text-sm">
+                    <p className="font-semibold text-warm-800">Department Address</p>
+                    <p className="text-warm-600 text-sm">
                       Department of Ecology, Evolution & Marine Biology<br/>
                       University of California, Santa Barbara<br/>
                       Santa Barbara, CA 93106-9620
@@ -473,7 +473,7 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-800">Phone</p>
+                    <p className="font-semibold text-warm-800">Phone</p>
                     <a href="tel:+18058932974" className="text-ocean-blue hover:text-ocean-teal transition-colors">(805) 893-2974</a>
                   </div>
                 </div>
@@ -486,7 +486,7 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-800">Email</p>
+                    <p className="font-semibold text-warm-800">Email</p>
                     <a href="mailto:info@eemb.ucsb.edu" className="text-ocean-blue hover:text-ocean-teal transition-colors">info@eemb.ucsb.edu</a>
                   </div>
                 </div>
@@ -509,7 +509,7 @@ export default function AboutPage() {
       </section>
 
       {/* Explore More */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-12 md:py-16 bg-warm-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-ucsb-navy mb-10">Explore EEMB</h2>
           <div className="grid md:grid-cols-4 gap-4">
@@ -528,7 +528,7 @@ export default function AboutPage() {
                   <link.icon className="w-10 h-10 text-ocean-blue" />
                 </div>
                 <h3 className="font-bold text-ucsb-navy group-hover:text-ocean-blue transition-colors">{link.label}</h3>
-                <p className="text-gray-500 text-sm">{link.desc}</p>
+                <p className="text-warm-500 text-sm">{link.desc}</p>
               </Link>
             ))}
           </div>

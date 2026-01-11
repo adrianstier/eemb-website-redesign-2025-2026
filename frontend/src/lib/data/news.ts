@@ -7,8 +7,27 @@ export type NewsWithFaculty = NewsArticle & {
   related_faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug'>[]
 }
 
+// Type for the nested select result from Supabase
+type NewsWithNestedFaculty = NewsArticle & {
+  news_faculty: Array<{
+    faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug'>
+  }>
+}
+
+/**
+ * Transform the nested Supabase result into our NewsWithFaculty type
+ */
+function transformNewsWithFaculty(article: NewsWithNestedFaculty): NewsWithFaculty {
+  const { news_faculty, ...rest } = article
+  return {
+    ...rest,
+    related_faculty: news_faculty?.map(nf => nf.faculty).filter(Boolean) || []
+  }
+}
+
 /**
  * Get all published news articles
+ * Uses a single query with nested selects (no N+1 problem)
  */
 export async function getAllNews(options?: {
   limit?: number
@@ -19,7 +38,17 @@ export async function getAllNews(options?: {
 
   let query = supabase
     .from('news_articles')
-    .select('*')
+    .select(`
+      *,
+      news_faculty(
+        faculty:faculty_id(
+          id,
+          first_name,
+          last_name,
+          slug
+        )
+      )
+    `)
     .eq('published', true)
     .order('pinned', { ascending: false })
     .order('publish_date', { ascending: false })
@@ -43,39 +72,29 @@ export async function getAllNews(options?: {
     return []
   }
 
-  // Get related faculty for each article
-  const articlesWithFaculty = await Promise.all(
-    articles.map(async (article) => {
-      const { data: facultyIds } = await supabase
-        .from('news_faculty')
-        .select('faculty_id')
-        .eq('news_id', article.id)
-
-      if (!facultyIds || facultyIds.length === 0) {
-        return { ...article, related_faculty: [] }
-      }
-
-      const { data: faculty } = await supabase
-        .from('faculty')
-        .select('id, first_name, last_name, slug')
-        .in('id', facultyIds.map(f => f.faculty_id))
-
-      return { ...article, related_faculty: faculty || [] }
-    })
-  )
-
-  return articlesWithFaculty
+  return (articles as NewsWithNestedFaculty[] || []).map(transformNewsWithFaculty)
 }
 
 /**
  * Get a single news article by slug
+ * Uses a single query with nested selects
  */
 export async function getNewsBySlug(slug: string): Promise<NewsWithFaculty | null> {
   const supabase = await createClient()
 
   const { data: article, error } = await supabase
     .from('news_articles')
-    .select('*')
+    .select(`
+      *,
+      news_faculty(
+        faculty:faculty_id(
+          id,
+          first_name,
+          last_name,
+          slug
+        )
+      )
+    `)
     .eq('slug', slug)
     .eq('published', true)
     .single()
@@ -85,33 +104,29 @@ export async function getNewsBySlug(slug: string): Promise<NewsWithFaculty | nul
     return null
   }
 
-  // Get related faculty
-  const { data: facultyIds } = await supabase
-    .from('news_faculty')
-    .select('faculty_id')
-    .eq('news_id', article.id)
-
-  if (!facultyIds || facultyIds.length === 0) {
-    return { ...article, related_faculty: [] }
-  }
-
-  const { data: faculty } = await supabase
-    .from('faculty')
-    .select('id, first_name, last_name, slug')
-    .in('id', facultyIds.map(f => f.faculty_id))
-
-  return { ...article, related_faculty: faculty || [] }
+  return transformNewsWithFaculty(article as NewsWithNestedFaculty)
 }
 
 /**
  * Get featured news articles
+ * Uses a single query with nested selects
  */
 export async function getFeaturedNews(limit: number = 3): Promise<NewsWithFaculty[]> {
   const supabase = await createClient()
 
   const { data: articles, error } = await supabase
     .from('news_articles')
-    .select('*')
+    .select(`
+      *,
+      news_faculty(
+        faculty:faculty_id(
+          id,
+          first_name,
+          last_name,
+          slug
+        )
+      )
+    `)
     .eq('published', true)
     .eq('featured', true)
     .order('publish_date', { ascending: false })
@@ -121,28 +136,7 @@ export async function getFeaturedNews(limit: number = 3): Promise<NewsWithFacult
     return []
   }
 
-  // Get related faculty for each article
-  const articlesWithFaculty = await Promise.all(
-    articles.map(async (article) => {
-      const { data: facultyIds } = await supabase
-        .from('news_faculty')
-        .select('faculty_id')
-        .eq('news_id', article.id)
-
-      if (!facultyIds || facultyIds.length === 0) {
-        return { ...article, related_faculty: [] }
-      }
-
-      const { data: faculty } = await supabase
-        .from('faculty')
-        .select('id, first_name, last_name, slug')
-        .in('id', facultyIds.map(f => f.faculty_id))
-
-      return { ...article, related_faculty: faculty || [] }
-    })
-  )
-
-  return articlesWithFaculty
+  return (articles as NewsWithNestedFaculty[] || []).map(transformNewsWithFaculty)
 }
 
 /**

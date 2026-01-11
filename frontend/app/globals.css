@@ -591,3 +591,77 @@
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+
+/* ============================================
+   Reduced Motion Support (Accessibility)
+   ============================================
+   Respects user's system preference for reduced motion.
+   Critical for users with vestibular disorders.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable specific animation classes */
+  .animate-float,
+  .animate-float-slow,
+  .animate-float-delayed,
+  .animate-sway,
+  .animate-wave,
+  .animate-ripple,
+  .animate-pulse-soft,
+  .animate-shimmer,
+  .animate-glow,
+  .animate-glow-pulse,
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-fade-in-down,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-scale-in,
+  .blob-animated {
+    animation: none !important;
+  }
+
+  /* Ensure transforms are reset */
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .card:hover {
+    transform: none !important;
+  }
+
+  /* Disable parallax effects */
+  .parallax-bg {
+    transform: none !important;
+  }
+
+  /* Keep essential visual feedback but remove motion */
+  .link-underline::after {
+    transform: scaleX(1) !important;
+    transition: none !important;
+  }
+
+  /* Ensure carousel/slider indicators are still visible */
+  .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Utility class for components to check reduced motion preference */
+.motion-safe {
+  /* Only animate if user hasn't requested reduced motion */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe {
+    /* Animations enabled */
+  }
+}

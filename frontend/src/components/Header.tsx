@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -10,6 +10,12 @@ export default function Header() {
   const [hidden, setHidden] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
   const pathname = usePathname()
+
+  // Refs for focus management
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const mobileNavRef = useRef<HTMLDivElement>(null)
+  const firstFocusableRef = useRef<HTMLAnchorElement>(null)
+  const lastFocusableRef = useRef<HTMLAnchorElement>(null)
 
   // Pages that have light backgrounds and need dark text in header
   const lightBackgroundPages = ['/news', '/people', '/support', '/contact', '/calendar', '/dei', '/good-news', '/memoriam']
@@ -34,6 +40,70 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
+
+  // Close menu on Escape key and handle focus trap
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!mobileMenuOpen) return
+
+      // Close on Escape
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false)
+        menuButtonRef.current?.focus()
+        return
+      }
+
+      // Focus trap - handle Tab key
+      if (e.key === 'Tab') {
+        const focusableElements = mobileNavRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled])'
+        )
+        if (!focusableElements || focusableElements.length === 0) return
+
+        const firstElement = focusableElements[0]
+        const lastElement = focusableElements[focusableElements.length - 1]
+
+        // Shift+Tab from first element - go to last
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement.focus()
+        }
+        // Tab from last element - go to first
+        else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement.focus()
+        }
+      }
+    }
+
+    if (mobileMenuOpen) {
+      document.addEventListener('keydown', handleKeyDown)
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen])
+
+  // Focus first menu item when menu opens
+  useEffect(() => {
+    if (mobileMenuOpen && firstFocusableRef.current) {
+      // Small delay to allow animation to start
+      setTimeout(() => {
+        firstFocusableRef.current?.focus()
+      }, 100)
+    }
+  }, [mobileMenuOpen])
+
+  // Close menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
 
   const navLinks = [
     { href: '/about', label: 'About' },
@@ -112,10 +182,12 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <button
-            className="lg:hidden relative w-12 h-12 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors duration-300"
+            ref={menuButtonRef}
+            className="lg:hidden relative w-12 h-12 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors duration-300 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
               <span
@@ -139,18 +211,23 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         <div
+          id="mobile-menu"
+          ref={mobileNavRef}
           className={`lg:hidden overflow-hidden transition-all duration-500 ease-spring ${
             mobileMenuOpen ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'
           }`}
+          aria-hidden={!mobileMenuOpen}
         >
-          <nav className="py-4 border-t border-white/10" aria-label="Mobile navigation">
+          <nav className="py-4 border-t border-white/10" aria-label="Mobile navigation" role="navigation">
             <div className="flex flex-col gap-1">
               {navLinks.map((link, index) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white/80 hover:text-white hover:bg-white/5 transition-all duration-300 py-3.5 px-4 rounded-xl font-medium flex items-center justify-between group"
+                  ref={index === 0 ? firstFocusableRef : undefined}
+                  className="text-white/80 hover:text-white hover:bg-white/5 transition-all duration-300 py-3.5 px-4 rounded-xl font-medium flex items-center justify-between group focus:ring-2 focus:ring-inset focus:ring-bioluminescent focus:outline-none"
                   onClick={() => setMobileMenuOpen(false)}
+                  tabIndex={mobileMenuOpen ? 0 : -1}
                   style={{
                     opacity: mobileMenuOpen ? 1 : 0,
                     transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
@@ -163,6 +240,7 @@ export default function Header() {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    aria-hidden="true"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -172,8 +250,10 @@ export default function Header() {
               {/* Mobile CTA */}
               <Link
                 href="/academics/graduate"
-                className="mt-4 mx-4 py-4 text-center font-semibold bg-ucsb-gold text-ocean-deep rounded-xl"
+                ref={lastFocusableRef}
+                className="mt-4 mx-4 py-4 text-center font-semibold bg-ucsb-gold text-ocean-deep rounded-xl focus:ring-2 focus:ring-ucsb-gold focus:ring-offset-2 focus:ring-offset-ocean-deep focus:outline-none"
                 onClick={() => setMobileMenuOpen(false)}
+                tabIndex={mobileMenuOpen ? 0 : -1}
               >
                 Apply Now
               </Link>
