@@ -3,11 +3,14 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { GraduationCap, Scroll } from 'lucide-react'
+import TestimonialCarousel from '@/components/TestimonialCarousel'
+import { useFeaturedTestimonials } from '@/hooks/useTestimonials'
 
 type TabId = 'overview' | 'phd' | 'ma' | 'apply' | 'funding' | 'faq' | 'resources'
 
 export default function GraduateProgramPage() {
   const [activeTab, setActiveTab] = useState<TabId>('overview')
+  const { testimonials, loading: testimonialsLoading } = useFeaturedTestimonials(5)
 
   const tabs: { id: TabId; label: string }[] = [
     { id: 'overview', label: 'Overview' },
@@ -300,6 +303,21 @@ export default function GraduateProgramPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Student Testimonials */}
+              {!testimonialsLoading && testimonials.length > 0 && (
+                <div className="mt-12">
+                  <h2 className="text-2xl font-bold text-ocean-deep mb-6 text-center">
+                    Hear From Our Students
+                  </h2>
+                  <TestimonialCarousel
+                    testimonials={testimonials}
+                    autoPlay={true}
+                    autoPlayInterval={7000}
+                    className="max-w-3xl mx-auto"
+                  />
+                </div>
+              )}
 
               {/* Diversity Statement */}
               <div className="bg-gradient-to-r from-ocean-deep to-ocean-blue rounded-xl p-8 text-white">

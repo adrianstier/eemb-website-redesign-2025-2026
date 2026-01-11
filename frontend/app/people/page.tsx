@@ -4,7 +4,11 @@ import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import type { Faculty, Staff, GraduateStudent } from '@/lib/supabase/types'
+import type { Faculty, Staff, GraduateStudent, Database } from '@/lib/supabase/types'
+import ResearchAreaFilter from '@/components/ResearchAreaFilter'
+import { useResearchAreas, useFacultyResearchAreaMap } from '@/hooks/useResearchAreas'
+
+type ResearchCategory = Database['public']['Enums']['research_category']
 
 // Unified person type for display
 interface Person {
@@ -44,7 +48,6 @@ interface Person {
 
 type CategoryTab = 'all' | 'faculty' | 'researchers' | 'adjunct' | 'emeriti' | 'lecturers' | 'staff' | 'students'
 type SortOption = 'name-asc' | 'name-desc' | 'title-asc' | 'title-desc' | 'email-asc' | 'email-desc' | 'office-asc' | 'office-desc' | 'recent'
-type ResearchAreaFilter = 'all' | 'ecology' | 'evolution' | 'marine-biology'
 
 export default function PeoplePage() {
   const searchParams = useSearchParams()
@@ -59,17 +62,31 @@ export default function PeoplePage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortOption, setSortOption] = useState<SortOption>('name-asc')
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
-  const [activeResearchArea, setActiveResearchArea] = useState<ResearchAreaFilter>('all')
+  const [selectedResearchCategory, setSelectedResearchCategory] = useState<ResearchCategory | 'All'>('All')
+  const [selectedResearchAreaIds, setSelectedResearchAreaIds] = useState<string[]>([])
+
+  // Fetch research areas and faculty-research area associations
+  const { areas: researchAreas, loading: areasLoading } = useResearchAreas()
+  const { areaFacultyMap, loading: mapLoading } = useFacultyResearchAreaMap()
 
   useEffect(() => {
     fetchAllPeople()
   }, [])
 
-  // Auto-select faculty tab and research area when URL filter is present
+  // Auto-select faculty tab when URL filter is present
   useEffect(() => {
     if (urlResearchAreaFilter) {
       setActiveCategory('faculty')
-      setActiveResearchArea(urlResearchAreaFilter as ResearchAreaFilter)
+      // Map URL filter to research category if possible
+      const categoryMap: Record<string, ResearchCategory> = {
+        'ecology': 'Ecology',
+        'evolution': 'Evolution',
+        'marine-biology': 'Marine Biology',
+      }
+      const category = categoryMap[urlResearchAreaFilter]
+      if (category) {
+        setSelectedResearchCategory(category)
+      }
     }
   }, [urlResearchAreaFilter])
 
@@ -231,12 +248,32 @@ export default function PeoplePage() {
       })
     }
 
-    // Filter by research area (from state)
-    if (activeResearchArea !== 'all' && activeCategory === 'faculty') {
-      people = people.filter(person => {
-        const areas = person.research_areas || ''
-        return areas.includes(activeResearchArea)
-      })
+    // Filter by research area (using the research area map)
+    if (activeCategory === 'faculty' && !mapLoading) {
+      // If specific area IDs are selected, filter by those
+      if (selectedResearchAreaIds.length > 0) {
+        const selectedAreaIdsAsNumbers = selectedResearchAreaIds.map(id => parseInt(id, 10))
+        const facultyInSelectedAreas = new Set<number>()
+
+        for (const areaId of selectedAreaIdsAsNumbers) {
+          const facultyIds = areaFacultyMap.get(areaId) || []
+          facultyIds.forEach(id => facultyInSelectedAreas.add(id))
+        }
+
+        people = people.filter(person => facultyInSelectedAreas.has(person.id))
+      }
+      // If only category is selected (not 'All'), filter by areas in that category
+      else if (selectedResearchCategory !== 'All') {
+        const areasInCategory = researchAreas.filter(a => a.category === selectedResearchCategory)
+        const facultyInCategory = new Set<number>()
+
+        for (const area of areasInCategory) {
+          const facultyIds = areaFacultyMap.get(area.id) || []
+          facultyIds.forEach(id => facultyInCategory.add(id))
+        }
+
+        people = people.filter(person => facultyInCategory.has(person.id))
+      }
     }
 
     // Sort - create a new array to avoid mutation issues
@@ -293,7 +330,7 @@ export default function PeoplePage() {
     }
 
     return sortedPeople
-  }, [searchTerm, sortOption, faculty, staff, students, activeCategory, activeResearchArea])
+  }, [searchTerm, sortOption, faculty, staff, students, activeCategory, selectedResearchCategory, selectedResearchAreaIds, researchAreas, areaFacultyMap, mapLoading])
 
   const handleImageError = (personId: number) => {
     setImageErrors(prev => new Set(prev).add(personId))
@@ -672,7 +709,8 @@ export default function PeoplePage() {
                     setActiveCategory(key)
                     setSearchTerm('')
                     if (key !== 'faculty') {
-                      setActiveResearchArea('all')
+                      setSelectedResearchCategory('All')
+                      setSelectedResearchAreaIds([])
                     }
                   }}
                   role="tab"
@@ -737,31 +775,21 @@ export default function PeoplePage() {
       </section>
 
       {/* Research Area Filter - Shows when Faculty tab is active */}
-      {activeCategory === 'faculty' && (
+      {activeCategory === 'faculty' && !areasLoading && researchAreas.length > 0 && (
         <section className="bg-gradient-to-r from-ocean-teal/5 to-bioluminescent/5 border-b border-warm-200">
           <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl py-4">
-            <div className="flex items-center gap-4 flex-wrap">
-              <span className="text-sm font-medium text-warm-600">Research area:</span>
-              <div className="flex gap-2 flex-wrap">
-                {([
-                  { key: 'all', label: 'All Faculty' },
-                  { key: 'ecology', label: 'Ecology' },
-                  { key: 'evolution', label: 'Evolution' },
-                  { key: 'marine-biology', label: 'Marine Biology' },
-                ] as { key: ResearchAreaFilter; label: string }[]).map(({ key, label }) => (
-                  <button
-                    key={key}
-                    onClick={() => setActiveResearchArea(key)}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
-                      activeResearchArea === key
-                        ? 'bg-gradient-to-r from-ocean-teal to-ocean-blue text-white shadow-lg'
-                        : 'bg-white text-warm-600 border border-warm-200 hover:border-ocean-teal hover:text-ocean-teal'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
+            <div className="flex items-start gap-4">
+              <span className="text-sm font-medium text-warm-600 mt-2 flex-shrink-0">Filter by research:</span>
+              <ResearchAreaFilter
+                areas={researchAreas}
+                selectedAreas={selectedResearchAreaIds}
+                onFilterChange={setSelectedResearchAreaIds}
+                selectedCategory={selectedResearchCategory}
+                onCategoryChange={setSelectedResearchCategory}
+                variant="pills"
+                showCounts={true}
+                className="flex-1"
+              />
             </div>
           </div>
         </section>

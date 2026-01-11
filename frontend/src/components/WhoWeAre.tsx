@@ -2,34 +2,15 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
-
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
+import { useInView } from '@/hooks/useInView'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 export default function WhoWeAre() {
-  const { ref, isInView } = useInView(0.1)
+  const prefersReducedMotion = useReducedMotion()
+  const { ref, isInView } = useInView<HTMLElement>({
+    threshold: 0.1,
+    skip: prefersReducedMotion,
+  })
 
   return (
     <section ref={ref} className="py-24 md:py-32 lg:py-40 bg-warm-50 overflow-hidden relative">

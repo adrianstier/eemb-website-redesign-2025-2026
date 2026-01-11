@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Fraunces } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
@@ -24,6 +24,14 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: 'EEMB - Ecology, Evolution & Marine Biology | UC Santa Barbara',
   description: 'Department of Ecology, Evolution and Marine Biology at UC Santa Barbara. Where the Santa Ynez Mountains meet the Pacific, we ask questions that matter.',
+}
+
+// Viewport configuration for accessibility
+// Allows users to zoom up to 5x and doesn't disable user scaling
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 }
 
 export default function RootLayout({

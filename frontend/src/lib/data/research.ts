@@ -27,54 +27,69 @@ export async function getAllResearchAreas(): Promise<ResearchArea[]> {
 
 /**
  * Get featured research areas (for homepage)
+ * Uses nested select to avoid N+1 queries
  */
 export async function getFeaturedResearchAreas(): Promise<ResearchAreaWithFaculty[]> {
   const supabase = await createClient()
 
   const { data: areas, error } = await supabase
     .from('research_areas')
-    .select('*')
+    .select(`
+      *,
+      faculty_research_areas(
+        faculty:faculty_id(
+          id,
+          first_name,
+          last_name,
+          slug,
+          photo_url,
+          active
+        )
+      )
+    `)
     .eq('featured', true)
     .order('order_index', { ascending: true })
 
   if (error || !areas) {
+    console.error('Error fetching featured research areas:', error)
     return []
   }
 
-  // Get faculty for each area
-  const areasWithFaculty = await Promise.all(
-    areas.map(async (area) => {
-      const { data: facultyIds } = await supabase
-        .from('faculty_research_areas')
-        .select('faculty_id')
-        .eq('research_area_id', area.id)
-
-      if (!facultyIds || facultyIds.length === 0) {
-        return { ...area, faculty: [] }
-      }
-
-      const { data: faculty } = await supabase
-        .from('faculty')
-        .select('id, first_name, last_name, slug, photo_url')
-        .in('id', facultyIds.map(f => f.faculty_id))
-        .eq('active', true)
-
-      return { ...area, faculty: faculty || [] }
-    })
-  )
-
-  return areasWithFaculty
+  // Transform nested data structure and filter active faculty
+  return areas.map(area => {
+    const { faculty_research_areas, ...areaData } = area
+    return {
+      ...areaData,
+      faculty: (faculty_research_areas || [])
+        .map((fra: { faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'active'> | null }) => fra.faculty)
+        .filter((f): f is Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'active'> => f !== null && f.active === true)
+        .map(({ active: _active, ...rest }) => rest) // Remove active field from output
+    }
+  })
 }
 
 /**
  * Get a single research area by slug with associated faculty
+ * Uses nested select to avoid N+1 queries
  */
 export async function getResearchAreaBySlug(slug: string): Promise<ResearchAreaWithFaculty | null> {
   const supabase = await createClient()
 
   const { data: area, error } = await supabase
     .from('research_areas')
-    .select('*')
+    .select(`
+      *,
+      faculty_research_areas(
+        faculty:faculty_id(
+          id,
+          first_name,
+          last_name,
+          slug,
+          photo_url,
+          active
+        )
+      )
+    `)
     .eq('slug', slug)
     .single()
 
@@ -83,23 +98,15 @@ export async function getResearchAreaBySlug(slug: string): Promise<ResearchAreaW
     return null
   }
 
-  // Get faculty for this area
-  const { data: facultyIds } = await supabase
-    .from('faculty_research_areas')
-    .select('faculty_id')
-    .eq('research_area_id', area.id)
-
-  if (!facultyIds || facultyIds.length === 0) {
-    return { ...area, faculty: [] }
+  // Transform nested data structure and filter active faculty
+  const { faculty_research_areas, ...areaData } = area
+  return {
+    ...areaData,
+    faculty: (faculty_research_areas || [])
+      .map((fra: { faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'active'> | null }) => fra.faculty)
+      .filter((f): f is Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'active'> => f !== null && f.active === true)
+      .map(({ active: _active, ...rest }) => rest) // Remove active field from output
   }
-
-  const { data: faculty } = await supabase
-    .from('faculty')
-    .select('id, first_name, last_name, slug, photo_url')
-    .in('id', facultyIds.map(f => f.faculty_id))
-    .eq('active', true)
-
-  return { ...area, faculty: faculty || [] }
 }
 
 /**
