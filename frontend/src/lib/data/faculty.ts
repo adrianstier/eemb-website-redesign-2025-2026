@@ -56,6 +56,8 @@ export async function getAllFaculty(): Promise<FacultyWithResearch[]> {
 export async function getFacultyBySlug(slug: string): Promise<FacultyWithResearch | null> {
   const supabase = await createClient()
 
+  // Don't filter by active status - we want to show all faculty profiles
+  // including emeriti and other inactive faculty who should still have viewable pages
   const { data: faculty, error } = await supabase
     .from('faculty')
     .select(`
@@ -65,7 +67,6 @@ export async function getFacultyBySlug(slug: string): Promise<FacultyWithResearc
       )
     `)
     .eq('slug', slug)
-    .eq('active', true)
     .single()
 
   if (error || !faculty) {
@@ -154,14 +155,15 @@ export async function getFacultyByResearchArea(researchAreaSlug: string): Promis
 /**
  * Get all faculty slugs for static generation
  * Uses createStaticClient to avoid cookie issues during build
+ * Includes all faculty (active and inactive) so emeriti pages work
  */
 export async function getAllFacultySlugs(): Promise<string[]> {
   const supabase = createStaticClient()
 
+  // Include all faculty, not just active ones, so emeriti pages are generated
   const { data, error } = await supabase
     .from('faculty')
     .select('slug')
-    .eq('active', true)
     .not('slug', 'is', null)
 
   if (error || !data) {
