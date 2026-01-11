@@ -579,8 +579,8 @@ export default function PeoplePage() {
             </div>
           )}
 
-          {/* View Profile Button */}
-          {person.slug && (
+          {/* View Profile Button - only show for faculty and students who have detail pages */}
+          {person.slug && person.person_type !== 'staff' && (
             <Link
               href={person.person_type === 'student'
                 ? `/people/students/${person.slug}`
@@ -896,7 +896,7 @@ export default function PeoplePage() {
                                       </span>
                                     </div>
                                   )}
-                                  {person.slug ? (
+                                  {person.slug && person.person_type !== 'staff' ? (
                                     <Link
                                       href={person.person_type === 'student'
                                         ? `/people/students/${person.slug}`
