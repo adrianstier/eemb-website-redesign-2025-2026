@@ -9,6 +9,7 @@ import UpcomingEvents from '@/components/UpcomingEvents'
 import PartnersSection from '@/components/PartnersSection'
 import Link from 'next/link'
 import { getAllFaculty, getUpcomingEvents, getAllNews } from '@/lib/data'
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
 
 export const revalidate = 900 // Revalidate every 15 minutes
 
@@ -181,16 +182,31 @@ export default async function HomePage() {
             <div className="md:col-span-2">
               <div className="grid grid-cols-2 gap-4">
                 <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-bioluminescent/30 transition-all duration-500">
-                  <div className="font-heading text-4xl lg:text-5xl font-bold text-ucsb-gold mb-2 group-hover:scale-105 transition-transform">100%</div>
-                  <div className="text-white/60 text-sm">Funding for PhD students</div>
+                  <AnimatedCounter
+                    end={100}
+                    suffix="%"
+                    className="text-4xl lg:text-5xl text-ucsb-gold group-hover:scale-105 transition-transform"
+                    labelClassName="text-white/60 text-sm"
+                    label="Funding for PhD students"
+                  />
                 </div>
                 <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-bioluminescent/30 transition-all duration-500">
-                  <div className="font-heading text-4xl lg:text-5xl font-bold text-bioluminescent mb-2 group-hover:scale-105 transition-transform">5 yrs</div>
-                  <div className="text-white/60 text-sm">Average time to PhD</div>
+                  <AnimatedCounter
+                    end={5}
+                    suffix=" yrs"
+                    className="text-4xl lg:text-5xl text-bioluminescent group-hover:scale-105 transition-transform"
+                    labelClassName="text-white/60 text-sm"
+                    label="Average time to PhD"
+                  />
                 </div>
                 <div className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-bioluminescent/30 transition-all duration-500 col-span-2">
                   <div className="flex items-baseline gap-3">
-                    <div className="font-heading text-4xl lg:text-5xl font-bold text-white group-hover:scale-105 transition-transform">Top 10</div>
+                    <span className="font-heading text-4xl lg:text-5xl font-bold text-white group-hover:scale-105 transition-transform">Top</span>
+                    <AnimatedCounter
+                      end={10}
+                      className="text-4xl lg:text-5xl text-white group-hover:scale-105 transition-transform"
+                      labelClassName="hidden"
+                    />
                     <div className="text-white/60 text-sm">Ecology program nationally</div>
                   </div>
                 </div>

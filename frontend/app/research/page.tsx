@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import WaveDivider from '@/components/ui/WaveDivider'
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
 
 // Research themes derived from actual EEMB faculty expertise
 const researchThemes = [
@@ -388,42 +390,43 @@ export default function ResearchPage() {
       {/* Research Highlights */}
       <section className="py-16 md:py-24 bg-warm-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="max-w-2xl mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-0.5 bg-ocean-teal" />
-              <span className="text-ocean-teal text-sm font-semibold tracking-wide uppercase">
-                Research Highlights
-              </span>
+          <ScrollReveal direction="up" duration={500}>
+            <div className="max-w-2xl mb-12">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-0.5 bg-ocean-teal" />
+                <span className="text-ocean-teal text-sm font-semibold tracking-wide uppercase">
+                  Research Highlights
+                </span>
+              </div>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+                Stories From the Lab & Field
+              </h2>
+              <p className="text-warm-600 text-lg leading-relaxed">
+                A glimpse into the diverse questions driving our research.
+              </p>
             </div>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
-              Stories From the Lab & Field
-            </h2>
-            <p className="text-warm-600 text-lg leading-relaxed">
-              A glimpse into the diverse questions driving our research.
-            </p>
-          </div>
+          </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-6">
             {researchHighlights.map((highlight, idx) => (
-              <article
-                key={idx}
-                className="bg-white rounded-2xl p-6 shadow-warm-md hover:shadow-warm-xl transition-all duration-300 border border-warm-200 group"
-              >
-                <div>
-                  <span className="text-xs font-bold text-ocean-teal uppercase tracking-wide">
-                    {highlight.theme}
-                  </span>
-                  <h3 className="font-heading text-lg font-bold text-ucsb-navy mt-1 mb-2 group-hover:text-ocean-blue transition-colors">
-                    {highlight.title}
-                  </h3>
-                  <p className="text-warm-600 text-sm leading-relaxed mb-3">
-                    {highlight.description}
-                  </p>
-                  <p className="text-sm font-medium text-ocean-blue">
-                    — {highlight.faculty}
-                  </p>
-                </div>
-              </article>
+              <ScrollReveal key={idx} delay={idx * 100} duration={500} direction="up">
+                <article className="h-full bg-white rounded-2xl p-6 shadow-warm-md hover:shadow-warm-xl transition-all duration-300 border border-warm-200 group hover:-translate-y-1">
+                  <div>
+                    <span className="text-xs font-bold text-ocean-teal uppercase tracking-wide">
+                      {highlight.theme}
+                    </span>
+                    <h3 className="font-heading text-lg font-bold text-ucsb-navy mt-1 mb-2 group-hover:text-ocean-blue transition-colors">
+                      {highlight.title}
+                    </h3>
+                    <p className="text-warm-600 text-sm leading-relaxed mb-3">
+                      {highlight.description}
+                    </p>
+                    <p className="text-sm font-medium text-ocean-blue">
+                      — {highlight.faculty}
+                    </p>
+                  </div>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -434,28 +437,28 @@ export default function ResearchPage() {
       {/* LTER Sites */}
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="max-w-2xl mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-0.5 bg-ucsb-gold" />
-              <span className="text-ucsb-gold text-sm font-semibold tracking-wide uppercase">
-                Long-Term Research
-              </span>
+          <ScrollReveal direction="up" duration={500}>
+            <div className="max-w-2xl mb-12">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-0.5 bg-ucsb-gold" />
+                <span className="text-ucsb-gold text-sm font-semibold tracking-wide uppercase">
+                  Long-Term Research
+                </span>
+              </div>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
+                LTER Sites
+              </h2>
+              <p className="text-warm-600 text-lg leading-relaxed">
+                EEMB leads two of the nation&apos;s Long-Term Ecological Research sites,
+                enabling multi-decadal studies of ecosystem dynamics.
+              </p>
             </div>
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-ucsb-navy mb-4">
-              LTER Sites
-            </h2>
-            <p className="text-warm-600 text-lg leading-relaxed">
-              EEMB leads two of the nation&apos;s Long-Term Ecological Research sites,
-              enabling multi-decadal studies of ecosystem dynamics.
-            </p>
-          </div>
+          </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {lterSites.map((site) => (
-              <article
-                key={site.name}
-                className="group bg-white rounded-2xl overflow-hidden shadow-warm-md hover:shadow-warm-xl transition-all duration-500 border border-warm-200"
-              >
+            {lterSites.map((site, idx) => (
+              <ScrollReveal key={site.name} delay={idx * 150} duration={500} direction="up">
+                <article className="group h-full bg-white rounded-2xl overflow-hidden shadow-warm-md hover:shadow-warm-xl transition-all duration-500 border border-warm-200 hover:-translate-y-1">
                 <div className="relative h-56">
                   <Image
                     src={site.image}
@@ -497,6 +500,7 @@ export default function ResearchPage() {
                   </a>
                 </div>
               </article>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -507,28 +511,33 @@ export default function ResearchPage() {
       {/* Stats Section */}
       <section className="py-16 md:py-20 bg-warm-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-ucsb-navy">
-              Research by the Numbers
-            </h2>
-          </div>
+          <ScrollReveal direction="up" duration={500}>
+            <div className="text-center mb-12">
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-ucsb-navy">
+                Research by the Numbers
+              </h2>
+            </div>
+          </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { number: '35+', label: 'Faculty', sublabel: 'across all ranks' },
-              { number: '100+', label: 'Grad Students', sublabel: 'PhD & Masters' },
-              { number: '2', label: 'LTER Sites', sublabel: 'coastal & coral reef' },
-              { number: '$25M+', label: 'Annual Funding', sublabel: 'NSF, NIH, NOAA' },
+              { value: 35, suffix: '+', label: 'Faculty', sublabel: 'across all ranks' },
+              { value: 100, suffix: '+', label: 'Grad Students', sublabel: 'PhD & Masters' },
+              { value: 2, label: 'LTER Sites', sublabel: 'coastal & coral reef' },
+              { value: 25, prefix: '$', suffix: 'M+', label: 'Annual Funding', sublabel: 'NSF, NIH, NOAA' },
             ].map((stat, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-6 text-center shadow-warm-md border border-warm-200"
-              >
-                <div className="font-heading text-3xl md:text-4xl font-bold text-ocean-blue mb-1">
-                  {stat.number}
+              <ScrollReveal key={idx} delay={idx * 100} duration={500} direction="up">
+                <div className="bg-white rounded-2xl p-6 text-center shadow-warm-md border border-warm-200 hover:shadow-warm-xl hover:border-ocean-teal/30 transition-all duration-500 group">
+                  <AnimatedCounter
+                    end={stat.value}
+                    prefix={stat.prefix}
+                    suffix={stat.suffix}
+                    className="text-3xl md:text-4xl text-ocean-blue group-hover:scale-105 transition-transform duration-300"
+                    labelClassName="hidden"
+                  />
+                  <p className="font-semibold text-ucsb-navy mt-1">{stat.label}</p>
+                  <p className="text-xs text-warm-500 mt-1">{stat.sublabel}</p>
                 </div>
-                <p className="font-semibold text-ucsb-navy">{stat.label}</p>
-                <p className="text-xs text-warm-500 mt-1">{stat.sublabel}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
