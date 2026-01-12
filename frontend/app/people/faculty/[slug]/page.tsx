@@ -244,8 +244,43 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                       {faculty.short_bio}
                     </p>
                   ) : (
-                    <div className="text-center py-8">
-                      <p className="text-warm-500 italic">Biography coming soon</p>
+                    <div className="relative py-12 text-center">
+                      {/* Decorative background pattern */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-ocean-teal/5 to-bioluminescent/5 rounded-xl"></div>
+                      <div className="absolute inset-0 opacity-30">
+                        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                          <defs>
+                            <pattern id="wave-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                              <path d="M0 10 Q5 5, 10 10 T20 10" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-ocean-teal/20"/>
+                            </pattern>
+                          </defs>
+                          <rect width="100" height="100" fill="url(#wave-pattern)"/>
+                        </svg>
+                      </div>
+                      <div className="relative">
+                        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-ocean-teal/20 to-ocean-blue/20 flex items-center justify-center">
+                          <svg className="w-10 h-10 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                          </svg>
+                        </div>
+                        <p className="text-warm-600 font-medium mb-2">
+                          Exploring the frontiers of science
+                        </p>
+                        <p className="text-warm-500 text-sm max-w-md mx-auto">
+                          {fullName}&apos;s research explores questions at the intersection of ecology, evolution, and marine biology. Visit their lab website or publications for more details.
+                        </p>
+                        {faculty.lab_website && (
+                          <a
+                            href={faculty.lab_website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-ocean-teal/10 text-ocean-teal font-medium rounded-lg hover:bg-ocean-teal hover:text-white transition-colors"
+                          >
+                            <Globe className="w-4 h-4" />
+                            Visit Lab Website
+                          </a>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>

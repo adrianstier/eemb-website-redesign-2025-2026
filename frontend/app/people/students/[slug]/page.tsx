@@ -291,8 +291,29 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                       {student.short_bio}
                     </p>
                   ) : (
-                    <div className="text-center py-8">
-                      <p className="text-warm-500 italic">Biography coming soon</p>
+                    <div className="relative py-12 text-center">
+                      {/* Decorative background */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-ocean-teal/5 to-bioluminescent/5 rounded-xl"></div>
+                      <div className="relative">
+                        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-ocean-teal/20 to-ocean-blue/20 flex items-center justify-center">
+                          <GraduationCap className="w-10 h-10 text-ocean-teal" />
+                        </div>
+                        <p className="text-warm-600 font-medium mb-2">
+                          Graduate researcher in training
+                        </p>
+                        <p className="text-warm-500 text-sm max-w-md mx-auto">
+                          {student.first_name} is a {student.degree_program} student{student.advisor ? ` in the ${student.advisor.last_name} lab` : ''} working on exciting research in ecology, evolution, and marine biology.
+                        </p>
+                        {student.email && (
+                          <a
+                            href={`mailto:${student.email}`}
+                            className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-ocean-teal/10 text-ocean-teal font-medium rounded-lg hover:bg-ocean-teal hover:text-white transition-colors"
+                          >
+                            <Mail className="w-4 h-4" />
+                            Get in Touch
+                          </a>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>

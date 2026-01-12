@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { Faculty, Staff, GraduateStudent, Database } from '@/lib/supabase/types'
 import ResearchAreaFilter from '@/components/ResearchAreaFilter'
 import { useResearchAreas, useFacultyResearchAreaMap } from '@/hooks/useResearchAreas'
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 type ResearchCategory = Database['public']['Enums']['research_category']
 
@@ -579,12 +580,15 @@ export default function PeoplePage() {
             </div>
           )}
 
-          {/* View Profile Button - only show for faculty and students who have detail pages */}
-          {person.slug && person.person_type !== 'staff' && (
+          {/* View Profile Button */}
+          {person.slug && (
             <Link
-              href={person.person_type === 'student'
-                ? `/people/students/${person.slug}`
-                : `/people/faculty/${person.slug}`
+              href={
+                person.person_type === 'student'
+                  ? `/people/students/${person.slug}`
+                  : person.person_type === 'staff'
+                  ? `/people/staff/${person.slug}`
+                  : `/people/faculty/${person.slug}`
               }
               className="mt-4 block w-full text-center px-4 py-2.5 bg-gradient-to-r from-ocean-teal to-ocean-blue text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-ocean-teal/25 hover:-translate-y-0.5"
             >
@@ -896,11 +900,14 @@ export default function PeoplePage() {
                                       </span>
                                     </div>
                                   )}
-                                  {person.slug && person.person_type !== 'staff' ? (
+                                  {person.slug ? (
                                     <Link
-                                      href={person.person_type === 'student'
-                                        ? `/people/students/${person.slug}`
-                                        : `/people/faculty/${person.slug}`
+                                      href={
+                                        person.person_type === 'student'
+                                          ? `/people/students/${person.slug}`
+                                          : person.person_type === 'staff'
+                                          ? `/people/staff/${person.slug}`
+                                          : `/people/faculty/${person.slug}`
                                       }
                                       className="font-semibold text-ocean-deep hover:text-ocean-teal transition-colors"
                                     >
@@ -931,9 +938,20 @@ export default function PeoplePage() {
                     </div>
                   </div>
                 ) : (
-                  // Card grid for categories
+                  // Card grid for categories with scroll-triggered animations
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {filteredAndSortedPeople.map((person, index) => renderPersonCard(person, index))}
+                    {filteredAndSortedPeople.map((person, index) => (
+                      <ScrollReveal
+                        key={person.id}
+                        delay={(index % 4) * 75}
+                        duration={500}
+                        direction="up"
+                        distance={20}
+                        threshold={0.05}
+                      >
+                        {renderPersonCard(person, index)}
+                      </ScrollReveal>
+                    ))}
                   </div>
                 )
               ) : (
