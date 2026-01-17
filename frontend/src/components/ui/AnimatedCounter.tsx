@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { ANIMATION_DURATION, ANIMATION_THRESHOLDS } from '@/lib/animationTokens'
 
 interface AnimatedCounterProps {
   end: number
@@ -15,7 +17,7 @@ interface AnimatedCounterProps {
 
 export function AnimatedCounter({
   end,
-  duration = 2000,
+  duration = ANIMATION_DURATION.COUNTER,
   prefix = '',
   suffix = '',
   decimals = 0,
@@ -23,18 +25,26 @@ export function AnimatedCounter({
   labelClassName = '',
   label,
 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0)
-  const [hasAnimated, setHasAnimated] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const [count, setCount] = useState(prefersReducedMotion ? end : 0)
+  const [hasAnimated, setHasAnimated] = useState(prefersReducedMotion)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const element = ref.current
-    if (!element || hasAnimated) return
+    if (!element || hasAnimated || prefersReducedMotion) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated) {
           setHasAnimated(true)
+
+          // If reduced motion is preferred, skip animation
+          if (prefersReducedMotion) {
+            setCount(end)
+            observer.unobserve(element)
+            return
+          }
 
           const startTime = performance.now()
           const startValue = 0
@@ -60,16 +70,16 @@ export function AnimatedCounter({
           observer.unobserve(element)
         }
       },
-      { threshold: 0.3 }
+      { threshold: ANIMATION_THRESHOLDS.DELAYED }
     )
 
     observer.observe(element)
     return () => observer.disconnect()
-  }, [end, duration, hasAnimated])
+  }, [end, duration, hasAnimated, prefersReducedMotion])
 
   const formattedCount = decimals > 0
     ? count.toFixed(decimals)
-    : Math.round(count).toLocaleString()
+    : Math.round(count).toLocaleString('en-US')
 
   return (
     <div ref={ref} className="text-center">

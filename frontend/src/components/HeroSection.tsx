@@ -146,6 +146,7 @@ export default function HeroSection() {
             src={headline.image}
             alt={`${headline.text} research at EEMB - ${headline.caption}`}
             fill
+            sizes="100vw"
             className="object-cover scale-110"
             priority={index === 0}
           />

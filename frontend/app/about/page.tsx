@@ -132,6 +132,7 @@ export default function AboutPage() {
           src="/images/about/kelp-banner.jpg"
           alt="Giant kelp forest in Santa Barbara Channel"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -191,6 +192,7 @@ export default function AboutPage() {
           src="/images/about/ucsb-aerial.jpg"
           alt="UCSB campus aerial view showing coastline"
           fill
+          sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-ocean-deep/80 to-transparent flex items-center">
@@ -230,6 +232,7 @@ export default function AboutPage() {
                 src="/images/about/campus-lagoon.jpg"
                 alt="UCSB Campus Lagoon"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
@@ -258,6 +261,7 @@ export default function AboutPage() {
                     src={highlight.image}
                     alt={highlight.area}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/80 to-transparent"></div>
@@ -498,6 +502,7 @@ export default function AboutPage() {
                 src="/images/about/marine-reef.jpg"
                 alt="Marine research - fish on coral reef"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/60 to-transparent flex items-end p-6">

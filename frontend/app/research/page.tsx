@@ -185,6 +185,7 @@ export default function ResearchPage() {
           src="/images/about/kelp-banner.jpg"
           alt="Giant kelp forest in the Santa Barbara Channel"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -282,6 +283,7 @@ export default function ResearchPage() {
                           src={theme.image}
                           alt={theme.title}
                           fill
+                          sizes="(max-width: 768px) 100vw, 256px"
                           className="object-cover"
                         />
                         <div className={`absolute inset-0 ${colors.overlay}`} />
@@ -464,6 +466,7 @@ export default function ResearchPage() {
                     src={site.image}
                     alt={site.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/80 via-ocean-deep/40 to-transparent" />

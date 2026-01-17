@@ -29,6 +29,7 @@ export default function WhoWeAre() {
                   src="/images/about/ucsb-aerial.jpg"
                   alt="Aerial view of UCSB campus where the Santa Ynez Mountains meet the Pacific Ocean"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover"
                 />
                 {/* Gradient overlay */}
@@ -51,6 +52,7 @@ export default function WhoWeAre() {
                   src="/images/about/marine-reef.jpg"
                   alt="Coral reef research"
                   fill
+                  sizes="208px"
                   className="object-cover"
                 />
               </div>

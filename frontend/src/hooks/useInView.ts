@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { ANIMATION_THRESHOLDS, STAGGER_DELAY } from '@/lib/animationTokens'
 
 interface UseInViewOptions {
   /** Intersection threshold (0-1). Default: 0.2 */
@@ -43,7 +44,7 @@ interface UseInViewReturn<T extends Element> {
  * ```
  */
 export function useInView<T extends Element = HTMLDivElement>({
-  threshold = 0.2,
+  threshold = ANIMATION_THRESHOLDS.STANDARD,
   rootMargin = '0px',
   triggerOnce = true,
   skip = false,
@@ -124,7 +125,7 @@ export function useStaggeredInView<T extends Element = HTMLDivElement>(
     initialDelay?: number
   } = {}
 ) {
-  const { staggerDelay = 100, initialDelay = 0, ...inViewOptions } = options
+  const { staggerDelay = STAGGER_DELAY.STANDARD, initialDelay = 0, ...inViewOptions } = options
   const { ref, isInView, hasBeenInView } = useInView<T>(inViewOptions)
 
   const getStaggerStyles = useCallback(
@@ -137,13 +138,18 @@ export function useStaggeredInView<T extends Element = HTMLDivElement>(
   const getStaggerClass = useCallback(
     (index: number, baseDelay = 0): string => {
       const delay = baseDelay + index * staggerDelay
-      // Map to common delay values
+      // Map to Tailwind delay classes (extended up to 1000ms)
       if (delay <= 100) return 'delay-100'
       if (delay <= 150) return 'delay-150'
       if (delay <= 200) return 'delay-200'
       if (delay <= 300) return 'delay-300'
+      if (delay <= 400) return 'delay-400'
       if (delay <= 500) return 'delay-500'
+      if (delay <= 600) return 'delay-600'
       if (delay <= 700) return 'delay-700'
+      if (delay <= 800) return 'delay-800'
+      if (delay <= 1000) return 'delay-1000'
+      // For delays > 1000ms, use inline styles via getStaggerStyles instead
       return ''
     },
     [staggerDelay]

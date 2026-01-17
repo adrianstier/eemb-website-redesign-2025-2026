@@ -122,6 +122,7 @@ export default function FacultyQuote() {
                     src={current.image}
                     alt={current.name}
                     fill
+                    sizes="(max-width: 768px) 192px, 256px"
                     className="object-cover"
                   />
                   {/* Subtle overlay */}
