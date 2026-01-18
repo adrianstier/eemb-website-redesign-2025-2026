@@ -137,6 +137,7 @@ function ThemeCard({ theme, index, isEven }: { theme: typeof themes[0]; index: n
                 src={theme.image}
                 alt={`${theme.title} research`}
                 fill
+                sizes="(max-width: 1024px) 100vw, 58vw"
                 className="object-cover transition-transform duration-700 ease-spring group-hover:scale-105"
               />
               {/* Overlay gradient */}

@@ -260,9 +260,9 @@ export default function HeroSection() {
         <span className="italic">{headlines[currentIndex].caption}</span>
       </p>
 
-      {/* Image indicators */}
+      {/* Image indicators - touch targets are 44x44px minimum for accessibility */}
       <div
-        className="absolute bottom-24 right-6 z-10 flex flex-col gap-2"
+        className="absolute bottom-24 right-4 z-10 flex flex-col gap-0"
         role="tablist"
         aria-label="Research topic slides"
       >
@@ -273,13 +273,17 @@ export default function HeroSection() {
             aria-selected={index === currentIndex}
             aria-controls={`slide-${index}`}
             onClick={() => goToSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-ocean-midnight focus:outline-none ${
-              index === currentIndex
-                ? 'bg-white scale-125'
-                : 'bg-white/30 hover:bg-white/60'
-            }`}
+            className="w-11 h-11 flex items-center justify-center focus:outline-none group"
             aria-label={`Slide ${index + 1}: ${headline.text}`}
-          />
+          >
+            <span
+              className={`block w-2 h-2 rounded-full transition-all duration-300 group-focus:ring-2 group-focus:ring-white group-focus:ring-offset-2 group-focus:ring-offset-ocean-midnight ${
+                index === currentIndex
+                  ? 'bg-white scale-125'
+                  : 'bg-white/30 group-hover:bg-white/60'
+              }`}
+            />
+          </button>
         ))}
       </div>
 

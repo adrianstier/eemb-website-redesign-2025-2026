@@ -5,10 +5,53 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
+// Validate redirect URL to prevent open redirect attacks
+function getSafeRedirectUrl(next: string | null): string {
+  // Default to home page
+  if (!next) return '/'
+
+  // Must start with / (relative path)
+  if (!next.startsWith('/')) return '/'
+
+  // Block protocol-relative URLs (//example.com)
+  if (next.startsWith('//')) return '/'
+
+  // Block URLs with encoded characters that could bypass checks
+  const decoded = decodeURIComponent(next)
+  if (decoded !== next && (decoded.includes('://') || decoded.startsWith('//'))) {
+    return '/'
+  }
+
+  // Allowed paths whitelist (add more as needed)
+  const allowedPrefixes = [
+    '/admin',
+    '/faculty',
+    '/people',
+    '/research',
+    '/news',
+    '/events',
+    '/academics',
+    '/about',
+    '/contact',
+  ]
+
+  // Allow root path
+  if (next === '/') return '/'
+
+  // Check if path starts with an allowed prefix
+  const isAllowed = allowedPrefixes.some(prefix => next.startsWith(prefix))
+  if (!isAllowed) return '/'
+
+  return next
+}
+
 function LoginContent() {
   const searchParams = useSearchParams()
   const error = searchParams?.get('error')
-  const next = searchParams?.get('next') || '/'
+  const rawNext = searchParams?.get('next') ?? null
+
+  // Validate and sanitize the redirect URL
+  const next = getSafeRedirectUrl(rawNext)
 
   const handleGoogleLogin = async () => {
     const supabase = createClient()

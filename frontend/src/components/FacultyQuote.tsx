@@ -9,21 +9,24 @@ const quotes = [
     name: "Dr. Holly Moeller",
     title: "Associate Professor",
     focus: "Microbial Ecology",
-    image: "/uploads/faculty/holly-moeller-976.jpg",
+    // TODO: Replace with actual faculty headshot at /uploads/faculty/holly-moeller.jpg
+    image: "/images/about/coral-reef.jpg",
   },
   {
     quote: "What drew me to EEMB was the chance to work at the intersection of evolution and ecology. Here, you can ask questions that span scales from genes to ecosystems.",
     name: "Dr. Gretchen Hofmann",
     title: "Professor",
     focus: "Marine Physiology",
-    image: "/uploads/faculty/gretchen-hofmann-200.jpg",
+    // TODO: Replace with actual faculty headshot at /uploads/faculty/gretchen-hofmann.jpg
+    image: "/images/about/marine-reef.jpg",
   },
   {
     quote: "Our students come here driven by real questions about real problems—coral bleaching, species extinction, climate impacts. We give them the tools to find answers.",
     name: "Dr. Deron Burkepile",
     title: "Professor",
     focus: "Marine Community Ecology",
-    image: "/uploads/faculty/deron-burkepile-200.jpg",
+    // TODO: Replace with actual faculty headshot at /uploads/faculty/deron-burkepile.jpg
+    image: "/images/about/kelp-banner.jpg",
   },
 ]
 
