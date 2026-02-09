@@ -2,186 +2,128 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Sparkles, CheckCircle, XCircle, Star, Calendar, MapPin, Mic } from 'lucide-react'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+import { CheckCircle, XCircle, Star, Calendar, MapPin, Mic, ArrowLeft, AlertTriangle } from 'lucide-react'
+
+interface EventData {
+  id: number
+  title: string
+  event_type: string | null
+  start_date: string
+  end_date: string | null
+  all_day: boolean | null
+  location: string | null
+  virtual_link: string | null
+  description: string | null
+  short_description: string | null
+  speaker: string | null
+  speaker_title: string | null
+  speaker_affiliation: string | null
+  speaker_bio: string | null
+  speaker_image_url: string | null
+  registration_required: boolean | null
+  registration_link: string | null
+  max_attendees: number | null
+  featured: boolean | null
+  canceled: boolean | null
+  cancellation_reason: string | null
+  slug: string | null
+  host_faculty_id: number | null
+  google_calendar_id: string | null
+}
 
 interface EventForm {
   title: string
-  eventType: string
-  startDate: string
-  endDate: string
-  allDay: boolean
+  event_type: string
+  start_date: string
+  end_date: string
+  all_day: boolean
   location: string
-  virtualLink: string
+  virtual_link: string
   description: string
-  shortDescription: string
+  short_description: string
   speaker: string
-  speakerTitle: string
-  speakerAffiliation: string
-  speakerBio: string
-  registrationRequired: boolean
-  registrationLink: string
-  registrationDeadline: string
-  maxAttendees: string
-  tags: string
+  speaker_title: string
+  speaker_affiliation: string
+  speaker_bio: string
+  speaker_image_url: string
+  registration_required: boolean
+  registration_link: string
+  max_attendees: string
   featured: boolean
-  recurring: boolean
-  recurringPattern: string
 }
 
 const initialFormState: EventForm = {
   title: '',
-  eventType: 'Seminar',
-  startDate: '',
-  endDate: '',
-  allDay: false,
+  event_type: 'Seminar',
+  start_date: '',
+  end_date: '',
+  all_day: false,
   location: '',
-  virtualLink: '',
+  virtual_link: '',
   description: '',
-  shortDescription: '',
+  short_description: '',
   speaker: '',
-  speakerTitle: '',
-  speakerAffiliation: '',
-  speakerBio: '',
-  registrationRequired: false,
-  registrationLink: '',
-  registrationDeadline: '',
-  maxAttendees: '',
-  tags: '',
+  speaker_title: '',
+  speaker_affiliation: '',
+  speaker_bio: '',
+  speaker_image_url: '',
+  registration_required: false,
+  registration_link: '',
+  max_attendees: '',
   featured: false,
-  recurring: false,
-  recurringPattern: ''
 }
+
+const EVENT_TYPES = [
+  'Seminar',
+  'Workshop',
+  'Conference',
+  'Lecture',
+  'Social',
+  'Recruitment',
+  'Defense',
+  'Meeting',
+  'Alumni Event',
+  'Field Trip',
+  'Other',
+]
 
 export default function AdminEventsPage() {
   const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [password, setPassword] = useState('')
-  const [loginError, setLoginError] = useState('')
   const [formData, setFormData] = useState<EventForm>(initialFormState)
-  const [aiPrompt, setAiPrompt] = useState('')
-  const [isAiGenerating, setIsAiGenerating] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
-  const [events, setEvents] = useState<any[]>([])
+  const [events, setEvents] = useState<EventData[]>([])
+  const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingEventId, setEditingEventId] = useState<number | null>(null)
+  const [cancelModalEventId, setCancelModalEventId] = useState<number | null>(null)
+  const [cancelReason, setCancelReason] = useState('')
 
   useEffect(() => {
-    // Check if already authenticated
-    const auth = localStorage.getItem('admin_auth')
-    if (auth === 'authenticated') {
-      setIsAuthenticated(true)
-      fetchEvents()
-    }
+    fetchEvents()
   }, [])
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Simple password check - in production, use proper authentication
-    if (password === 'eemb2024admin') {
-      setIsAuthenticated(true)
-      localStorage.setItem('admin_auth', 'authenticated')
-      setLoginError('')
-      fetchEvents()
-    } else {
-      setLoginError('Incorrect password')
-    }
-  }
-
-  const handleLogout = () => {
-    setIsAuthenticated(false)
-    localStorage.removeItem('admin_auth')
-    setPassword('')
-  }
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('http://localhost:1337/api/events?sort=startDate:desc&populate=*')
+      setLoading(true)
+      const response = await fetch('/api/admin/events')
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          router.push('/auth/login')
+          return
+        }
+        throw new Error('Failed to fetch events')
+      }
       const data = await response.json()
-      setEvents(data.data || [])
+      setEvents(data || [])
     } catch (error) {
       console.error('Error fetching events:', error)
-    }
-  }
-
-  const handleAiGenerate = async () => {
-    if (!aiPrompt.trim()) return
-
-    setIsAiGenerating(true)
-    try {
-      // Simulate AI generation with intelligent parsing
-      await new Promise(resolve => setTimeout(resolve, 1500))
-
-      // Parse the prompt for event details
-      const prompt = aiPrompt.toLowerCase()
-
-      // Extract date patterns
-      const dateMatch = prompt.match(/(\d{1,2}\/\d{1,2}\/\d{4})|(\d{4}-\d{2}-\d{2})|(january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2}/)
-
-      // Extract time patterns
-      const timeMatch = prompt.match(/(\d{1,2}:\d{2}\s*(am|pm)?)|(\d{1,2}\s*(am|pm))/)
-
-      // Extract event type
-      let eventType = 'Seminar'
-      if (prompt.includes('workshop')) eventType = 'Workshop'
-      else if (prompt.includes('conference')) eventType = 'Conference'
-      else if (prompt.includes('lecture')) eventType = 'Lecture'
-      else if (prompt.includes('social')) eventType = 'Social'
-      else if (prompt.includes('field trip')) eventType = 'Field Trip'
-      else if (prompt.includes('defense')) eventType = 'Defense'
-
-      // Extract location
-      const locationMatch = prompt.match(/(?:at|in|location:|venue:)\s*([^,.]+)/)
-
-      // Extract speaker info
-      const speakerMatch = prompt.match(/(?:speaker|presenter|by|with)\s*:?\s*([A-Z][a-z]+\s+[A-Z][a-z]+)/)
-
-      // Generate intelligent defaults
-      const generatedData: Partial<EventForm> = {
-        title: aiPrompt.split('.')[0].trim().replace(/^(event|seminar|workshop|lecture|create|add|new)\s+/i, ''),
-        eventType,
-        description: `<p>${aiPrompt}</p>`,
-        shortDescription: aiPrompt.substring(0, 200),
-      }
-
-      if (locationMatch) {
-        generatedData.location = locationMatch[1].trim()
-      } else if (prompt.includes('online') || prompt.includes('virtual') || prompt.includes('zoom')) {
-        generatedData.location = 'Virtual'
-        generatedData.virtualLink = 'https://'
-      } else {
-        generatedData.location = 'Life Sciences Building, Room 1001'
-      }
-
-      if (speakerMatch) {
-        generatedData.speaker = speakerMatch[1]
-      }
-
-      // Generate start date
-      if (dateMatch) {
-        const dateStr = dateMatch[0]
-        generatedData.startDate = new Date(dateStr).toISOString().split('.')[0]
-      } else {
-        // Default to next week
-        const nextWeek = new Date()
-        nextWeek.setDate(nextWeek.getDate() + 7)
-        nextWeek.setHours(15, 0, 0, 0)
-        generatedData.startDate = nextWeek.toISOString().split('.')[0]
-      }
-
-      // Set end date 1 hour later
-      const start = new Date(generatedData.startDate!)
-      const end = new Date(start.getTime() + 60 * 60 * 1000)
-      generatedData.endDate = end.toISOString().split('.')[0]
-
-      setFormData(prev => ({ ...prev, ...generatedData }))
-      setSaveMessage('ai:AI generated event details! Review and adjust as needed.')
+      setSaveMessage('error:Failed to load events. Please try again.')
       setTimeout(() => setSaveMessage(''), 5000)
-    } catch (error) {
-      console.error('Error generating with AI:', error)
-      setSaveMessage('Error generating event details')
     } finally {
-      setIsAiGenerating(false)
+      setLoading(false)
     }
   }
 
@@ -191,45 +133,37 @@ export default function AdminEventsPage() {
     setSaveMessage('')
 
     try {
-      const eventData = {
-        data: {
-          title: formData.title,
-          eventType: formData.eventType,
-          startDate: formData.startDate,
-          endDate: formData.endDate || null,
-          allDay: formData.allDay,
-          location: formData.location || null,
-          virtualLink: formData.virtualLink || null,
-          description: formData.description || null,
-          shortDescription: formData.shortDescription || null,
-          speaker: formData.speaker || null,
-          speakerTitle: formData.speakerTitle || null,
-          speakerAffiliation: formData.speakerAffiliation || null,
-          speakerBio: formData.speakerBio || null,
-          registrationRequired: formData.registrationRequired,
-          registrationLink: formData.registrationLink || null,
-          registrationDeadline: formData.registrationDeadline || null,
-          maxAttendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
-          tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : [],
-          featured: formData.featured,
-          recurring: formData.recurring,
-          recurringPattern: formData.recurringPattern || null,
-          publishedAt: new Date().toISOString()
-        }
+      const payload: Record<string, unknown> = {
+        title: formData.title,
+        event_type: formData.event_type || null,
+        start_date: formData.start_date,
+        end_date: formData.end_date || null,
+        all_day: formData.all_day,
+        location: formData.location || null,
+        virtual_link: formData.virtual_link || null,
+        description: formData.description || null,
+        short_description: formData.short_description || null,
+        speaker: formData.speaker || null,
+        speaker_title: formData.speaker_title || null,
+        speaker_affiliation: formData.speaker_affiliation || null,
+        speaker_bio: formData.speaker_bio || null,
+        speaker_image_url: formData.speaker_image_url || null,
+        registration_required: formData.registration_required,
+        registration_link: formData.registration_link || null,
+        max_attendees: formData.max_attendees ? parseInt(formData.max_attendees) : null,
+        featured: formData.featured,
       }
 
-      const url = editingEventId
-        ? `http://localhost:1337/api/events/${editingEventId}`
-        : 'http://localhost:1337/api/events'
+      if (editingEventId) {
+        payload.id = editingEventId
+      }
 
       const method = editingEventId ? 'PUT' : 'POST'
 
-      const response = await fetch(url, {
+      const response = await fetch('/api/admin/events', {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(eventData)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       })
 
       if (response.ok) {
@@ -241,57 +175,57 @@ export default function AdminEventsPage() {
         setTimeout(() => setSaveMessage(''), 5000)
       } else {
         const error = await response.json()
-        setSaveMessage(`error:Error: ${error.error?.message || 'Failed to save event'}`)
+        setSaveMessage(`error:Error: ${error.error || 'Failed to save event'}`)
       }
     } catch (error) {
       console.error('Error saving event:', error)
-      setSaveMessage('error:Error saving event. Make sure the backend is running.')
+      setSaveMessage('error:Error saving event. Please try again.')
     } finally {
       setIsSaving(false)
     }
   }
 
-  const handleEdit = (event: any) => {
-    const attrs = event.attributes
+  const handleEdit = (event: EventData) => {
     setFormData({
-      title: attrs.title || '',
-      eventType: attrs.eventType || 'Seminar',
-      startDate: attrs.startDate?.split('.')[0] || '',
-      endDate: attrs.endDate?.split('.')[0] || '',
-      allDay: attrs.allDay || false,
-      location: attrs.location || '',
-      virtualLink: attrs.virtualLink || '',
-      description: attrs.description || '',
-      shortDescription: attrs.shortDescription || '',
-      speaker: attrs.speaker || '',
-      speakerTitle: attrs.speakerTitle || '',
-      speakerAffiliation: attrs.speakerAffiliation || '',
-      speakerBio: attrs.speakerBio || '',
-      registrationRequired: attrs.registrationRequired || false,
-      registrationLink: attrs.registrationLink || '',
-      registrationDeadline: attrs.registrationDeadline?.split('.')[0] || '',
-      maxAttendees: attrs.maxAttendees?.toString() || '',
-      tags: Array.isArray(attrs.tags) ? attrs.tags.join(', ') : '',
-      featured: attrs.featured || false,
-      recurring: attrs.recurring || false,
-      recurringPattern: attrs.recurringPattern || ''
+      title: event.title || '',
+      event_type: event.event_type || 'Seminar',
+      start_date: event.start_date?.split('.')[0] || '',
+      end_date: event.end_date?.split('.')[0] || '',
+      all_day: event.all_day || false,
+      location: event.location || '',
+      virtual_link: event.virtual_link || '',
+      description: event.description || '',
+      short_description: event.short_description || '',
+      speaker: event.speaker || '',
+      speaker_title: event.speaker_title || '',
+      speaker_affiliation: event.speaker_affiliation || '',
+      speaker_bio: event.speaker_bio || '',
+      speaker_image_url: event.speaker_image_url || '',
+      registration_required: event.registration_required || false,
+      registration_link: event.registration_link || '',
+      max_attendees: event.max_attendees?.toString() || '',
+      featured: event.featured || false,
     })
     setEditingEventId(event.id)
     setShowForm(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleDelete = async (eventId: number) => {
-    if (!confirm('Are you sure you want to delete this event?')) return
+    if (!confirm('Are you sure you want to permanently delete this event? This cannot be undone.')) return
 
     try {
-      const response = await fetch(`http://localhost:1337/api/events/${eventId}`, {
-        method: 'DELETE'
+      const response = await fetch(`/api/admin/events?id=${eventId}`, {
+        method: 'DELETE',
       })
 
       if (response.ok) {
         setSaveMessage('success:Event deleted successfully!')
         fetchEvents()
         setTimeout(() => setSaveMessage(''), 3000)
+      } else {
+        const error = await response.json()
+        setSaveMessage(`error:Error: ${error.error || 'Failed to delete event'}`)
       }
     } catch (error) {
       console.error('Error deleting event:', error)
@@ -299,54 +233,45 @@ export default function AdminEventsPage() {
     }
   }
 
-  if (!isAuthenticated) {
+  const handleCancel = async () => {
+    if (!cancelModalEventId) return
+
+    try {
+      const reasonParam = cancelReason ? `&reason=${encodeURIComponent(cancelReason)}` : ''
+      const response = await fetch(
+        `/api/admin/events?id=${cancelModalEventId}&cancel=true${reasonParam}`,
+        { method: 'DELETE' }
+      )
+
+      if (response.ok) {
+        setSaveMessage('success:Event canceled successfully!')
+        setCancelModalEventId(null)
+        setCancelReason('')
+        fetchEvents()
+        setTimeout(() => setSaveMessage(''), 3000)
+      } else {
+        const error = await response.json()
+        setSaveMessage(`error:Error: ${error.error || 'Failed to cancel event'}`)
+      }
+    } catch (error) {
+      console.error('Error canceling event:', error)
+      setSaveMessage('error:Error canceling event')
+    }
+  }
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/')
+    router.refresh()
+  }
+
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-md w-full">
-          <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-ocean-blue rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Access</h1>
-            <p className="text-gray-600">Events Management System</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
-                placeholder="Enter admin password"
-                required
-              />
-            </div>
-
-            {loginError && (
-              <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                <p className="text-red-700 text-sm font-semibold">{loginError}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full bg-ocean-blue text-white py-3 rounded-lg font-semibold hover:bg-ocean-deep transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              Login
-            </button>
-
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
-              <p className="text-blue-700 text-xs">
-                <strong>Demo Password:</strong> eemb2024admin
-              </p>
-            </div>
-          </form>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ocean-teal mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading events...</p>
         </div>
       </div>
     )
@@ -359,8 +284,15 @@ export default function AdminEventsPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-1">Events Admin</h1>
-              <p className="text-white/80">AI-Powered Event Management</p>
+              <Link
+                href="/admin/dashboard"
+                className="inline-flex items-center gap-1 text-white/70 hover:text-white text-sm mb-2 transition"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Dashboard
+              </Link>
+              <h1 className="text-3xl font-bold mb-1">Events Management</h1>
+              <p className="text-white/80">Create and manage department events</p>
             </div>
             <div className="flex gap-4">
               <a
@@ -376,7 +308,7 @@ export default function AdminEventsPage() {
               </a>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition"
+                className="px-4 py-2 bg-red-500/80 hover:bg-red-600 rounded-lg transition"
               >
                 Logout
               </button>
@@ -386,22 +318,27 @@ export default function AdminEventsPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Status Messages */}
         {saveMessage && (() => {
-          const [type, message] = saveMessage.includes(':') ? saveMessage.split(':') : ['error', saveMessage]
+          const colonIndex = saveMessage.indexOf(':')
+          const type = colonIndex > -1 ? saveMessage.substring(0, colonIndex) : 'error'
+          const message = colonIndex > -1 ? saveMessage.substring(colonIndex + 1) : saveMessage
           const isSuccess = type === 'success'
-          const isAi = type === 'ai'
           return (
-            <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${isSuccess ? 'bg-green-50 border-l-4 border-green-500' : isAi ? 'bg-blue-50 border-l-4 border-blue-500' : 'bg-red-50 border-l-4 border-red-500'}`}>
-              {isSuccess && <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />}
-              {isAi && <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0" />}
-              {!isSuccess && !isAi && <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" />}
-              <p className={`font-semibold ${isSuccess ? 'text-green-700' : isAi ? 'text-blue-700' : 'text-red-700'}`}>
+            <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${isSuccess ? 'bg-green-50 border-l-4 border-green-500' : 'bg-red-50 border-l-4 border-red-500'}`}>
+              {isSuccess ? (
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+              )}
+              <p className={`font-semibold ${isSuccess ? 'text-green-700' : 'text-red-700'}`}>
                 {message}
               </p>
             </div>
           )
         })()}
 
+        {/* Create Button */}
         {!showForm && (
           <div className="mb-8">
             <button
@@ -410,7 +347,7 @@ export default function AdminEventsPage() {
                 setEditingEventId(null)
                 setFormData(initialFormState)
               }}
-              className="bg-ocean-coral text-white px-6 py-3 rounded-lg font-semibold hover:bg-ocean-sunset transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+              className="bg-ocean-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-ocean-deep transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -420,6 +357,7 @@ export default function AdminEventsPage() {
           </div>
         )}
 
+        {/* Event Form */}
         {showForm && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <div className="flex items-center justify-between mb-6">
@@ -440,55 +378,9 @@ export default function AdminEventsPage() {
               </button>
             </div>
 
-            {/* AI Assistant */}
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 mb-8 border-2 border-purple-200">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">AI Event Assistant</h3>
-              </div>
-              <p className="text-gray-700 mb-4">
-                Describe your event in natural language and let AI fill in the details!
-              </p>
-              <div className="space-y-3">
-                <textarea
-                  value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
-                  placeholder="Example: 'Create a seminar on coral reef conservation by Dr. Sarah Chen on December 15th at 3pm in the Marine Science Institute. She'll discuss her latest research on climate adaptation in tropical corals.'"
-                  className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                  rows={3}
-                />
-                <button
-                  onClick={handleAiGenerate}
-                  disabled={isAiGenerating || !aiPrompt.trim()}
-                  className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:from-purple-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isAiGenerating ? (
-                    <>
-                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                      Generate Event Details
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Event Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
+                {/* Title */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Event Title *
@@ -497,36 +389,31 @@ export default function AdminEventsPage() {
                     type="text"
                     required
                     value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                     placeholder="EEMB Seminar: Ocean Acidification"
                   />
                 </div>
 
+                {/* Event Type */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Event Type *
+                    Event Type
                   </label>
                   <select
-                    required
-                    value={formData.eventType}
-                    onChange={(e) => setFormData({...formData, eventType: e.target.value})}
+                    value={formData.event_type}
+                    onChange={(e) => setFormData({ ...formData, event_type: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                   >
-                    <option value="Seminar">Seminar</option>
-                    <option value="Workshop">Workshop</option>
-                    <option value="Conference">Conference</option>
-                    <option value="Lecture">Lecture</option>
-                    <option value="Social">Social</option>
-                    <option value="Recruitment">Recruitment</option>
-                    <option value="Defense">Defense</option>
-                    <option value="Meeting">Meeting</option>
-                    <option value="Alumni Event">Alumni Event</option>
-                    <option value="Field Trip">Field Trip</option>
-                    <option value="Other">Other</option>
+                    {EVENT_TYPES.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
+                {/* Start Date */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Start Date & Time *
@@ -534,24 +421,26 @@ export default function AdminEventsPage() {
                   <input
                     type="datetime-local"
                     required
-                    value={formData.startDate}
-                    onChange={(e) => setFormData({...formData, startDate: e.target.value})}
+                    value={formData.start_date}
+                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                   />
                 </div>
 
+                {/* End Date */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     End Date & Time
                   </label>
                   <input
                     type="datetime-local"
-                    value={formData.endDate}
-                    onChange={(e) => setFormData({...formData, endDate: e.target.value})}
+                    value={formData.end_date}
+                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                   />
                 </div>
 
+                {/* Location */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Location
@@ -559,51 +448,55 @@ export default function AdminEventsPage() {
                   <input
                     type="text"
                     value={formData.location}
-                    onChange={(e) => setFormData({...formData, location: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                     placeholder="Life Sciences Building, Room 1001"
                   />
                 </div>
 
+                {/* Virtual Link */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Virtual Link (Zoom, etc.)
                   </label>
                   <input
                     type="url"
-                    value={formData.virtualLink}
-                    onChange={(e) => setFormData({...formData, virtualLink: e.target.value})}
+                    value={formData.virtual_link}
+                    onChange={(e) => setFormData({ ...formData, virtual_link: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                     placeholder="https://zoom.us/..."
                   />
                 </div>
 
+                {/* Short Description */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Short Description
                   </label>
                   <textarea
-                    value={formData.shortDescription}
-                    onChange={(e) => setFormData({...formData, shortDescription: e.target.value})}
+                    value={formData.short_description}
+                    onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent resize-none"
                     rows={2}
                     placeholder="Brief summary for list views..."
                   />
                 </div>
 
+                {/* Full Description */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Full Description
                   </label>
                   <textarea
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent resize-none"
                     rows={4}
                     placeholder="Detailed event description..."
                   />
                 </div>
 
+                {/* Speaker Name */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Speaker Name
@@ -611,57 +504,75 @@ export default function AdminEventsPage() {
                   <input
                     type="text"
                     value={formData.speaker}
-                    onChange={(e) => setFormData({...formData, speaker: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, speaker: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                     placeholder="Dr. Jane Smith"
                   />
                 </div>
 
+                {/* Speaker Title */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Speaker Title
                   </label>
                   <input
                     type="text"
-                    value={formData.speakerTitle}
-                    onChange={(e) => setFormData({...formData, speakerTitle: e.target.value})}
+                    value={formData.speaker_title}
+                    onChange={(e) => setFormData({ ...formData, speaker_title: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                     placeholder="Professor of Marine Biology"
                   />
                 </div>
 
-                <div className="md:col-span-2">
+                {/* Speaker Affiliation */}
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Speaker Affiliation
                   </label>
                   <input
                     type="text"
-                    value={formData.speakerAffiliation}
-                    onChange={(e) => setFormData({...formData, speakerAffiliation: e.target.value})}
+                    value={formData.speaker_affiliation}
+                    onChange={(e) => setFormData({ ...formData, speaker_affiliation: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                     placeholder="Stanford University"
                   />
                 </div>
 
-                <div className="md:col-span-2">
+                {/* Speaker Image URL */}
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Tags (comma-separated)
+                    Speaker Image URL
                   </label>
                   <input
-                    type="text"
-                    value={formData.tags}
-                    onChange={(e) => setFormData({...formData, tags: e.target.value})}
+                    type="url"
+                    value={formData.speaker_image_url}
+                    onChange={(e) => setFormData({ ...formData, speaker_image_url: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
-                    placeholder="marine biology, conservation, coral reefs"
+                    placeholder="https://example.com/photo.jpg"
                   />
                 </div>
 
+                {/* Speaker Bio */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Speaker Bio
+                  </label>
+                  <textarea
+                    value={formData.speaker_bio}
+                    onChange={(e) => setFormData({ ...formData, speaker_bio: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent resize-none"
+                    rows={3}
+                    placeholder="Brief biography of the speaker..."
+                  />
+                </div>
+
+                {/* Checkboxes */}
                 <div>
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.featured}
-                      onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                      onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                       className="w-5 h-5 text-ocean-blue"
                     />
                     <span className="text-sm font-semibold text-gray-700">Featured Event</span>
@@ -672,8 +583,8 @@ export default function AdminEventsPage() {
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.allDay}
-                      onChange={(e) => setFormData({...formData, allDay: e.target.checked})}
+                      checked={formData.all_day}
+                      onChange={(e) => setFormData({ ...formData, all_day: e.target.checked })}
                       className="w-5 h-5 text-ocean-blue"
                     />
                     <span className="text-sm font-semibold text-gray-700">All Day Event</span>
@@ -684,15 +595,16 @@ export default function AdminEventsPage() {
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.registrationRequired}
-                      onChange={(e) => setFormData({...formData, registrationRequired: e.target.checked})}
+                      checked={formData.registration_required}
+                      onChange={(e) => setFormData({ ...formData, registration_required: e.target.checked })}
                       className="w-5 h-5 text-ocean-blue"
                     />
                     <span className="text-sm font-semibold text-gray-700">Registration Required</span>
                   </label>
                 </div>
 
-                {formData.registrationRequired && (
+                {/* Registration Fields (conditional) */}
+                {formData.registration_required && (
                   <>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -700,8 +612,8 @@ export default function AdminEventsPage() {
                       </label>
                       <input
                         type="url"
-                        value={formData.registrationLink}
-                        onChange={(e) => setFormData({...formData, registrationLink: e.target.value})}
+                        value={formData.registration_link}
+                        onChange={(e) => setFormData({ ...formData, registration_link: e.target.value })}
                         className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                         placeholder="https://..."
                       />
@@ -713,8 +625,8 @@ export default function AdminEventsPage() {
                       </label>
                       <input
                         type="number"
-                        value={formData.maxAttendees}
-                        onChange={(e) => setFormData({...formData, maxAttendees: e.target.value})}
+                        value={formData.max_attendees}
+                        onChange={(e) => setFormData({ ...formData, max_attendees: e.target.value })}
                         className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent"
                         placeholder="50"
                         min="0"
@@ -724,6 +636,7 @@ export default function AdminEventsPage() {
                 )}
               </div>
 
+              {/* Form Actions */}
               <div className="flex gap-4 pt-6 border-t">
                 <button
                   type="submit"
@@ -748,6 +661,52 @@ export default function AdminEventsPage() {
           </div>
         )}
 
+        {/* Cancel Event Modal */}
+        {cancelModalEventId && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">Cancel Event</h3>
+              </div>
+              <p className="text-gray-600 mb-4">
+                This will mark the event as canceled. It will still appear in the event list but will be shown as canceled to visitors.
+              </p>
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Cancellation Reason (optional)
+                </label>
+                <textarea
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-blue focus:border-transparent resize-none"
+                  rows={2}
+                  placeholder="Reason for cancellation..."
+                />
+              </div>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => {
+                    setCancelModalEventId(null)
+                    setCancelReason('')
+                  }}
+                  className="px-4 py-2 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition"
+                >
+                  Go Back
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition"
+                >
+                  Cancel Event
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Events List */}
         <div className="bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">All Events ({events.length})</h2>
@@ -758,53 +717,89 @@ export default function AdminEventsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <p className="text-lg">No events created yet</p>
+              <p className="text-sm mt-1">Click &quot;Create New Event&quot; to get started.</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {events.map(event => (
-                <div key={event.id} className="border-2 border-gray-200 rounded-lg p-6 hover:border-ocean-blue transition-all">
+              {events.map((event) => (
+                <div
+                  key={event.id}
+                  className={`border-2 rounded-lg p-6 hover:border-ocean-blue transition-all ${
+                    event.canceled
+                      ? 'border-yellow-300 bg-yellow-50/50'
+                      : 'border-gray-200'
+                  }`}
+                >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="px-3 py-1 bg-ocean-blue text-white rounded-full text-xs font-semibold">
-                          {event.attributes.eventType}
-                        </span>
-                        {event.attributes.featured && (
+                      <div className="flex items-center gap-3 mb-2 flex-wrap">
+                        {event.event_type && (
+                          <span className="px-3 py-1 bg-ocean-blue text-white rounded-full text-xs font-semibold">
+                            {event.event_type}
+                          </span>
+                        )}
+                        {event.featured && (
                           <span className="px-3 py-1 bg-yellow-400 text-yellow-900 rounded-full text-xs font-semibold flex items-center gap-1">
                             <Star className="w-3 h-3" /> Featured
                           </span>
                         )}
+                        {event.canceled && (
+                          <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex items-center gap-1">
+                            <XCircle className="w-3 h-3" /> Canceled
+                          </span>
+                        )}
                       </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{event.attributes.title}</h3>
+                      <h3 className={`text-xl font-bold mb-2 ${event.canceled ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
+                        {event.title}
+                      </h3>
+                      {event.canceled && event.cancellation_reason && (
+                        <p className="text-sm text-red-600 mb-2 italic">
+                          Reason: {event.cancellation_reason}
+                        </p>
+                      )}
                       <div className="text-sm text-gray-600 space-y-1">
                         <p className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          {new Date(event.attributes.startDate).toLocaleString()}
+                          {new Date(event.start_date).toLocaleString()}
+                          {event.end_date && (
+                            <span> - {new Date(event.end_date).toLocaleString()}</span>
+                          )}
                         </p>
-                        {event.attributes.location && (
+                        {event.location && (
                           <p className="flex items-center gap-2">
                             <MapPin className="w-4 h-4" />
-                            {event.attributes.location}
+                            {event.location}
                           </p>
                         )}
-                        {event.attributes.speaker && (
+                        {event.speaker && (
                           <p className="flex items-center gap-2">
                             <Mic className="w-4 h-4" />
-                            {event.attributes.speaker}
+                            {event.speaker}
+                            {event.speaker_affiliation && (
+                              <span className="text-gray-400">({event.speaker_affiliation})</span>
+                            )}
                           </p>
                         )}
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 ml-4 flex-shrink-0">
                       <button
                         onClick={() => handleEdit(event)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm"
                       >
                         Edit
                       </button>
+                      {!event.canceled && (
+                        <button
+                          onClick={() => setCancelModalEventId(event.id)}
+                          className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition text-sm"
+                        >
+                          Cancel
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDelete(event.id)}
-                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm"
                       >
                         Delete
                       </button>

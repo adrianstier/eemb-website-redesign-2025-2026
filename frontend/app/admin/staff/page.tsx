@@ -1,29 +1,26 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface StaffMember {
   id: number
-  attributes: {
-    fullName: string
-    firstName: string
-    lastName: string
-    email: string
-    title: string
-    office: string
-    phone: string
-    bio: string
-    responsibilities: string[]
-    department: string
-    personalWebsite: string
-    linkedin: string
-  }
+  first_name: string
+  last_name: string
+  full_name: string | null
+  email: string
+  title: string | null
+  office: string | null
+  phone: string | null
+  bio: string | null
+  short_bio: string | null
+  responsibilities: string[] | null
+  department: string | null
+  linkedin: string | null
+  active: boolean
 }
 
 export default function StaffManagement() {
-  const router = useRouter()
   const [staff, setStaff] = useState<StaffMember[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -32,22 +29,18 @@ export default function StaffManagement() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken')
-    if (!token) {
-      router.push('/admin')
-      return
-    }
+    fetchStaff()
+  }, [])
 
-    fetchStaff(token)
-  }, [router])
-
-  const fetchStaff = async (token: string) => {
+  const fetchStaff = async () => {
     try {
-      const response = await fetch('http://localhost:1337/api/staff-members?pagination[limit]=200&sort=fullName:asc', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const response = await fetch('/api/admin/staff')
+      if (!response.ok) {
+        console.error('Failed to fetch staff:', response.status)
+        return
+      }
       const data = await response.json()
-      setStaff(data.data || [])
+      setStaff(data || [])
     } catch (error) {
       console.error('Failed to fetch staff:', error)
     } finally {
@@ -58,18 +51,18 @@ export default function StaffManagement() {
   const handleEdit = (member: StaffMember) => {
     setEditingId(member.id)
     setEditForm({
-      fullName: member.attributes.fullName || '',
-      firstName: member.attributes.firstName || '',
-      lastName: member.attributes.lastName || '',
-      email: member.attributes.email || '',
-      title: member.attributes.title || '',
-      office: member.attributes.office || '',
-      phone: member.attributes.phone || '',
-      bio: member.attributes.bio || '',
-      responsibilities: member.attributes.responsibilities?.join(', ') || '',
-      department: member.attributes.department || '',
-      personalWebsite: member.attributes.personalWebsite || '',
-      linkedin: member.attributes.linkedin || ''
+      first_name: member.first_name || '',
+      last_name: member.last_name || '',
+      full_name: member.full_name || '',
+      email: member.email || '',
+      title: member.title || '',
+      office: member.office || '',
+      phone: member.phone || '',
+      bio: member.bio || '',
+      short_bio: member.short_bio || '',
+      responsibilities: member.responsibilities?.join(', ') || '',
+      department: member.department || '',
+      linkedin: member.linkedin || ''
     })
   }
 
@@ -77,7 +70,6 @@ export default function StaffManagement() {
     if (!editingId) return
 
     setSaving(true)
-    const token = localStorage.getItem('adminToken')
 
     try {
       const responsibilities = editForm.responsibilities
@@ -85,31 +77,31 @@ export default function StaffManagement() {
         : []
 
       const dataToSave = {
-        fullName: editForm.fullName,
-        firstName: editForm.firstName,
-        lastName: editForm.lastName,
+        id: editingId,
+        first_name: editForm.first_name,
+        last_name: editForm.last_name,
+        full_name: editForm.full_name,
         email: editForm.email,
         title: editForm.title,
         office: editForm.office,
         phone: editForm.phone,
         bio: editForm.bio,
+        short_bio: editForm.short_bio,
         responsibilities,
         department: editForm.department,
-        personalWebsite: editForm.personalWebsite,
         linkedin: editForm.linkedin
       }
 
-      const response = await fetch(`http://localhost:1337/api/staff-members/${editingId}`, {
+      const response = await fetch('/api/admin/staff', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ data: dataToSave })
+        body: JSON.stringify(dataToSave)
       })
 
       if (response.ok) {
-        await fetchStaff(token!)
+        await fetchStaff()
         setEditingId(null)
         setEditForm({})
       } else {
@@ -124,9 +116,9 @@ export default function StaffManagement() {
   }
 
   const filteredStaff = staff.filter(member =>
-    member.attributes.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.attributes.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.attributes.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    member.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.title?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   if (loading) {
@@ -179,8 +171,8 @@ export default function StaffManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                         <input
                           type="text"
-                          value={editForm.firstName}
-                          onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
+                          value={editForm.first_name}
+                          onChange={(e) => setEditForm({ ...editForm, first_name: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                         />
                       </div>
@@ -188,8 +180,8 @@ export default function StaffManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                         <input
                           type="text"
-                          value={editForm.lastName}
-                          onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
+                          value={editForm.last_name}
+                          onChange={(e) => setEditForm({ ...editForm, last_name: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                         />
                       </div>
@@ -197,8 +189,8 @@ export default function StaffManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name (Display)</label>
                         <input
                           type="text"
-                          value={editForm.fullName}
-                          onChange={(e) => setEditForm({ ...editForm, fullName: e.target.value })}
+                          value={editForm.full_name}
+                          onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                         />
                       </div>
@@ -269,6 +261,16 @@ export default function StaffManagement() {
                         />
                       </div>
                       <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Short Bio</label>
+                        <textarea
+                          value={editForm.short_bio}
+                          onChange={(e) => setEditForm({ ...editForm, short_bio: e.target.value })}
+                          rows={2}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                          placeholder="One-line summary for card views..."
+                        />
+                      </div>
+                      <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Responsibilities (comma-separated)</label>
                         <textarea
                           value={editForm.responsibilities}
@@ -285,16 +287,6 @@ export default function StaffManagement() {
                   <div className="mb-6">
                     <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Links</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Personal Website</label>
-                        <input
-                          type="url"
-                          value={editForm.personalWebsite}
-                          onChange={(e) => setEditForm({ ...editForm, personalWebsite: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                          placeholder="https://..."
-                        />
-                      </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
                         <input
@@ -331,56 +323,56 @@ export default function StaffManagement() {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{member.attributes.fullName}</h3>
-                      <p className="text-sm text-gray-600">{member.attributes.title}</p>
+                      <h3 className="text-lg font-semibold text-gray-900">{member.full_name}</h3>
+                      <p className="text-sm text-gray-600">{member.title}</p>
                     </div>
-                    <button
-                      onClick={() => handleEdit(member)}
-                      className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-sm font-medium"
-                    >
-                      Edit
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {!member.active && (
+                        <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                          Inactive
+                        </span>
+                      )}
+                      <button
+                        onClick={() => handleEdit(member)}
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-sm font-medium"
+                      >
+                        Edit
+                      </button>
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="text-gray-600">Email:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.email || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.email || 'N/A'}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Phone:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.phone || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.phone || 'N/A'}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Office:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.office || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.office || 'N/A'}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Department:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.department || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.department || 'N/A'}</span>
                     </div>
                   </div>
 
                   {/* Links */}
-                  {(member.attributes.personalWebsite || member.attributes.linkedin) && (
+                  {member.linkedin && (
                     <div className="mt-4 flex flex-wrap gap-3">
-                      {member.attributes.personalWebsite && (
-                        <a href={member.attributes.personalWebsite} target="_blank" rel="noopener noreferrer" className="text-xs text-green-600 hover:underline">
-                          Website
-                        </a>
-                      )}
-                      {member.attributes.linkedin && (
-                        <a href={member.attributes.linkedin} target="_blank" rel="noopener noreferrer" className="text-xs text-green-600 hover:underline">
-                          LinkedIn
-                        </a>
-                      )}
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-xs text-green-600 hover:underline">
+                        LinkedIn
+                      </a>
                     </div>
                   )}
 
-                  {member.attributes.responsibilities && member.attributes.responsibilities.length > 0 && (
+                  {member.responsibilities && member.responsibilities.length > 0 && (
                     <div className="mt-4">
                       <span className="text-sm text-gray-600">Responsibilities:</span>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        {member.attributes.responsibilities.map((resp, idx) => (
+                        {member.responsibilities.map((resp, idx) => (
                           <span key={idx} className="px-3 py-1 bg-green-500/10 text-green-600 rounded-full text-xs">
                             {resp}
                           </span>
@@ -389,9 +381,9 @@ export default function StaffManagement() {
                     </div>
                   )}
 
-                  {member.attributes.bio && (
+                  {member.bio && (
                     <div className="mt-4">
-                      <p className="text-sm text-gray-600 line-clamp-2">{member.attributes.bio}</p>
+                      <p className="text-sm text-gray-600 line-clamp-2">{member.bio}</p>
                     </div>
                   )}
                 </div>

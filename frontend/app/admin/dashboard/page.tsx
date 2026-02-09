@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface Stats {
   faculty: number
@@ -14,50 +15,47 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [stats, setStats] = useState<Stats>({ faculty: 0, students: 0, staff: 0 })
   const [loading, setLoading] = useState(true)
-  const [adminUser, setAdminUser] = useState<any>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
 
   useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('adminToken')
-    const user = localStorage.getItem('adminUser')
+    const init = async () => {
+      // Get user info from Supabase session
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
 
-    if (!token) {
-      router.push('/admin')
-      return
+      if (user?.email) {
+        setUserEmail(user.email)
+      }
+
+      // Fetch statistics from Supabase API routes
+      await fetchStats()
     }
 
-    if (user) {
-      setAdminUser(JSON.parse(user))
-    }
+    init()
+  }, [])
 
-    // Fetch statistics
-    fetchStats(token)
-  }, [router])
-
-  const fetchStats = async (token: string) => {
+  const fetchStats = async () => {
     try {
-      const [facultyRes, studentsRes, staffRes] = await Promise.all([
-        fetch('http://localhost:1337/api/faculties?pagination[limit]=1', {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        fetch('http://localhost:1337/api/graduate-students?pagination[limit]=1', {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        fetch('http://localhost:1337/api/staff-members?pagination[limit]=1', {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+      const [facultyRes, studentsRes] = await Promise.all([
+        fetch('/api/admin/faculty'),
+        fetch('/api/admin/students'),
       ])
 
-      const [facultyData, studentsData, staffData] = await Promise.all([
-        facultyRes.json(),
-        studentsRes.json(),
-        staffRes.json()
+      const [facultyData, studentsData] = await Promise.all([
+        facultyRes.ok ? facultyRes.json() : [],
+        studentsRes.ok ? studentsRes.json() : [],
       ])
+
+      // Get staff count via direct Supabase query
+      const supabase = createClient()
+      const { count: staffCount } = await supabase
+        .from('staff')
+        .select('*', { count: 'exact', head: true })
 
       setStats({
-        faculty: facultyData.meta?.pagination?.total || 0,
-        students: studentsData.meta?.pagination?.total || 0,
-        staff: staffData.meta?.pagination?.total || 0
+        faculty: Array.isArray(facultyData) ? facultyData.length : 0,
+        students: Array.isArray(studentsData) ? studentsData.length : 0,
+        staff: staffCount ?? 0,
       })
     } catch (error) {
       console.error('Failed to fetch stats:', error)
@@ -66,10 +64,11 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken')
-    localStorage.removeItem('adminUser')
-    router.push('/admin')
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/')
+    router.refresh()
   }
 
   if (loading) {
@@ -98,7 +97,7 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">
-                Welcome, <span className="font-medium">{adminUser?.username || 'Admin'}</span>
+                Welcome, <span className="font-medium">{userEmail || 'Admin'}</span>
               </span>
               <button
                 onClick={handleLogout}
@@ -236,31 +235,55 @@ export default function AdminDashboard() {
             </div>
           </Link>
 
-          {/* Strapi Admin */}
-          <a href="http://localhost:1337/admin" target="_blank" rel="noopener noreferrer" className="group">
+          {/* Events Management */}
+          <Link href="/admin/events" className="group">
             <div className="bg-white rounded-lg shadow hover:shadow-lg transition-all p-6 border border-gray-200 hover:border-purple-500">
               <div className="flex items-center gap-4 mb-4">
                 <div className="bg-purple-500/10 rounded-lg p-3 group-hover:bg-purple-500/20 transition">
                   <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 group-hover:text-purple-500 transition">
-                  Strapi CMS
+                  Manage Events
                 </h3>
               </div>
               <p className="text-gray-600 text-sm mb-4">
-                Access the full Strapi admin panel for advanced management
+                Create and manage department seminars, workshops, and events
               </p>
               <div className="flex items-center text-purple-500 font-medium text-sm group-hover:gap-2 transition-all">
-                <span>Open Panel</span>
+                <span>Manage</span>
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
             </div>
-          </a>
+          </Link>
+
+          {/* News Management */}
+          <Link href="/admin/news" className="group">
+            <div className="bg-white rounded-lg shadow hover:shadow-lg transition-all p-6 border border-gray-200 hover:border-amber-500">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="bg-amber-500/10 rounded-lg p-3 group-hover:bg-amber-500/20 transition">
+                  <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-amber-500 transition">
+                  Manage News
+                </h3>
+              </div>
+              <p className="text-gray-600 text-sm mb-4">
+                Publish news articles, research highlights, and announcements
+              </p>
+              <div className="flex items-center text-amber-500 font-medium text-sm group-hover:gap-2 transition-all">
+                <span>Manage</span>
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
 
           {/* View Site */}
           <Link href="/" className="group">

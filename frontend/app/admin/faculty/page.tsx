@@ -1,34 +1,28 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface FacultyMember {
   id: number
-  attributes: {
-    fullName: string
-    firstName: string
-    lastName: string
-    email: string
-    title: string
-    office: string
-    phone: string
-    bio: string
-    shortBio: string
-    researchInterests: string[]
-    research_areas: string
-    personalWebsite: string
-    labWebsite: string
-    googleScholar: string
-    orcid: string
-    twitter: string
-    linkedin: string
-  }
+  first_name: string
+  last_name: string
+  full_name: string | null
+  email: string
+  title: string
+  office: string | null
+  phone: string | null
+  bio: string | null
+  short_bio: string | null
+  research_interests: any[] | null
+  google_scholar: string | null
+  orcid: string | null
+  lab_website: string | null
+  active: boolean
+  slug: string | null
 }
 
 export default function FacultyManagement() {
-  const router = useRouter()
   const [faculty, setFaculty] = useState<FacultyMember[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -37,22 +31,17 @@ export default function FacultyManagement() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken')
-    if (!token) {
-      router.push('/admin')
-      return
-    }
+    fetchFaculty()
+  }, [])
 
-    fetchFaculty(token)
-  }, [router])
-
-  const fetchFaculty = async (token: string) => {
+  const fetchFaculty = async () => {
     try {
-      const response = await fetch('http://localhost:1337/api/faculties?pagination[limit]=200&sort=fullName:asc', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const response = await fetch('/api/admin/faculty')
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.status}`)
+      }
       const data = await response.json()
-      setFaculty(data.data || [])
+      setFaculty(data || [])
     } catch (error) {
       console.error('Failed to fetch faculty:', error)
     } finally {
@@ -63,23 +52,21 @@ export default function FacultyManagement() {
   const handleEdit = (member: FacultyMember) => {
     setEditingId(member.id)
     setEditForm({
-      fullName: member.attributes.fullName || '',
-      firstName: member.attributes.firstName || '',
-      lastName: member.attributes.lastName || '',
-      email: member.attributes.email || '',
-      title: member.attributes.title || '',
-      office: member.attributes.office || '',
-      phone: member.attributes.phone || '',
-      bio: member.attributes.bio || '',
-      shortBio: member.attributes.shortBio || '',
-      researchInterests: member.attributes.researchInterests?.join(', ') || '',
-      research_areas: member.attributes.research_areas || '',
-      personalWebsite: member.attributes.personalWebsite || '',
-      labWebsite: member.attributes.labWebsite || '',
-      googleScholar: member.attributes.googleScholar || '',
-      orcid: member.attributes.orcid || '',
-      twitter: member.attributes.twitter || '',
-      linkedin: member.attributes.linkedin || ''
+      full_name: member.full_name || '',
+      first_name: member.first_name || '',
+      last_name: member.last_name || '',
+      email: member.email || '',
+      title: member.title || '',
+      office: member.office || '',
+      phone: member.phone || '',
+      bio: member.bio || '',
+      short_bio: member.short_bio || '',
+      research_interests: Array.isArray(member.research_interests)
+        ? member.research_interests.join(', ')
+        : '',
+      lab_website: member.lab_website || '',
+      google_scholar: member.google_scholar || '',
+      orcid: member.orcid || '',
     })
   }
 
@@ -87,50 +74,46 @@ export default function FacultyManagement() {
     if (!editingId) return
 
     setSaving(true)
-    const token = localStorage.getItem('adminToken')
 
     try {
       // Parse research interests from comma-separated string
-      const researchInterests = editForm.researchInterests
-        ? editForm.researchInterests.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
+      const research_interests = editForm.research_interests
+        ? editForm.research_interests.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
         : []
 
       const dataToSave = {
-        fullName: editForm.fullName,
-        firstName: editForm.firstName,
-        lastName: editForm.lastName,
+        id: editingId,
+        full_name: editForm.full_name,
+        first_name: editForm.first_name,
+        last_name: editForm.last_name,
         email: editForm.email,
         title: editForm.title,
-        office: editForm.office,
-        phone: editForm.phone,
-        bio: editForm.bio,
-        shortBio: editForm.shortBio,
-        researchInterests,
-        research_areas: editForm.research_areas,
-        personalWebsite: editForm.personalWebsite,
-        labWebsite: editForm.labWebsite,
-        googleScholar: editForm.googleScholar,
-        orcid: editForm.orcid,
-        twitter: editForm.twitter,
-        linkedin: editForm.linkedin
+        office: editForm.office || null,
+        phone: editForm.phone || null,
+        bio: editForm.bio || null,
+        short_bio: editForm.short_bio || null,
+        research_interests,
+        lab_website: editForm.lab_website || null,
+        google_scholar: editForm.google_scholar || null,
+        orcid: editForm.orcid || null,
       }
 
-      const response = await fetch(`http://localhost:1337/api/faculties/${editingId}`, {
+      const response = await fetch('/api/admin/faculty', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ data: dataToSave })
+        body: JSON.stringify(dataToSave),
       })
 
       if (response.ok) {
         // Refresh faculty list
-        await fetchFaculty(token!)
+        await fetchFaculty()
         setEditingId(null)
         setEditForm({})
       } else {
-        alert('Failed to save changes')
+        const errorData = await response.json().catch(() => null)
+        alert(errorData?.error || 'Failed to save changes')
       }
     } catch (error) {
       console.error('Failed to save:', error)
@@ -140,11 +123,16 @@ export default function FacultyManagement() {
     }
   }
 
-  const filteredFaculty = faculty.filter(member =>
-    member.attributes.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.attributes.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.attributes.title?.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const displayName = (member: FacultyMember) =>
+    member.full_name || `${member.first_name} ${member.last_name}`
+
+  const filteredFaculty = faculty.filter(member => {
+    const name = displayName(member).toLowerCase()
+    const email = (member.email || '').toLowerCase()
+    const title = (member.title || '').toLowerCase()
+    const term = searchTerm.toLowerCase()
+    return name.includes(term) || email.includes(term) || title.includes(term)
+  })
 
   if (loading) {
     return (
@@ -200,8 +188,8 @@ export default function FacultyManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                         <input
                           type="text"
-                          value={editForm.firstName}
-                          onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
+                          value={editForm.first_name}
+                          onChange={(e) => setEditForm({ ...editForm, first_name: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                         />
                       </div>
@@ -209,8 +197,8 @@ export default function FacultyManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                         <input
                           type="text"
-                          value={editForm.lastName}
-                          onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
+                          value={editForm.last_name}
+                          onChange={(e) => setEditForm({ ...editForm, last_name: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                         />
                       </div>
@@ -218,8 +206,8 @@ export default function FacultyManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name (Display)</label>
                         <input
                           type="text"
-                          value={editForm.fullName}
-                          onChange={(e) => setEditForm({ ...editForm, fullName: e.target.value })}
+                          value={editForm.full_name}
+                          onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                         />
                       </div>
@@ -272,8 +260,8 @@ export default function FacultyManagement() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Short Bio</label>
                         <textarea
-                          value={editForm.shortBio}
-                          onChange={(e) => setEditForm({ ...editForm, shortBio: e.target.value })}
+                          value={editForm.short_bio}
+                          onChange={(e) => setEditForm({ ...editForm, short_bio: e.target.value })}
                           rows={3}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                           placeholder="Brief description for cards and previews..."
@@ -292,49 +280,26 @@ export default function FacultyManagement() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Research Interests (comma-separated)</label>
                         <textarea
-                          value={editForm.researchInterests}
-                          onChange={(e) => setEditForm({ ...editForm, researchInterests: e.target.value })}
+                          value={editForm.research_interests}
+                          onChange={(e) => setEditForm({ ...editForm, research_interests: e.target.value })}
                           rows={2}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                           placeholder="Marine Biology, Ecology, Evolution, Climate Change"
                         />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Research Areas</label>
-                        <select
-                          value={editForm.research_areas}
-                          onChange={(e) => setEditForm({ ...editForm, research_areas: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
-                        >
-                          <option value="">Select research area...</option>
-                          <option value="ecology">Ecology</option>
-                          <option value="evolution">Evolution</option>
-                          <option value="marine-biology">Marine Biology</option>
-                        </select>
-                      </div>
                     </div>
                   </div>
 
-                  {/* Section 3: Links & Social Media */}
+                  {/* Section 3: Academic Links */}
                   <div className="mb-6">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Links & Social Media</h4>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Academic Links</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Personal Website</label>
-                        <input
-                          type="url"
-                          value={editForm.personalWebsite}
-                          onChange={(e) => setEditForm({ ...editForm, personalWebsite: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
-                          placeholder="https://..."
-                        />
-                      </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Lab Website</label>
                         <input
                           type="url"
-                          value={editForm.labWebsite}
-                          onChange={(e) => setEditForm({ ...editForm, labWebsite: e.target.value })}
+                          value={editForm.lab_website}
+                          onChange={(e) => setEditForm({ ...editForm, lab_website: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                           placeholder="https://..."
                         />
@@ -343,8 +308,8 @@ export default function FacultyManagement() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Google Scholar</label>
                         <input
                           type="url"
-                          value={editForm.googleScholar}
-                          onChange={(e) => setEditForm({ ...editForm, googleScholar: e.target.value })}
+                          value={editForm.google_scholar}
+                          onChange={(e) => setEditForm({ ...editForm, google_scholar: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                           placeholder="https://scholar.google.com/..."
                         />
@@ -357,26 +322,6 @@ export default function FacultyManagement() {
                           onChange={(e) => setEditForm({ ...editForm, orcid: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
                           placeholder="https://orcid.org/0000-..."
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Twitter/X</label>
-                        <input
-                          type="url"
-                          value={editForm.twitter}
-                          onChange={(e) => setEditForm({ ...editForm, twitter: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
-                          placeholder="https://twitter.com/..."
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
-                        <input
-                          type="url"
-                          value={editForm.linkedin}
-                          onChange={(e) => setEditForm({ ...editForm, linkedin: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
-                          placeholder="https://linkedin.com/in/..."
                         />
                       </div>
                     </div>
@@ -406,8 +351,15 @@ export default function FacultyManagement() {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{member.attributes.fullName}</h3>
-                      <p className="text-sm text-gray-600">{member.attributes.title}</p>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-semibold text-gray-900">{displayName(member)}</h3>
+                        {!member.active && (
+                          <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                            Inactive
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600">{member.title}</p>
                     </div>
                     <button
                       onClick={() => handleEdit(member)}
@@ -419,65 +371,44 @@ export default function FacultyManagement() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="text-gray-600">Email:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.email || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.email || 'N/A'}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Phone:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.phone || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.phone || 'N/A'}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Office:</span>
-                      <span className="ml-2 text-gray-900">{member.attributes.office || 'N/A'}</span>
+                      <span className="ml-2 text-gray-900">{member.office || 'N/A'}</span>
                     </div>
-                    {member.attributes.research_areas && (
-                      <div>
-                        <span className="text-gray-600">Area:</span>
-                        <span className="ml-2 text-gray-900 capitalize">{member.attributes.research_areas.replace('-', ' ')}</span>
-                      </div>
-                    )}
                   </div>
 
-                  {/* Social/Academic Links */}
-                  {(member.attributes.personalWebsite || member.attributes.labWebsite || member.attributes.googleScholar || member.attributes.orcid || member.attributes.twitter || member.attributes.linkedin) && (
+                  {/* Academic Links */}
+                  {(member.lab_website || member.google_scholar || member.orcid) && (
                     <div className="mt-4 flex flex-wrap gap-3">
-                      {member.attributes.personalWebsite && (
-                        <a href={member.attributes.personalWebsite} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
-                          Website
-                        </a>
-                      )}
-                      {member.attributes.labWebsite && (
-                        <a href={member.attributes.labWebsite} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
+                      {member.lab_website && (
+                        <a href={member.lab_website} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
                           Lab
                         </a>
                       )}
-                      {member.attributes.googleScholar && (
-                        <a href={member.attributes.googleScholar} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
+                      {member.google_scholar && (
+                        <a href={member.google_scholar} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
                           Scholar
                         </a>
                       )}
-                      {member.attributes.orcid && (
-                        <a href={member.attributes.orcid} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
+                      {member.orcid && (
+                        <a href={member.orcid} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
                           ORCID
-                        </a>
-                      )}
-                      {member.attributes.twitter && (
-                        <a href={member.attributes.twitter} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
-                          Twitter
-                        </a>
-                      )}
-                      {member.attributes.linkedin && (
-                        <a href={member.attributes.linkedin} target="_blank" rel="noopener noreferrer" className="text-xs text-ocean-teal hover:underline">
-                          LinkedIn
                         </a>
                       )}
                     </div>
                   )}
 
-                  {member.attributes.researchInterests && member.attributes.researchInterests.length > 0 && (
+                  {member.research_interests && member.research_interests.length > 0 && (
                     <div className="mt-4">
                       <span className="text-sm text-gray-600">Research Interests:</span>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        {member.attributes.researchInterests.map((interest, idx) => (
+                        {member.research_interests.map((interest, idx) => (
                           <span key={idx} className="px-3 py-1 bg-ocean-teal/10 text-ocean-teal rounded-full text-xs">
                             {interest}
                           </span>
@@ -486,9 +417,9 @@ export default function FacultyManagement() {
                     </div>
                   )}
 
-                  {member.attributes.shortBio && (
+                  {member.short_bio && (
                     <div className="mt-4">
-                      <p className="text-sm text-gray-600 line-clamp-2">{member.attributes.shortBio}</p>
+                      <p className="text-sm text-gray-600 line-clamp-2">{member.short_bio}</p>
                     </div>
                   )}
                 </div>
