@@ -1,4 +1,5 @@
 # R Studio
+*.Rproj
 .Rproj.user
 .Rhistory
 .RData

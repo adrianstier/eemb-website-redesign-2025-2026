@@ -8,7 +8,7 @@ This file provides context for AI assistants (Claude) working on the EEMB websit
 
 **Department:** Ecology, Evolution & Marine Biology (EEMB), UC Santa Barbara
 **Website Purpose:** Modern, accessible department website showcasing research, recruiting students, and connecting with the scientific community
-**Tech Stack:** Next.js 14 + Strapi CMS + TypeScript + Tailwind CSS
+**Tech Stack:** Next.js 14 + Supabase + TypeScript + Tailwind CSS
 
 ---
 
@@ -234,24 +234,31 @@ rounded-3xl         /* Cards */
 
 ### Start Development
 ```bash
-# Backend
-cd backend && npm run develop
-
-# Frontend
 cd frontend && npm run dev
+# Website: http://localhost:3000
+# Supabase dashboard: https://supabase.com/dashboard (cloud-hosted, no local backend needed)
 ```
 
 ### Key URLs
 - Frontend: http://localhost:3000
-- Strapi Admin: http://localhost:1337/admin
-- API: http://localhost:1337/api
+- Supabase Dashboard: https://supabase.com/dashboard
+- Admin Panel: http://localhost:3000/admin
 
 ### Database
-```bash
-# Query SQLite
-sqlite3 backend/.tmp/data.db "SELECT COUNT(*) FROM faculties"
-```
+Supabase PostgreSQL (cloud-hosted). Manage via Supabase dashboard or CLI.
+Types auto-generated at `frontend/src/lib/supabase/types.ts`.
 
 ---
 
-*Last updated: January 2026*
+*Last updated: February 2026*
+
+---
+
+## File Ownership (parallel work)
+- `frontend/` — web UI, splittable by page/component
+- `backend/` — API server, independent from frontend
+- `scraping/` — data collection scripts, independent
+- `scripts/` — utility scripts, independent
+- `infrastructure/` — deployment config, independent
+- `docs/` — documentation, independent
+- `planning documents/` — specs, independent
