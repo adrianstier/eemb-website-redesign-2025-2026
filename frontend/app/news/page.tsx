@@ -1,23 +1,20 @@
-import { createClient } from '@/lib/supabase/server'
+import { getAllNews } from '@/lib/data/news'
 import NewsPageClient from './NewsPageClient'
+import type { Metadata } from 'next'
+
+export const revalidate = 900
+
+export const metadata: Metadata = {
+  title: 'News | EEMB',
+  description: 'Latest news from the Department of Ecology, Evolution, and Marine Biology at UC Santa Barbara.',
+}
 
 // Server component for data fetching
 export default async function NewsPage() {
-  const supabase = await createClient()
+  const articles = await getAllNews()
 
-  // Fetch all news articles from Supabase
-  const { data: articles, error } = await supabase
-    .from('news_articles')
-    .select('*')
-    .order('publish_date', { ascending: false })
-
-  if (error) {
-    console.error('Error fetching news:', error)
-  }
-
-  // Transform Supabase data to match the expected NewsItem interface
-  const newsData = (articles || []).map(article => {
-    // Parse tags - could be JSON array or null
+  // Transform to match the expected NewsItem interface
+  const newsData = articles.map(article => {
     let topic = 'ecology'
     if (article.tags) {
       const tagsArray = Array.isArray(article.tags) ? article.tags : []

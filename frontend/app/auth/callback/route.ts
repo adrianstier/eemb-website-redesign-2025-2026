@@ -1,10 +1,41 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+// Validate redirect URL to prevent open redirect attacks
+function getSafeRedirectUrl(next: string | null): string {
+  if (!next) return '/'
+  if (!next.startsWith('/')) return '/'
+  if (next.startsWith('//')) return '/'
+
+  const decoded = decodeURIComponent(next)
+  if (decoded !== next && (decoded.includes('://') || decoded.startsWith('//'))) {
+    return '/'
+  }
+
+  const allowedPrefixes = [
+    '/admin',
+    '/faculty',
+    '/people',
+    '/research',
+    '/news',
+    '/events',
+    '/academics',
+    '/about',
+    '/contact',
+  ]
+
+  if (next === '/') return '/'
+
+  const isAllowed = allowedPrefixes.some(prefix => next.startsWith(prefix))
+  if (!isAllowed) return '/'
+
+  return next
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
+  const next = getSafeRedirectUrl(searchParams.get('next'))
 
   if (code) {
     const supabase = await createClient()

@@ -83,6 +83,7 @@ const config: Config = {
         'sans': ['var(--font-dm-sans)', 'system-ui', '-apple-system', 'sans-serif'],
         // Heading font - Fraunces: characterful, academic, distinctive
         'heading': ['var(--font-fraunces)', 'Georgia', 'serif'],
+        'display': ['var(--font-fraunces)', 'Georgia', 'serif'],
         'serif': ['var(--font-fraunces)', 'Georgia', 'serif'],
       },
 
