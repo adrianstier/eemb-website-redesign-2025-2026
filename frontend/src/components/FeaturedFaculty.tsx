@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useInView } from '@/hooks/useInView'
 import type { FacultyWithResearch } from '@/lib/data'
 
 // Helper to get primary research area from faculty
@@ -64,30 +65,6 @@ function selectBalancedFaculty(allFaculty: FacultyWithResearch[]): FacultyWithRe
   return selected.sort(() => 0.5 - Math.random())
 }
 
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
-
 interface FeaturedFacultyProps {
   initialFaculty?: FacultyWithResearch[]
 }
@@ -95,7 +72,7 @@ interface FeaturedFacultyProps {
 export default function FeaturedFaculty({ initialFaculty = [] }: FeaturedFacultyProps) {
   const [faculty, setFaculty] = useState<FacultyWithResearch[]>([])
   const [loading, setLoading] = useState(!initialFaculty.length)
-  const { ref, isInView } = useInView(0.1)
+  const { ref, isInView } = useInView({ threshold: 0.1 })
 
   useEffect(() => {
     if (initialFaculty.length > 0) {

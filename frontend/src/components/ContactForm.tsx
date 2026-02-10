@@ -289,6 +289,7 @@ export default function ContactForm({
             onChange={handleChange}
             onBlur={handleBlur}
             rows={5}
+            maxLength={1000}
             className={`w-full px-4 py-3 rounded-xl border ${
               errors.message ? 'border-red-300 focus:ring-red-500/50 focus:border-red-500' : 'border-warm-200 focus:ring-ocean-teal/50 focus:border-ocean-teal'
             } bg-white text-ocean-deep placeholder-warm-400 focus:outline-none focus:ring-2 transition-all resize-none`}
@@ -334,7 +335,7 @@ export default function ContactForm({
       {/* Privacy note */}
       <p className="mt-4 text-xs text-warm-400 text-center">
         By submitting this form, you agree to our{' '}
-        <a href="/privacy" className="text-ocean-teal hover:underline">
+        <a href="https://www.policy.ucsb.edu/terms-of-use/privacy-notification" className="text-ocean-teal hover:underline">
           Privacy Policy
         </a>
         .

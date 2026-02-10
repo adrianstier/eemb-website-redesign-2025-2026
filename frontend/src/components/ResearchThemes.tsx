@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useInView } from '@/hooks/useInView'
 
 const themes = [
   {
@@ -37,32 +37,8 @@ const themes = [
   },
 ]
 
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
-
 export default function ResearchThemes() {
-  const { ref: sectionRef, isInView: sectionInView } = useInView(0.1)
+  const { ref: sectionRef, isInView: sectionInView } = useInView({ threshold: 0.1 })
 
   return (
     <section ref={sectionRef} className="py-24 md:py-32 lg:py-40 bg-warm-100 relative overflow-hidden">
@@ -120,7 +96,7 @@ export default function ResearchThemes() {
 }
 
 function ThemeCard({ theme, index, isEven }: { theme: typeof themes[0]; index: number; isEven: boolean }) {
-  const { ref, isInView } = useInView(0.2)
+  const { ref, isInView } = useInView({ threshold: 0.2 })
 
   return (
     <div

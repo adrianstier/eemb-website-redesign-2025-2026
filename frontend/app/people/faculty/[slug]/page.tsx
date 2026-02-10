@@ -12,16 +12,20 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const faculty = await getFacultyBySlug(slug)
+  try {
+    const { slug } = await params
+    const faculty = await getFacultyBySlug(slug)
 
-  if (!faculty) {
-    return { title: 'Faculty Not Found' }
-  }
+    if (!faculty) {
+      return { title: 'Faculty Not Found' }
+    }
 
-  return {
-    title: `${faculty.full_name || `${faculty.first_name} ${faculty.last_name}`} | EEMB Faculty`,
-    description: faculty.short_bio || `Learn about ${faculty.full_name}'s research in the EEMB department at UC Santa Barbara.`
+    return {
+      title: `${faculty.full_name || `${faculty.first_name} ${faculty.last_name}`} | EEMB Faculty`,
+      description: faculty.short_bio || `Learn about ${faculty.full_name}'s research in the EEMB department at UC Santa Barbara.`
+    }
+  } catch {
+    return { title: 'EEMB Faculty' }
   }
 }
 
@@ -35,7 +39,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
 
   const students = faculty.id ? await getStudentsByAdvisor(faculty.id) : []
   const fullName = faculty.full_name || `${faculty.first_name} ${faculty.last_name}`
-  const researchInterests = faculty.research_interests as string[] | null
+  const researchInterests = Array.isArray(faculty.research_interests) ? faculty.research_interests.filter((i): i is string => typeof i === 'string') : []
   const hasResearchLinks = faculty.lab_website || faculty.google_scholar || faculty.orcid
 
   return (
@@ -287,7 +291,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
               </article>
 
               {/* Research Interests */}
-              {researchInterests && researchInterests.length > 0 && (
+              {researchInterests.length > 0 && (
                 <article className="bg-white rounded-2xl shadow-warm-sm border border-warm-200 overflow-hidden">
                   <div className="bg-gradient-to-r from-ocean-teal to-ocean-blue p-6 md:p-8">
                     <h2 className="text-2xl font-display font-bold text-white">Research Focus</h2>
@@ -330,35 +334,50 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                 <article className="bg-white rounded-2xl shadow-warm-sm border border-warm-200 p-6 md:p-8">
                   <h2 className="text-2xl font-display font-bold text-ocean-deep mb-4">Graduate Students</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {students.map((student) => (
-                      <Link
-                        key={student.id}
-                        href={`/people/students/${student.slug}`}
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-warm-100 transition-colors"
-                      >
-                        {student.photo_url ? (
-                          <Image
-                            src={student.photo_url}
-                            alt={student.full_name || `${student.first_name} ${student.last_name}`}
-                            width={48}
-                            height={48}
-                            className="w-12 h-12 rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-full bg-ocean-teal/10 flex items-center justify-center">
-                            <span className="text-ocean-teal font-bold">
-                              {student.first_name[0]}{student.last_name[0]}
-                            </span>
+                    {students.map((student) => {
+                      const studentContent = (
+                        <>
+                          {student.photo_url ? (
+                            <Image
+                              src={student.photo_url}
+                              alt={student.full_name || `${student.first_name} ${student.last_name}`}
+                              width={48}
+                              height={48}
+                              className="w-12 h-12 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-full bg-ocean-teal/10 flex items-center justify-center">
+                              <span className="text-ocean-teal font-bold">
+                                {student.first_name[0]}{student.last_name[0]}
+                              </span>
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-medium text-ocean-deep">
+                              {student.full_name || `${student.first_name} ${student.last_name}`}
+                            </p>
+                            <p className="text-sm text-warm-500">{student.degree_program}</p>
                           </div>
-                        )}
-                        <div>
-                          <p className="font-medium text-ocean-deep">
-                            {student.full_name || `${student.first_name} ${student.last_name}`}
-                          </p>
-                          <p className="text-sm text-warm-500">{student.degree_program}</p>
+                        </>
+                      )
+
+                      return student.slug ? (
+                        <Link
+                          key={student.id}
+                          href={`/people/students/${student.slug}`}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-warm-100 transition-colors"
+                        >
+                          {studentContent}
+                        </Link>
+                      ) : (
+                        <div
+                          key={student.id}
+                          className="flex items-center gap-3 p-3 rounded-lg"
+                        >
+                          {studentContent}
                         </div>
-                      </Link>
-                    ))}
+                      )
+                    })}
                   </div>
                 </article>
               )}

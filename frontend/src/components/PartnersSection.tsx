@@ -1,33 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
+import { useInView } from '@/hooks/useInView'
 
 export default function PartnersSection() {
-  const { ref, isInView } = useInView(0.1)
+  const { ref, isInView } = useInView({ threshold: 0.1 })
 
   const partners = [
     { name: 'Marine Science Institute', url: 'https://msi.ucsb.edu', abbr: 'MSI' },

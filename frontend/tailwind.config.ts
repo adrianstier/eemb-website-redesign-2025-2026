@@ -48,6 +48,7 @@ const config: Config = {
         'sand': '#E8DFD1',           // Beach sand
         'driftwood': '#8B7355',      // Driftwood brown
         'kelp': {
+          '50': '#ecfdf5',           // Kelp green lightest
           '400': '#34d399',          // Kelp green light
           '500': '#10b981',          // Kelp green
           '600': '#059669',          // Kelp deep

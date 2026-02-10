@@ -41,7 +41,7 @@ const securityHeaders = [
   },
   {
     key: 'Strict-Transport-Security',
-    value: 'max-age=31536000; includeSubDomains',
+    value: 'max-age=31536000; includeSubDomains; preload',
   },
   {
     key: 'Permissions-Policy',
@@ -82,7 +82,7 @@ const nextConfig = {
   // Experimental features for better performance
   experimental: {
     // Enable optimized package imports
-    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+    optimizePackageImports: ['lucide-react'],
   },
   // Security headers
   async headers() {

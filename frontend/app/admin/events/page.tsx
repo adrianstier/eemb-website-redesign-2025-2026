@@ -189,8 +189,8 @@ export default function AdminEventsPage() {
     setFormData({
       title: event.title || '',
       event_type: event.event_type || 'Seminar',
-      start_date: event.start_date?.split('.')[0] || '',
-      end_date: event.end_date?.split('.')[0] || '',
+      start_date: event.start_date ? new Date(event.start_date).toISOString().slice(0, 16) : '',
+      end_date: event.end_date ? new Date(event.end_date).toISOString().slice(0, 16) : '',
       all_day: event.all_day || false,
       location: event.location || '',
       virtual_link: event.virtual_link || '',

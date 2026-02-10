@@ -23,7 +23,12 @@ export default function AdminDashboard() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
 
-      if (user?.email) {
+      if (!user) {
+        router.push('/auth/login')
+        return
+      }
+
+      if (user.email) {
         setUserEmail(user.email)
       }
 

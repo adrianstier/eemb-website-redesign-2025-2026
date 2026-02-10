@@ -53,12 +53,19 @@ export async function middleware(request: NextRequest) {
   )
 
   if (isAdminRoute && user) {
-    // Check if user is admin
-    const { data: userRole } = await supabase
+    // Check if user is admin (fail closed: redirect to home on any error)
+    const { data: userRole, error: roleError } = await supabase
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
       .single()
+
+    if (roleError) {
+      console.error('Failed to check user role:', roleError.message)
+      const url = request.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
 
     if (!userRole || userRole.role !== 'admin') {
       // Redirect to home if not admin

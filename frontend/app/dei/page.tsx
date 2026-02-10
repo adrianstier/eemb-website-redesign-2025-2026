@@ -118,32 +118,37 @@ export default function DEIPage() {
     {
       title: 'Disabled Students Program (DSP)',
       description: 'Accommodations and support for students with disabilities.',
-      link: '#'
+      link: 'https://dsp.sa.ucsb.edu/'
     },
     {
       title: 'Office of Diversity, Equity & Inclusion',
       description: 'Campus-wide DEI resources and initiatives.',
-      link: '#'
+      link: 'https://diversity.ucsb.edu/'
     },
     {
       title: 'UCSB Counseling & Psychological Services',
       description: 'Mental health support for students.',
-      link: '#'
+      link: 'https://caps.sa.ucsb.edu/'
     },
     {
-      title: 'Women in Science',
-      description: 'Support and mentoring for women in STEM.',
-      link: '#'
+      title: 'Title IX & Sexual Harassment',
+      description: 'Resources for reporting and addressing sexual harassment and misconduct.',
+      link: 'https://titleix.ucsb.edu/'
     },
     {
-      title: 'International Student Programs',
+      title: 'Office of the Ombuds',
+      description: 'Confidential conflict resolution and support.',
+      link: 'https://ombuds.ucsb.edu/'
+    },
+    {
+      title: 'Office of International Students & Scholars',
       description: 'Support for international students.',
-      link: '#'
+      link: 'https://oiss.sa.ucsb.edu/'
     },
     {
       title: 'Financial Aid Office',
       description: 'Scholarships and financial support.',
-      link: '#'
+      link: 'https://www.finaid.ucsb.edu/'
     }
   ]
 
@@ -372,9 +377,12 @@ export default function DEIPage() {
             >
               Get in Touch
             </Link>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+            <a
+              href="mailto:eemb-web@ucsb.edu?subject=DEI%20Community%20Interest"
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition"
+            >
               Join Our Community
-            </button>
+            </a>
           </div>
         </div>
       </section>

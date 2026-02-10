@@ -275,7 +275,7 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
       {/* Actions */}
       <div className="flex items-center justify-between">
         <Link
-          href={`/people/${faculty.slug}`}
+          href={`/people/faculty/${faculty.slug}`}
           className="text-ocean-blue hover:underline"
         >
           ← View public profile

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { TestimonialWithStudent } from '@/lib/data'
@@ -65,18 +65,13 @@ export default function TestimonialCarousel({
     }
   }, [autoPlay, autoPlayInterval, isPaused, prefersReducedMotion, goToNext, testimonials.length])
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        goToPrevious()
-      } else if (e.key === 'ArrowRight') {
-        goToNext()
-      }
+  // Keyboard navigation handler scoped to carousel container
+  const handleKeyDown = useCallback((e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowLeft') {
+      goToPrevious()
+    } else if (e.key === 'ArrowRight') {
+      goToNext()
     }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [goToNext, goToPrevious])
 
   if (testimonials.length === 0) {
@@ -93,6 +88,8 @@ export default function TestimonialCarousel({
       className={`relative ${className}`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
       role="region"
       aria-label="Student testimonials carousel"
       aria-roledescription="carousel"

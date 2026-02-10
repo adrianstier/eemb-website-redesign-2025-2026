@@ -290,9 +290,15 @@ export const CardEyebrow: React.FC<{
     gold: 'text-ucsb-gold',
   }
 
+  const gradientClasses: Record<string, string> = {
+    teal: 'from-ocean-teal to-transparent',
+    blue: 'from-ocean-blue to-transparent',
+    gold: 'from-ucsb-gold to-transparent',
+  }
+
   return (
     <div className={`flex items-center gap-3 mb-3 ${className}`}>
-      <div className={`h-px w-8 bg-gradient-to-r from-${color === 'teal' ? 'ocean-teal' : color === 'blue' ? 'ocean-blue' : 'ucsb-gold'} to-transparent`} />
+      <div className={`h-px w-8 bg-gradient-to-r ${gradientClasses[color] || gradientClasses.teal}`} />
       <span className={`text-xs font-semibold tracking-[0.15em] uppercase ${colorClasses[color]}`}>
         {children}
       </span>

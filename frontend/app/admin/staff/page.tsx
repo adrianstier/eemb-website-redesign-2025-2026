@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface StaffMember {
@@ -21,11 +22,12 @@ interface StaffMember {
 }
 
 export default function StaffManagement() {
+  const router = useRouter()
   const [staff, setStaff] = useState<StaffMember[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [editingId, setEditingId] = useState<number | null>(null)
-  const [editForm, setEditForm] = useState<any>({})
+  const [editForm, setEditForm] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -80,16 +82,16 @@ export default function StaffManagement() {
         id: editingId,
         first_name: editForm.first_name,
         last_name: editForm.last_name,
-        full_name: editForm.full_name,
+        full_name: editForm.full_name || null,
         email: editForm.email,
-        title: editForm.title,
-        office: editForm.office,
-        phone: editForm.phone,
-        bio: editForm.bio,
-        short_bio: editForm.short_bio,
+        title: editForm.title || null,
+        office: editForm.office || null,
+        phone: editForm.phone || null,
+        bio: editForm.bio || null,
+        short_bio: editForm.short_bio || null,
         responsibilities,
-        department: editForm.department,
-        linkedin: editForm.linkedin
+        department: editForm.department || null,
+        linkedin: editForm.linkedin || null
       }
 
       const response = await fetch('/api/admin/staff', {
@@ -115,11 +117,22 @@ export default function StaffManagement() {
     }
   }
 
-  const filteredStaff = staff.filter(member =>
-    member.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.title?.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const handleLogout = async () => {
+    await fetch('/auth/logout', { method: 'POST' })
+    router.push('/')
+    router.refresh()
+  }
+
+  const displayName = (member: StaffMember) =>
+    member.full_name || `${member.first_name} ${member.last_name}`.trim()
+
+  const filteredStaff = staff.filter(member => {
+    const name = displayName(member).toLowerCase()
+    const email = (member.email || '').toLowerCase()
+    const title = (member.title || '').toLowerCase()
+    const term = searchTerm.toLowerCase()
+    return name.includes(term) || email.includes(term) || title.includes(term)
+  })
 
   if (loading) {
     return (
@@ -133,16 +146,24 @@ export default function StaffManagement() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/admin/dashboard" className="text-green-600 hover:text-green-700 transition">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Staff Management</h1>
-            <span className="bg-green-500/10 text-green-600 px-3 py-1 rounded-full text-sm font-medium">
-              {staff.length} members
-            </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/admin/dashboard" className="text-green-600 hover:text-green-700 transition">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">Staff Management</h1>
+              <span className="bg-green-500/10 text-green-600 px-3 py-1 rounded-full text-sm font-medium">
+                {staff.length} members
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-red-600 hover:text-red-700 font-medium transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </header>
@@ -235,13 +256,18 @@ export default function StaffManagement() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                        <input
-                          type="text"
+                        <select
                           value={editForm.department}
                           onChange={(e) => setEditForm({ ...editForm, department: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                          placeholder="EEMB"
-                        />
+                        >
+                          <option value="">Select a department...</option>
+                          <option value="EEMB">EEMB</option>
+                          <option value="MCDB">MCDB</option>
+                          <option value="ERI">ERI</option>
+                          <option value="MSI">MSI</option>
+                          <option value="Other">Other</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -323,7 +349,7 @@ export default function StaffManagement() {
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{member.full_name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">{displayName(member)}</h3>
                       <p className="text-sm text-gray-600">{member.title}</p>
                     </div>
                     <div className="flex items-center gap-2">

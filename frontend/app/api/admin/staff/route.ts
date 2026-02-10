@@ -3,8 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { TablesInsert, TablesUpdate } from '@/lib/supabase/types'
 
 // Helper to check admin status
-async function isAdmin() {
-  const supabase = await createClient()
+async function isAdmin(supabase: Awaited<ReturnType<typeof createClient>>) {
   const { data, error } = await supabase.rpc('is_admin')
   return !error && data === true
 }
@@ -20,7 +19,7 @@ export async function GET() {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -48,7 +47,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -102,7 +101,7 @@ export async function PUT(request: NextRequest) {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -114,8 +113,8 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Staff member ID is required' }, { status: 400 })
     }
 
-    // Update full_name if first/last name changed
-    if (updates.first_name || updates.last_name) {
+    // Only auto-generate full_name if not explicitly provided
+    if (!updates.full_name && (updates.first_name || updates.last_name)) {
       const { data: existing } = await supabase
         .from('staff')
         .select('first_name, last_name')
@@ -128,6 +127,8 @@ export async function PUT(request: NextRequest) {
         updates.full_name = `${firstName} ${lastName}`
       }
     }
+
+    updates.updated_at = new Date().toISOString()
 
     const { data: staff, error } = await supabase
       .from('staff')
@@ -159,7 +160,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

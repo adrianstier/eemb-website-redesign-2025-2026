@@ -12,16 +12,20 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const staff = await getStaffBySlug(slug)
+  try {
+    const { slug } = await params
+    const staff = await getStaffBySlug(slug)
 
-  if (!staff) {
-    return { title: 'Staff Member Not Found' }
-  }
+    if (!staff) {
+      return { title: 'Staff Member Not Found' }
+    }
 
-  return {
-    title: `${staff.full_name || `${staff.first_name} ${staff.last_name}`} | EEMB Staff`,
-    description: staff.short_bio || `${staff.full_name} - ${staff.title} in the EEMB department at UC Santa Barbara.`
+    return {
+      title: `${staff.full_name || `${staff.first_name} ${staff.last_name}`} | EEMB Staff`,
+      description: staff.short_bio || `${staff.full_name || `${staff.first_name} ${staff.last_name}`}${staff.title ? ` - ${staff.title}` : ''} in the EEMB department at UC Santa Barbara.`
+    }
+  } catch {
+    return { title: 'EEMB Staff' }
   }
 }
 
@@ -87,7 +91,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
               </h1>
               <div className="flex items-center justify-center sm:justify-start gap-2 text-lg md:text-xl text-white/90 font-medium mb-1">
                 <Briefcase className="w-5 h-5" />
-                <span>{staff.title}</span>
+                <span>{staff.title || 'Staff'}</span>
               </div>
               <p className="text-base md:text-lg text-white/80">
                 Department of {staff.department || 'EEMB'}
@@ -221,7 +225,10 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                           {fullName} keeps EEMB running smoothly
                         </p>
                         <p className="text-warm-500 text-sm max-w-md mx-auto">
-                          As {staff.title?.toLowerCase().startsWith('a') || staff.title?.toLowerCase().startsWith('e') || staff.title?.toLowerCase().startsWith('i') || staff.title?.toLowerCase().startsWith('o') || staff.title?.toLowerCase().startsWith('u') ? 'an' : 'a'} {staff.title}, {staff.first_name} plays a vital role in supporting our department&apos;s research and educational mission.
+                            {staff.title
+                            ? <>As {staff.title.toLowerCase().startsWith('a') || staff.title.toLowerCase().startsWith('e') || staff.title.toLowerCase().startsWith('i') || staff.title.toLowerCase().startsWith('o') || staff.title.toLowerCase().startsWith('u') ? 'an' : 'a'} {staff.title}, {staff.first_name} plays a vital role in supporting our department&apos;s research and educational mission.</>
+                            : <>{staff.first_name} plays a vital role in supporting our department&apos;s research and educational mission.</>
+                          }
                         </p>
                       </div>
                     </div>
@@ -240,7 +247,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                       <Briefcase className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <p className="font-semibold text-ocean-deep">{staff.title}</p>
+                      <p className="font-semibold text-ocean-deep">{staff.title || 'Staff'}</p>
                       <p className="text-warm-600 text-sm">Department of {staff.department || 'Ecology, Evolution & Marine Biology'}</p>
                     </div>
                   </div>

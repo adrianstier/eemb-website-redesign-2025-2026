@@ -114,7 +114,7 @@ export default async function EventsPage() {
                   {eventTypes.map(({ type, count }) => (
                     <span
                       key={type}
-                      className="px-3 py-1.5 bg-white text-warm-600 rounded-full text-sm font-medium border border-warm-200 hover:border-ocean-teal/30 transition-colors cursor-pointer"
+                      className="px-3 py-1.5 bg-white text-warm-600 rounded-full text-sm font-medium border border-warm-200"
                     >
                       {type} <span className="text-warm-400">({count})</span>
                     </span>

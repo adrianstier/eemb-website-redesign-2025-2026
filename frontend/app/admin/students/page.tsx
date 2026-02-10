@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface Student {
@@ -27,6 +28,7 @@ interface Student {
 }
 
 export default function StudentsManagement() {
+  const router = useRouter()
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -123,6 +125,12 @@ export default function StudentsManagement() {
     }
   }
 
+  const handleLogout = async () => {
+    await fetch('/auth/logout', { method: 'POST' })
+    router.push('/')
+    router.refresh()
+  }
+
   const displayName = (student: Student) =>
     student.full_name || `${student.first_name} ${student.last_name}`
 
@@ -145,16 +153,24 @@ export default function StudentsManagement() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/admin/dashboard" className="text-ocean-teal hover:text-ocean-deep transition">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Graduate Students Management</h1>
-            <span className="bg-ocean-teal/10 text-ocean-teal px-3 py-1 rounded-full text-sm font-medium">
-              {students.length} students
-            </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/admin/dashboard" className="text-ocean-teal hover:text-ocean-deep transition">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">Graduate Students Management</h1>
+              <span className="bg-ocean-teal/10 text-ocean-teal px-3 py-1 rounded-full text-sm font-medium">
+                {students.length} students
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-red-600 hover:text-red-700 font-medium transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </header>
@@ -214,7 +230,7 @@ export default function StudentsManagement() {
                       >
                         <option value="PhD">PhD</option>
                         <option value="MS">MS</option>
-                        <option value="Combined BS/MS">Combined BS/MS</option>
+                        <option value="Combined BS-MS">Combined BS-MS</option>
                       </select>
                     </div>
                     <div>

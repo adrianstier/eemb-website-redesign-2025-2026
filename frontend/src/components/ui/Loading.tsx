@@ -287,7 +287,7 @@ export const TextSkeleton: React.FC<{
         <div
           key={i}
           className="h-4 bg-warm-200 rounded"
-          style={{ width: `${100 - i * 10 - Math.random() * 20}%` }}
+          style={{ width: `${60 + ((i * 37) % 40)}%` }}
         />
       ))}
       <span className="sr-only">Loading text...</span>

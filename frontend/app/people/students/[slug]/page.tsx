@@ -12,17 +12,21 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const student = await getStudentBySlug(slug)
+  try {
+    const { slug } = await params
+    const student = await getStudentBySlug(slug)
 
-  if (!student) {
-    return { title: 'Student Not Found' }
-  }
+    if (!student) {
+      return { title: 'Student Not Found' }
+    }
 
-  const fullName = student.full_name || `${student.first_name} ${student.last_name}`
-  return {
-    title: `${fullName} | EEMB Graduate Student`,
-    description: student.short_bio || `Learn about ${fullName}'s research in the EEMB department at UC Santa Barbara.`
+    const fullName = student.full_name || `${student.first_name} ${student.last_name}`
+    return {
+      title: `${fullName} | EEMB Graduate Student`,
+      description: student.short_bio || `Learn about ${fullName}'s research in the EEMB department at UC Santa Barbara.`
+    }
+  } catch {
+    return { title: 'EEMB Graduate Student' }
   }
 }
 
@@ -35,7 +39,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
   }
 
   const fullName = student.full_name || `${student.first_name} ${student.last_name}`
-  const researchInterests = student.research_interests as string[] | null
+  const researchInterests = Array.isArray(student.research_interests) ? student.research_interests.filter((i): i is string => typeof i === 'string') : []
   const hasResearchLinks = student.lab_website || student.personal_website || student.google_scholar || student.orcid
   const hasSocialLinks = student.twitter || student.linkedin
 
@@ -80,7 +84,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                 {fullName}
               </h1>
               <p className="text-lg md:text-xl text-white/90 font-medium mb-1">
-                {student.degree_program} Student
+                {student.degree_program ? `${student.degree_program} ` : ''}Student
               </p>
               <p className="text-base md:text-lg text-white/80">
                 Department of Ecology, Evolution, and Marine Biology
@@ -302,7 +306,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                           Graduate researcher in training
                         </p>
                         <p className="text-warm-500 text-sm max-w-md mx-auto">
-                          {student.first_name} is a {student.degree_program} student{student.advisor ? ` in the ${student.advisor.last_name} lab` : ''} working on exciting research in ecology, evolution, and marine biology.
+                          {student.first_name} is a {student.degree_program ? `${student.degree_program} ` : ''}student{student.advisor ? ` in the ${student.advisor.last_name} lab` : ''} working on exciting research in ecology, evolution, and marine biology.
                         </p>
                         {student.email && (
                           <a
@@ -320,7 +324,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
               </article>
 
               {/* Research Interests */}
-              {researchInterests && researchInterests.length > 0 && (
+              {researchInterests.length > 0 && (
                 <article className="bg-white rounded-2xl shadow-warm-sm border border-warm-200 overflow-hidden">
                   <div className="bg-gradient-to-r from-ocean-teal to-ocean-blue p-6 md:p-8">
                     <h2 className="text-2xl font-display font-bold text-white">Research Interests</h2>
@@ -344,32 +348,46 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
               {student.advisor && (
                 <article className="bg-white rounded-2xl shadow-warm-sm border border-warm-200 p-6 md:p-8">
                   <h2 className="text-2xl font-display font-bold text-ocean-deep mb-4">Advisor</h2>
-                  <Link
-                    href={`/people/faculty/${student.advisor.slug}`}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-warm-50 hover:bg-warm-100 transition-colors"
-                  >
-                    {student.advisor.photo_url ? (
-                      <Image
-                        src={student.advisor.photo_url}
-                        alt={student.advisor.full_name || `${student.advisor.first_name} ${student.advisor.last_name}`}
-                        width={64}
-                        height={64}
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
+                  {(() => {
+                    const advisorContent = (
+                      <>
+                        {student.advisor.photo_url ? (
+                          <Image
+                            src={student.advisor.photo_url}
+                            alt={student.advisor.full_name || `${student.advisor.first_name} ${student.advisor.last_name}`}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 rounded-full bg-ocean-teal/10 flex items-center justify-center">
+                            <span className="text-ocean-teal font-bold text-xl">
+                              {student.advisor.first_name[0]}{student.advisor.last_name[0]}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-semibold text-ocean-deep">
+                            {student.advisor.full_name || `${student.advisor.first_name} ${student.advisor.last_name}`}
+                          </p>
+                          <p className="text-sm text-warm-500">{student.advisor.title}</p>
+                        </div>
+                      </>
+                    )
+
+                    return student.advisor.slug ? (
+                      <Link
+                        href={`/people/faculty/${student.advisor.slug}`}
+                        className="flex items-center gap-4 p-4 rounded-xl bg-warm-50 hover:bg-warm-100 transition-colors"
+                      >
+                        {advisorContent}
+                      </Link>
                     ) : (
-                      <div className="w-16 h-16 rounded-full bg-ocean-teal/10 flex items-center justify-center">
-                        <span className="text-ocean-teal font-bold text-xl">
-                          {student.advisor.first_name[0]}{student.advisor.last_name[0]}
-                        </span>
+                      <div className="flex items-center gap-4 p-4 rounded-xl bg-warm-50">
+                        {advisorContent}
                       </div>
-                    )}
-                    <div>
-                      <p className="font-semibold text-ocean-deep">
-                        {student.advisor.full_name || `${student.advisor.first_name} ${student.advisor.last_name}`}
-                      </p>
-                      <p className="text-sm text-warm-500">{student.advisor.title}</p>
-                    </div>
-                  </Link>
+                    )
+                  })()}
                 </article>
               )}
             </div>

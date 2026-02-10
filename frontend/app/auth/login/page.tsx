@@ -45,10 +45,20 @@ function getSafeRedirectUrl(next: string | null): string {
   return next
 }
 
+// Allowlist of known error messages to prevent XSS via crafted URLs
+const errorMessages: Record<string, string> = {
+  'Could not authenticate': 'Authentication failed. Please try again.',
+  'Access denied': 'You do not have permission to access this page.',
+  'Session expired': 'Your session has expired. Please sign in again.',
+}
+
 function LoginContent() {
   const searchParams = useSearchParams()
   const error = searchParams?.get('error')
   const rawNext = searchParams?.get('next') ?? null
+
+  // Sanitize error: only show known messages, fallback for unknown
+  const displayError = error ? (errorMessages[error] || 'An error occurred. Please try again.') : null
 
   // Validate and sanitize the redirect URL
   const next = getSafeRedirectUrl(rawNext)
@@ -94,9 +104,9 @@ function LoginContent() {
 
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-warm-lg p-8 border border-warm-200">
-          {error && (
+          {displayError && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
-              {error}
+              {displayError}
             </div>
           )}
 

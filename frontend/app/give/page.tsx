@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { HeartIcon, AcademicCapIcon, BeakerIcon, UsersIcon, GlobeAltIcon, EnvelopeIcon, PhoneIcon, CheckCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
+import { Heart, GraduationCap, FlaskConical, Users, Globe, Mail, Phone, CheckCircle, ChevronDown, ChevronUp } from 'lucide-react'
 
 export default function GivePage() {
   const [expandedSections, setExpandedSections] = useState<{ [key: number]: boolean }>({})
@@ -13,7 +13,7 @@ export default function GivePage() {
 
   const givingPriorities = [
     {
-      icon: GlobeAltIcon,
+      icon: Globe,
       title: 'Unrestricted Support',
       description: 'Flexible funding for departmental needs',
       benefits: [
@@ -37,7 +37,7 @@ export default function GivePage() {
       color: 'from-ocean-blue to-ocean-teal'
     },
     {
-      icon: AcademicCapIcon,
+      icon: GraduationCap,
       title: 'Graduate Support',
       description: 'Empowering the next generation of scientists',
       benefits: [
@@ -76,7 +76,7 @@ export default function GivePage() {
       color: 'from-purple-600 to-blue-600'
     },
     {
-      icon: UsersIcon,
+      icon: Users,
       title: 'Undergraduate Support',
       description: 'Enriching undergraduate education and research',
       benefits: [
@@ -120,7 +120,7 @@ export default function GivePage() {
       color: 'from-green-600 to-teal-600'
     },
     {
-      icon: BeakerIcon,
+      icon: FlaskConical,
       title: 'Faculty, Research & Facilities',
       description: 'Advancing cutting-edge research and innovation',
       benefits: [
@@ -177,17 +177,17 @@ export default function GivePage() {
     {
       title: 'Addressing Environmental Challenges',
       description: 'Your support helps our faculty and students tackle critical environmental issues through groundbreaking research in ecology, evolution, and marine biology.',
-      icon: GlobeAltIcon
+      icon: Globe
     },
     {
       title: 'Training Future Leaders',
       description: 'Donations enable us to provide world-class education and mentorship, preparing the next generation of environmental scientists and problem-solvers.',
-      icon: AcademicCapIcon
+      icon: GraduationCap
     },
     {
       title: 'Advancing Scientific Discovery',
       description: 'Philanthropic support accelerates research discoveries that shape our understanding of life on Earth and inform conservation strategies worldwide.',
-      icon: BeakerIcon
+      icon: FlaskConical
     }
   ]
 
@@ -197,19 +197,19 @@ export default function GivePage() {
       description: 'Make a secure online donation through the UCSB giving portal',
       action: 'Give Online',
       link: 'https://giving.ucsb.edu/Funds/Dept/ecology-evolution-and-marine-biology',
-      icon: CheckCircleIcon
+      icon: CheckCircle
     },
     {
       method: 'Mail',
       description: 'Send a check payable to "UC Santa Barbara Foundation" with "EEMB" in the memo line',
       address: 'UC Santa Barbara Foundation, 6580 Hollister Ave., Suite 120, Goleta, CA 93117',
-      icon: EnvelopeIcon
+      icon: Mail
     },
     {
       method: 'Contact',
       description: 'Speak with our development officer about major gifts, planned giving, or endowments',
       contact: 'Bethany Innocenti',
-      icon: PhoneIcon
+      icon: Phone
     }
   ]
 
@@ -228,7 +228,7 @@ export default function GivePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <div className="flex items-center gap-4 mb-6">
-              <HeartIcon className="w-16 h-16" />
+              <Heart className="w-16 h-16" />
               <h1 className="text-5xl md:text-6xl font-bold">Give to EEMB</h1>
             </div>
             <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
@@ -318,7 +318,7 @@ export default function GivePage() {
                     <ul className="space-y-3 mb-6">
                       {priority.benefits.map((benefit, idx) => (
                         <li key={idx} className="flex items-start gap-3 text-sm text-gray-700">
-                          <CheckCircleIcon className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                           <span>{benefit}</span>
                         </li>
                       ))}
@@ -331,9 +331,9 @@ export default function GivePage() {
                     >
                       <span className="font-semibold text-ocean-blue">Learn More About Giving Opportunities</span>
                       {isExpanded ? (
-                        <ChevronUpIcon className="w-5 h-5 text-ocean-blue" />
+                        <ChevronUp className="w-5 h-5 text-ocean-blue" />
                       ) : (
-                        <ChevronDownIcon className="w-5 h-5 text-ocean-blue" />
+                        <ChevronDown className="w-5 h-5 text-ocean-blue" />
                       )}
                     </button>
 
@@ -519,7 +519,7 @@ export default function GivePage() {
                 <div className="space-y-4">
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
                     <div className="flex items-center gap-3 mb-2">
-                      <PhoneIcon className="w-5 h-5" />
+                      <Phone className="w-5 h-5" />
                       <p className="text-sm text-white/80">Phone</p>
                     </div>
                     <a
@@ -532,7 +532,7 @@ export default function GivePage() {
 
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
                     <div className="flex items-center gap-3 mb-2">
-                      <EnvelopeIcon className="w-5 h-5" />
+                      <Mail className="w-5 h-5" />
                       <p className="text-sm text-white/80">Email</p>
                     </div>
                     <a

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface Memorial {
@@ -132,11 +133,13 @@ export default function InMemoriamPage() {
                 onClick={() => setSelectedMemorial(memorial.id)}
               >
                 {memorial.photo && (
-                  <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
-                    <img
+                  <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
+                    <Image
                       src={memorial.photo}
                       alt={memorial.name}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
                     />
                   </div>
                 )}

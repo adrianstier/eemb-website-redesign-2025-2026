@@ -1,7 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import { useInView } from '@/hooks/useInView'
+import useReducedMotion from '@/hooks/useReducedMotion'
 
 const quotes = [
   {
@@ -30,36 +32,14 @@ const quotes = [
   },
 ]
 
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
-
 export default function FacultyQuote() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
-  const { ref, isInView } = useInView(0.2)
+  const { ref, isInView } = useInView({ threshold: 0.2 })
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
+    if (prefersReducedMotion) return
     const interval = setInterval(() => {
       setIsAnimating(true)
       setTimeout(() => {
@@ -68,7 +48,7 @@ export default function FacultyQuote() {
       }, 500)
     }, 8000)
     return () => clearInterval(interval)
-  }, [])
+  }, [prefersReducedMotion])
 
   const handleDotClick = (index: number) => {
     if (index === currentIndex) return

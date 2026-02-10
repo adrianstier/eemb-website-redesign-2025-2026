@@ -1,32 +1,9 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useInView } from '@/hooks/useInView'
 import type { EventWithHost } from '@/lib/data'
-
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
 
 const eventTypeColors: Record<string, { accent: string; bg: string }> = {
   Seminar: { accent: 'bg-ocean-teal', bg: 'bg-ocean-teal/10' },
@@ -44,7 +21,7 @@ interface UpcomingEventsProps {
 export default function UpcomingEvents({ initialEvents = [] }: UpcomingEventsProps) {
   const [events, setEvents] = useState<EventWithHost[]>([])
   const [loading, setLoading] = useState(!initialEvents.length)
-  const { ref, isInView } = useInView(0.1)
+  const { ref, isInView } = useInView({ threshold: 0.1 })
 
   useEffect(() => {
     if (initialEvents.length > 0) {

@@ -3,8 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { TablesInsert, TablesUpdate } from '@/lib/supabase/types'
 
 // Helper to check admin status
-async function isAdmin() {
-  const supabase = await createClient()
+async function isAdmin(supabase: Awaited<ReturnType<typeof createClient>>) {
   const { data, error } = await supabase.rpc('is_admin')
   return !error && data === true
 }
@@ -20,7 +19,7 @@ export async function GET() {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -48,7 +47,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -102,7 +101,7 @@ export async function PUT(request: NextRequest) {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -113,6 +112,8 @@ export async function PUT(request: NextRequest) {
     if (!id) {
       return NextResponse.json({ error: 'Event ID is required' }, { status: 400 })
     }
+
+    updates.updated_at = new Date().toISOString()
 
     const { data: event, error } = await supabase
       .from('events')
@@ -144,7 +145,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   // Check admin status
-  if (!await isAdmin()) {
+  if (!await isAdmin(supabase)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

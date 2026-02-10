@@ -7,18 +7,21 @@ const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'eemb-web@ucsb.edu'
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX_REQUESTS = 5 // Max 5 submissions per hour per IP
+const MAX_RATE_LIMIT_ENTRIES = 10000 // Cap to prevent unbounded growth
 
 // In-memory rate limit store (for serverless, consider using Redis or Supabase)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
-// Clean up expired entries periodically
+// Clean up expired entries periodically and enforce size limit
 function cleanupRateLimitStore() {
   const now = Date.now()
-  rateLimitStore.forEach((value, key) => {
-    if (now > value.resetTime) {
-      rateLimitStore.delete(key)
-    }
-  })
+  if (rateLimitStore.size > MAX_RATE_LIMIT_ENTRIES) {
+    rateLimitStore.forEach((value, key) => {
+      if (now > value.resetTime) {
+        rateLimitStore.delete(key)
+      }
+    })
+  }
 }
 
 // Check rate limit for an IP
@@ -88,9 +91,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate field lengths to prevent abuse
-    if (name.length > 200 || email.length > 254 || message.length > 5000) {
+    if (name.length > 200 || email.length > 254 || message.length > 1000) {
       return NextResponse.json(
         { error: 'Field length exceeds maximum allowed' },
+        { status: 400 }
+      )
+    }
+
+    // Validate subject length separately for a clearer error message
+    if (subject && subject.length > 200) {
+      return NextResponse.json(
+        { error: 'Subject is too long. Please keep it under 200 characters.' },
         { status: 400 }
       )
     }

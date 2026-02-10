@@ -1,32 +1,9 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useInView } from '@/hooks/useInView'
 import type { NewsArticle } from '@/lib/supabase/types'
-
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
 
 const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
   Research: { bg: 'bg-ocean-blue/10', text: 'text-ocean-blue', border: 'border-ocean-blue/20' },
@@ -44,7 +21,7 @@ interface FeaturedNewsProps {
 export default function FeaturedNews({ initialNews = [] }: FeaturedNewsProps) {
   const [news, setNews] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(!initialNews.length)
-  const { ref, isInView } = useInView(0.1)
+  const { ref, isInView } = useInView({ threshold: 0.1 })
 
   useEffect(() => {
     if (initialNews.length > 0) {

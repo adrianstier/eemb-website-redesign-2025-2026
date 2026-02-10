@@ -8,23 +8,23 @@ import WaveDivider from '@/components/ui/WaveDivider'
 const studentVoices = [
   {
     quote: "What drew me to EEMB was the chance to study kelp forest ecology literally steps from my lab. I can run an experiment in the morning and be diving at Campus Point in the afternoon.",
-    name: "Maria Santos",
+    name: "PhD Student",
     year: "4th Year PhD",
-    advisor: "Burkepile Lab",
+    advisor: "Marine Ecology",
     research: "Kelp forest community dynamics",
   },
   {
     quote: "The collaborative culture here is genuine. My committee includes faculty from three different research groups, and that cross-pollination has shaped my dissertation in ways I never expected.",
-    name: "James Chen",
+    name: "Graduate Student",
     year: "3rd Year PhD",
-    advisor: "Briggs Lab",
+    advisor: "Disease Ecology",
     research: "Disease ecology modeling",
   },
   {
     quote: "I came for the marine biology, but discovered a passion for evolution. EEMB gave me the flexibility to pivot my research focus while still finishing in five years.",
-    name: "Aisha Williams",
-    year: "Recent PhD Graduate",
-    advisor: "Oakley Lab",
+    name: "Recent PhD Graduate",
+    year: "PhD Alumni",
+    advisor: "Evolutionary Biology",
     research: "Bioluminescence evolution",
   },
 ]

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface FacultyMember {
@@ -23,11 +24,12 @@ interface FacultyMember {
 }
 
 export default function FacultyManagement() {
+  const router = useRouter()
   const [faculty, setFaculty] = useState<FacultyMember[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [editingId, setEditingId] = useState<number | null>(null)
-  const [editForm, setEditForm] = useState<any>({})
+  const [editForm, setEditForm] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -123,6 +125,12 @@ export default function FacultyManagement() {
     }
   }
 
+  const handleLogout = async () => {
+    await fetch('/auth/logout', { method: 'POST' })
+    router.push('/')
+    router.refresh()
+  }
+
   const displayName = (member: FacultyMember) =>
     member.full_name || `${member.first_name} ${member.last_name}`
 
@@ -147,16 +155,24 @@ export default function FacultyManagement() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/admin/dashboard" className="text-ocean-blue hover:text-ocean-teal transition">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Faculty Management</h1>
-            <span className="bg-ocean-teal/10 text-ocean-teal px-3 py-1 rounded-full text-sm font-medium">
-              {faculty.length} members
-            </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/admin/dashboard" className="text-ocean-blue hover:text-ocean-teal transition">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">Faculty Management</h1>
+              <span className="bg-ocean-teal/10 text-ocean-teal px-3 py-1 rounded-full text-sm font-medium">
+                {faculty.length} members
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-red-600 hover:text-red-700 font-medium transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </header>
@@ -213,13 +229,21 @@ export default function FacultyManagement() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                        <input
-                          type="text"
+                        <select
                           value={editForm.title}
                           onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ocean-teal"
-                          placeholder="Professor, Assistant Professor, etc."
-                        />
+                        >
+                          <option value="">Select a title...</option>
+                          <option value="Professor">Professor</option>
+                          <option value="Associate Professor">Associate Professor</option>
+                          <option value="Assistant Professor">Assistant Professor</option>
+                          <option value="Adjunct Professor">Adjunct Professor</option>
+                          <option value="Professor Emeritus">Professor Emeritus</option>
+                          <option value="Lecturer">Lecturer</option>
+                          <option value="Researcher">Researcher</option>
+                          <option value="Visiting Professor">Visiting Professor</option>
+                        </select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -404,11 +428,11 @@ export default function FacultyManagement() {
                     </div>
                   )}
 
-                  {member.research_interests && member.research_interests.length > 0 && (
+                  {Array.isArray(member.research_interests) && member.research_interests.length > 0 && (
                     <div className="mt-4">
                       <span className="text-sm text-gray-600">Research Interests:</span>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        {member.research_interests.map((interest, idx) => (
+                        {member.research_interests.filter((i): i is string => typeof i === 'string').map((interest, idx) => (
                           <span key={idx} className="px-3 py-1 bg-ocean-teal/10 text-ocean-teal rounded-full text-xs">
                             {interest}
                           </span>

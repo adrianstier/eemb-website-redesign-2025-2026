@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { Faculty, Staff, GraduateStudent, Database } from '@/lib/supabase/types'
@@ -62,7 +63,7 @@ export default function PeoplePage() {
   const [activeCategory, setActiveCategory] = useState<CategoryTab>('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [sortOption, setSortOption] = useState<SortOption>('name-asc')
-  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
   const [selectedResearchCategory, setSelectedResearchCategory] = useState<ResearchCategory | 'All'>('All')
   const [selectedResearchAreaIds, setSelectedResearchAreaIds] = useState<string[]>([])
 
@@ -100,7 +101,7 @@ export default function PeoplePage() {
 
       // Fetch all data in parallel
       const [facultyRes, staffRes, studentsRes] = await Promise.all([
-        supabase.from('faculty').select('*').order('last_name'),
+        supabase.from('faculty').select('*').eq('active', true).order('last_name'),
         supabase.from('staff').select('*').eq('active', true).order('last_name'),
         supabase.from('graduate_students').select('*, advisor:faculty!graduate_students_advisor_id_fkey(id, full_name, last_name, slug)').eq('active', true).order('last_name')
       ])
@@ -333,8 +334,8 @@ export default function PeoplePage() {
     return sortedPeople
   }, [searchTerm, sortOption, faculty, staff, students, activeCategory, selectedResearchCategory, selectedResearchAreaIds, researchAreas, areaFacultyMap, mapLoading])
 
-  const handleImageError = (personId: number) => {
-    setImageErrors(prev => new Set(prev).add(personId))
+  const handleImageError = (personKey: string) => {
+    setImageErrors(prev => new Set(prev).add(personKey))
   }
 
   const clearSearch = () => {
@@ -374,7 +375,8 @@ export default function PeoplePage() {
   }
 
   const renderPersonCard = (person: Person, index: number) => {
-    const hasImageError = imageErrors.has(person.id)
+    const imageKey = `${person.person_type}-${person.id}`
+    const hasImageError = imageErrors.has(imageKey)
     const isStudent = person.person_type === 'student'
     const hasSocialLinks = person.lab_website || person.google_scholar || person.orcid || person.personal_website || person.twitter || person.linkedin
 
@@ -398,12 +400,14 @@ export default function PeoplePage() {
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-ocean-teal to-bioluminescent opacity-20 blur-lg group-hover:opacity-40 transition-opacity duration-500" />
             <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:scale-105 transition-transform duration-500">
               {person.photo_url && !hasImageError ? (
-                <img
+                <Image
                   src={person.photo_url}
                   alt={person.full_name || ''}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  onError={() => handleImageError(person.id)}
+                  width={96}
+                  height={96}
+                  className="object-cover rounded-full w-full h-full"
+                  sizes="96px"
+                  onError={() => handleImageError(imageKey)}
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-ocean-teal to-ocean-blue flex items-center justify-center">
@@ -417,7 +421,7 @@ export default function PeoplePage() {
 
           {/* Name */}
           <h3 className="font-heading text-lg font-bold text-ocean-deep text-center mb-1 group-hover:text-ocean-blue transition-colors duration-300">
-            {person.full_name}
+            {person.full_name || [person.first_name, person.last_name].filter(Boolean).join(' ') || 'Unknown'}
           </h3>
 
           {/* Title/Program Info */}
@@ -886,12 +890,15 @@ export default function PeoplePage() {
                             >
                               <td className="px-6 py-4">
                                 <div className="flex items-center gap-4">
-                                  {person.photo_url && !imageErrors.has(person.id) ? (
-                                    <img
+                                  {person.photo_url && !imageErrors.has(`${person.person_type}-${person.id}`) ? (
+                                    <Image
                                       src={person.photo_url}
                                       alt={person.full_name || ''}
-                                      className="w-12 h-12 rounded-full object-cover border-2 border-warm-200 group-hover:border-ocean-teal transition-colors"
-                                      onError={() => handleImageError(person.id)}
+                                      width={48}
+                                      height={48}
+                                      className="w-12 h-12 object-cover rounded-full border-2 border-warm-200 group-hover:border-ocean-teal transition-colors"
+                                      sizes="48px"
+                                      onError={() => handleImageError(`${person.person_type}-${person.id}`)}
                                     />
                                   ) : (
                                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-ocean-teal to-ocean-blue flex items-center justify-center border-2 border-warm-200 group-hover:border-ocean-teal transition-colors">
@@ -911,10 +918,10 @@ export default function PeoplePage() {
                                       }
                                       className="font-semibold text-ocean-deep hover:text-ocean-teal transition-colors"
                                     >
-                                      {person.full_name}
+                                      {person.full_name || [person.first_name, person.last_name].filter(Boolean).join(' ') || 'Unknown'}
                                     </Link>
                                   ) : (
-                                    <span className="font-semibold text-ocean-deep">{person.full_name}</span>
+                                    <span className="font-semibold text-ocean-deep">{person.full_name || [person.first_name, person.last_name].filter(Boolean).join(' ') || 'Unknown'}</span>
                                   )}
                                 </div>
                               </td>
@@ -942,7 +949,7 @@ export default function PeoplePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredAndSortedPeople.map((person, index) => (
                       <ScrollReveal
-                        key={person.id}
+                        key={`${person.person_type}-${person.id}`}
                         delay={(index % 4) * 75}
                         duration={500}
                         direction="up"

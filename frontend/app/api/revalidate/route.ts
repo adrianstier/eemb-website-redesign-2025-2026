@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
+import { timingSafeEqual } from 'crypto'
+
+// Constant-time string comparison to prevent timing attacks
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+}
 
 // Secret token for webhook authentication
 const REVALIDATION_TOKEN = process.env.REVALIDATION_TOKEN
@@ -39,7 +46,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (token !== REVALIDATION_TOKEN) {
+    if (!token || !safeCompare(token, REVALIDATION_TOKEN)) {
       return NextResponse.json(
         { error: 'Invalid token' },
         { status: 401 }
@@ -130,8 +137,5 @@ export async function POST(request: NextRequest) {
 
 // Allow GET for health check
 export async function GET() {
-  return NextResponse.json({
-    status: 'ok',
-    configured: !!REVALIDATION_TOKEN
-  })
+  return NextResponse.json({ status: 'ok' })
 }

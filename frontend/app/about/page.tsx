@@ -330,7 +330,7 @@ export default function AboutPage() {
                 href={center.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white rounded-lg p-6 border border-gray-100 shadow-md hover:shadow-xl hover:border-ocean-blue/30 transition-all duration-200"
+                className="group bg-white rounded-lg p-6 border border-warm-200 shadow-md hover:shadow-xl hover:border-ocean-blue/30 transition-all duration-200"
               >
                 <h3 className="text-lg font-bold text-ucsb-navy mb-2 group-hover:text-ocean-blue transition-colors">
                   {center.name}
@@ -395,7 +395,7 @@ export default function AboutPage() {
               { number: 'Top 10', label: 'Research Impact' },
               { number: '2', label: 'LTER Sites' }
             ].map((stat, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 text-center border border-gray-100 shadow-md hover:shadow-xl transition-shadow duration-200">
+              <div key={index} className="bg-white rounded-xl p-6 text-center border border-warm-200 shadow-md hover:shadow-xl transition-shadow duration-200">
                 <div className="text-3xl md:text-4xl font-bold text-ocean-blue mb-2">
                   {stat.number}
                 </div>
@@ -422,7 +422,7 @@ export default function AboutPage() {
               { role: 'Vice Chair, Resources', name: 'Hillary Young', title: 'Professor', slug: 'hillary-young', color: 'from-ucsb-coral to-orange-400' },
               { role: 'Vice Chair, Curriculum', name: 'Stephen Proulx', title: 'Professor', slug: 'stephen-proulx', color: 'from-ocean-blue to-ocean-deep' },
             ].map((leader, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition-shadow text-center">
+              <div key={index} className="bg-white rounded-xl p-6 shadow-md border border-warm-200 hover:shadow-xl transition-shadow text-center">
                 <div className={`w-20 h-20 bg-gradient-to-br ${leader.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
                   <svg className="w-10 h-10 text-white/80" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
@@ -527,7 +527,7 @@ export default function AboutPage() {
               <Link
                 key={index}
                 href={link.href}
-                className="group bg-white rounded-xl p-6 border border-gray-100 shadow-md hover:shadow-xl hover:border-ocean-blue/30 transition-all text-center"
+                className="group bg-white rounded-xl p-6 border border-warm-200 shadow-md hover:shadow-xl hover:border-ocean-blue/30 transition-all text-center"
               >
                 <div className="mb-3 flex justify-center">
                   <link.icon className="w-10 h-10 text-ocean-blue" />

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useInView } from '@/hooks/useInView'
 
 const pathways = [
   {
@@ -51,32 +51,8 @@ const pathways = [
   },
 ]
 
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold }
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return { ref, isInView }
-}
-
 export default function QuickNav() {
-  const { ref, isInView } = useInView(0.1)
+  const { ref, isInView } = useInView({ threshold: 0.1 })
 
   return (
     <section ref={ref} className="py-16 md:py-20 bg-warm-50 relative overflow-hidden">

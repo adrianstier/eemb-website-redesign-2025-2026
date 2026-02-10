@@ -8,7 +8,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const lastScrollYRef = useRef(0)
   const pathname = usePathname()
 
   // Refs for focus management
@@ -26,7 +26,7 @@ export default function Header() {
       const currentScrollY = window.scrollY
 
       // Show/hide based on scroll direction
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
         setHidden(true)
       } else {
         setHidden(false)
@@ -34,12 +34,12 @@ export default function Header() {
 
       // Background change
       setScrolled(currentScrollY > 50)
-      setLastScrollY(currentScrollY)
+      lastScrollYRef.current = currentScrollY
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+  }, [])
 
   // Close menu on Escape key and handle focus trap
   useEffect(() => {
