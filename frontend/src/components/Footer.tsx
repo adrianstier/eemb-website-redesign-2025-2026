@@ -188,12 +188,12 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} The Regents of the University of California. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-white/40 hover:text-white/70 transition-colors text-sm">
+            <a href="https://www.policy.ucsb.edu/terms-of-use/privacy-notification" className="text-white/40 hover:text-white/70 transition-colors text-sm">
               Privacy Policy
-            </Link>
-            <Link href="/accessibility" className="text-white/40 hover:text-white/70 transition-colors text-sm">
+            </a>
+            <a href="https://www.ucsb.edu/accessibility" className="text-white/40 hover:text-white/70 transition-colors text-sm">
               Accessibility
-            </Link>
+            </a>
           </div>
         </div>
       </div>

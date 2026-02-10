@@ -2,14 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import {
-  PhoneIcon,
-  EnvelopeIcon,
-  BuildingOfficeIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  ClockIcon,
-} from '@heroicons/react/24/outline'
+import { Phone, Mail, Building2, ChevronDown, ChevronRight, Clock } from 'lucide-react'
 
 // Types
 interface Person {
@@ -146,7 +139,7 @@ export default function SupportPage() {
           className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-warm-50 transition-colors"
         >
           <h3 className="font-medium text-warm-800">{title}</h3>
-          <ChevronDownIcon className={`w-5 h-5 text-warm-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-5 h-5 text-warm-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
         </button>
         {isExpanded && (
           <div className="px-6 pb-6 border-t border-warm-100">
@@ -164,7 +157,7 @@ export default function SupportPage() {
         <div className="container mx-auto px-4 py-12">
           <nav className="flex items-center gap-2 text-sm text-white/60 mb-4">
             <Link href="/" className="hover:text-white">Home</Link>
-            <ChevronRightIcon className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" />
             <span className="text-white">Support</span>
           </nav>
           <h1 className="text-3xl md:text-4xl font-serif font-bold">Department Support</h1>
@@ -179,23 +172,23 @@ export default function SupportPage() {
         <div className="container mx-auto px-4 py-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <BuildingOfficeIcon className="w-8 h-8 text-ocean-blue flex-shrink-0" />
+              <Building2 className="w-8 h-8 text-ocean-blue flex-shrink-0" />
               <div>
                 <p className="font-medium text-warm-800">EEMB Main Office</p>
                 <p className="text-sm text-warm-500">Life Sciences Building, Room 4102</p>
               </div>
             </div>
             <div className="flex items-center gap-2 text-sm text-warm-600">
-              <ClockIcon className="w-4 h-4" />
+              <Clock className="w-4 h-4" />
               <span>Mon–Fri, 8:00am – 5:00pm</span>
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <a href="tel:8058932974" className="flex items-center gap-2 text-ocean-blue font-medium">
-                <PhoneIcon className="w-4 h-4" />
+                <Phone className="w-4 h-4" />
                 805-893-2974
               </a>
               <a href="mailto:info@eemb.ucsb.edu" className="flex items-center gap-2 text-ocean-blue font-medium">
-                <EnvelopeIcon className="w-4 h-4" />
+                <Mail className="w-4 h-4" />
                 info@eemb.ucsb.edu
               </a>
             </div>
