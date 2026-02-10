@@ -86,9 +86,9 @@ export default function EmptyState({
       <div className="absolute top-0 right-0 w-64 h-64 bg-ucsb-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-ocean-teal/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-      {/* Animated wave pattern */}
+      {/* Animated wave pattern - respects prefers-reduced-motion via CSS */}
       {showWave && (
-        <div className="absolute bottom-0 left-0 right-0 opacity-10">
+        <div className="absolute bottom-0 left-0 right-0 opacity-10" aria-hidden="true">
           <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-16">
             <path fill="currentColor" className="text-ocean-teal" d="M0,64 C240,96,480,32,720,64 C960,96,1200,32,1440,64 L1440,120 L0,120 Z">
               <animate
@@ -99,6 +99,8 @@ export default function EmptyState({
               />
             </path>
           </svg>
+          {/* Disable SVG animation for users who prefer reduced motion */}
+          <style>{`@media (prefers-reduced-motion: reduce) { animate { animation: none !important; } }`}</style>
         </div>
       )}
 

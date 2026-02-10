@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface FacultyMember {
   id: number
@@ -31,6 +32,7 @@ export default function FacultyManagement() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editForm, setEditForm] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchFaculty()
@@ -38,14 +40,16 @@ export default function FacultyManagement() {
 
   const fetchFaculty = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/admin/faculty')
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`)
       }
       const data = await response.json()
       setFaculty(data || [])
-    } catch (error) {
-      console.error('Failed to fetch faculty:', error)
+    } catch (err) {
+      console.error('Failed to fetch faculty:', err)
+      setError('Failed to load faculty data. Please try refreshing the page.')
     } finally {
       setLoading(false)
     }
@@ -126,7 +130,8 @@ export default function FacultyManagement() {
   }
 
   const handleLogout = async () => {
-    await fetch('/auth/logout', { method: 'POST' })
+    const supabase = createClient()
+    await supabase.auth.signOut()
     router.push('/')
     router.refresh()
   }
@@ -178,6 +183,13 @@ export default function FacultyManagement() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error State */}
+        {error && (
+          <div className="mb-6 p-4 rounded-lg bg-red-50 border-l-4 border-red-500">
+            <p className="text-red-700 font-semibold">{error}</p>
+          </div>
+        )}
+
         {/* Search */}
         <div className="mb-6">
           <input
@@ -238,11 +250,13 @@ export default function FacultyManagement() {
                           <option value="Professor">Professor</option>
                           <option value="Associate Professor">Associate Professor</option>
                           <option value="Assistant Professor">Assistant Professor</option>
-                          <option value="Adjunct Professor">Adjunct Professor</option>
                           <option value="Professor Emeritus">Professor Emeritus</option>
+                          <option value="Distinguished Professor">Distinguished Professor</option>
+                          <option value="Research Professor">Research Professor</option>
+                          <option value="Adjunct Professor">Adjunct Professor</option>
+                          <option value="Postdoctoral Researcher">Postdoctoral Researcher</option>
                           <option value="Lecturer">Lecturer</option>
-                          <option value="Researcher">Researcher</option>
-                          <option value="Visiting Professor">Visiting Professor</option>
+                          <option value="Teaching Professor">Teaching Professor</option>
                         </select>
                       </div>
                       <div>

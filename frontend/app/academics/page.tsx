@@ -100,6 +100,7 @@ export default function AcademicsPage() {
           src="/images/about/ucsb-aerial.jpg"
           alt="UCSB campus where mountains meet the sea"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -394,6 +395,7 @@ export default function AcademicsPage() {
                     src={exp.image}
                     alt={exp.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep/80 via-ocean-deep/30 to-transparent" />

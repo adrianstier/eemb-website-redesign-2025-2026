@@ -7,7 +7,7 @@ import {
   TrendingUp,
   Globe,
   Waves,
-  Palmtree,
+  TreePalm,
   Microscope,
   Star,
   Sun,
@@ -24,7 +24,7 @@ export default function AboutPage() {
     { year: '1972-77', event: 'Vice Chancellor Alec Alexander strategically reallocated faculty appointments to strengthen ecology and marine biology', icon: TrendingUp },
     { year: '1995', event: 'EEMB faculty founded NCEAS (National Center for Ecological Analysis and Synthesis), pioneering synthesis science worldwide', icon: Globe },
     { year: '2000', event: 'NSF Santa Barbara Coastal Long Term Ecological Research Site established, enabling decades of kelp forest monitoring', icon: Waves },
-    { year: '2004', event: 'NSF Moorea Coral Reef LTER established in French Polynesia, expanding our tropical research footprint', icon: Palmtree },
+    { year: '2004', event: 'NSF Moorea Coral Reef LTER established in French Polynesia, expanding our tropical research footprint', icon: TreePalm },
     { year: '2010s', event: 'Department grows to 40+ research groups, becomes top-ranked program in marine science and ecology', icon: Microscope },
     { year: 'Present', event: 'Recognized globally: Top 10 in research impact, Top 3 in Marine Science, leading climate change and biodiversity research', icon: Star }
   ]
@@ -91,7 +91,7 @@ export default function AboutPage() {
     {
       title: 'Channel Islands Access',
       description: 'Research partnerships with Channel Islands National Park and Marine Sanctuary provide access to pristine island ecosystems just offshore.',
-      icon: Palmtree,
+      icon: TreePalm,
     },
   ]
 

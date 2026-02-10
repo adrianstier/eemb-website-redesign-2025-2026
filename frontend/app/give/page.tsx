@@ -73,7 +73,7 @@ export default function GivePage() {
         ],
         impact: 'Fellowship support allows students to focus on their research, attend conferences, publish their findings, and develop into leading scientists and educators.'
       },
-      color: 'from-purple-600 to-blue-600'
+      color: 'from-ocean-blue to-ocean-teal'
     },
     {
       icon: Users,
@@ -117,7 +117,7 @@ export default function GivePage() {
         ],
         impact: 'These experiences help students develop critical thinking skills, gain practical knowledge, and prepare for careers in science, medicine, conservation, and education.'
       },
-      color: 'from-green-600 to-teal-600'
+      color: 'from-ocean-teal to-bioluminescent'
     },
     {
       icon: FlaskConical,
@@ -222,7 +222,7 @@ export default function GivePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-warm-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
@@ -262,7 +262,7 @@ export default function GivePage() {
             <h2 className="text-3xl md:text-4xl font-bold text-ucsb-navy mb-6">
               Excellence in the Fundamental Sciences
             </h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-8">
+            <p className="text-lg text-warm-700 leading-relaxed mb-8">
               The Department of Ecology, Evolution and Marine Biology is committed to excellence in the
               fundamental sciences of ecology and evolution from genes to ecosystems. Your support helps
               sustain world-class scholars and promising students who are dedicated to understanding and
@@ -277,7 +277,7 @@ export default function GivePage() {
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <h3 className="font-bold text-lg text-ucsb-navy mb-3">{story.title}</h3>
-                    <p className="text-sm text-gray-600">{story.description}</p>
+                    <p className="text-sm text-warm-600">{story.description}</p>
                   </div>
                 )
               })}
@@ -287,10 +287,10 @@ export default function GivePage() {
       </section>
 
       {/* Giving Priorities */}
-      <section className="py-12 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="py-12 bg-gradient-to-br from-warm-50 to-ocean-blue/5">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-ucsb-navy mb-4 text-center">Giving Priorities</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+          <p className="text-center text-warm-600 mb-12 max-w-3xl mx-auto">
             Your contribution in any of these areas makes a direct impact on our ability to advance
             scientific discovery and educate future leaders in environmental science.
           </p>
@@ -314,11 +314,11 @@ export default function GivePage() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h4 className="font-semibold text-gray-700 mb-4">Your gift supports:</h4>
+                    <h4 className="font-semibold text-warm-700 mb-4">Your gift supports:</h4>
                     <ul className="space-y-3 mb-6">
                       {priority.benefits.map((benefit, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-gray-700">
-                          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                        <li key={idx} className="flex items-start gap-3 text-sm text-warm-700">
+                          <CheckCircle className="w-5 h-5 text-ocean-teal flex-shrink-0 mt-0.5" />
                           <span>{benefit}</span>
                         </li>
                       ))}
@@ -327,7 +327,7 @@ export default function GivePage() {
                     {/* Expandable Details Section */}
                     <button
                       onClick={() => toggleSection(index)}
-                      className="w-full flex items-center justify-between bg-gradient-to-r from-gray-50 to-blue-50 px-4 py-3 rounded-lg hover:from-gray-100 hover:to-blue-100 transition border border-gray-200"
+                      className="w-full flex items-center justify-between bg-gradient-to-r from-warm-50 to-ocean-blue/5 px-4 py-3 rounded-lg hover:from-warm-100 hover:to-ocean-blue/10 transition border border-warm-200"
                     >
                       <span className="font-semibold text-ocean-blue">Learn More About Giving Opportunities</span>
                       {isExpanded ? (
@@ -338,8 +338,8 @@ export default function GivePage() {
                     </button>
 
                     {isExpanded && (
-                      <div className="mt-4 space-y-4 border-t border-gray-200 pt-4">
-                        <p className="text-sm text-gray-700 leading-relaxed">
+                      <div className="mt-4 space-y-4 border-t border-warm-200 pt-4">
+                        <p className="text-sm text-warm-700 leading-relaxed">
                           {priority.details.intro}
                         </p>
 
@@ -347,7 +347,7 @@ export default function GivePage() {
                         {priority.details.points && (
                           <ul className="space-y-2">
                             {priority.details.points.map((point: string, idx: number) => (
-                              <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                              <li key={idx} className="flex items-start gap-2 text-sm text-warm-700">
                                 <span className="text-ocean-blue mt-1">•</span>
                                 <span>{point}</span>
                               </li>
@@ -358,12 +358,12 @@ export default function GivePage() {
                         {/* Graduate Support Fellowships */}
                         {priority.details.fellowships && (
                           <div className="space-y-3">
-                            <h5 className="font-semibold text-gray-800">Named Fellowships & Awards:</h5>
+                            <h5 className="font-semibold text-ocean-deep">Named Fellowships & Awards:</h5>
                             {priority.details.fellowships.map((fellowship: any, idx: number) => (
-                              <div key={idx} className="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
-                                <h6 className="font-bold text-gray-900 mb-1">{fellowship.name}</h6>
-                                <p className="text-sm text-gray-700 mb-2">{fellowship.description}</p>
-                                <p className="text-xs text-purple-700 font-semibold">{fellowship.level}</p>
+                              <div key={idx} className="bg-ocean-blue/5 rounded-lg p-4 border-l-4 border-ocean-blue">
+                                <h6 className="font-bold text-ocean-deep mb-1">{fellowship.name}</h6>
+                                <p className="text-sm text-warm-700 mb-2">{fellowship.description}</p>
+                                <p className="text-xs text-ocean-blue font-semibold">{fellowship.level}</p>
                               </div>
                             ))}
                           </div>
@@ -372,21 +372,21 @@ export default function GivePage() {
                         {/* Undergraduate Support Needs */}
                         {priority.details.needs && (
                           <div className="space-y-3">
-                            <h5 className="font-semibold text-gray-800">Priority Needs:</h5>
+                            <h5 className="font-semibold text-ocean-deep">Priority Needs:</h5>
                             {priority.details.needs.map((need: any, idx: number) => (
-                              <div key={idx} className="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
-                                <h6 className="font-bold text-gray-900 mb-2">{need.category}</h6>
+                              <div key={idx} className="bg-ocean-teal/5 rounded-lg p-4 border-l-4 border-ocean-teal">
+                                <h6 className="font-bold text-ocean-deep mb-2">{need.category}</h6>
                                 {need.description && (
-                                  <p className="text-sm text-gray-700 mb-1">{need.description}</p>
+                                  <p className="text-sm text-warm-700 mb-1">{need.description}</p>
                                 )}
                                 {need.cost && (
-                                  <p className="text-xs text-green-700 font-semibold">{need.cost}</p>
+                                  <p className="text-xs text-ocean-teal font-semibold">{need.cost}</p>
                                 )}
                                 {need.items && (
                                   <ul className="space-y-1 mt-2">
                                     {need.items.map((item: string, itemIdx: number) => (
-                                      <li key={itemIdx} className="text-sm text-gray-700 ml-4">
-                                        <span className="text-green-600">→</span> {item}
+                                      <li key={itemIdx} className="text-sm text-warm-700 ml-4">
+                                        <span className="text-ocean-teal">→</span> {item}
                                       </li>
                                     ))}
                                   </ul>
@@ -399,26 +399,26 @@ export default function GivePage() {
                         {/* Faculty & Research Opportunities */}
                         {priority.details.opportunities && (
                           <div className="space-y-3">
-                            <h5 className="font-semibold text-gray-800">Major Giving Opportunities:</h5>
+                            <h5 className="font-semibold text-ocean-deep">Major Giving Opportunities:</h5>
                             {priority.details.opportunities.map((opp: any, idx: number) => (
-                              <div key={idx} className="bg-blue-50 rounded-lg p-4 border-l-4 border-ucsb-navy">
+                              <div key={idx} className="bg-ocean-blue/5 rounded-lg p-4 border-l-4 border-ucsb-navy">
                                 <div className="flex items-start justify-between mb-2">
-                                  <h6 className="font-bold text-gray-900">{opp.type}</h6>
+                                  <h6 className="font-bold text-ocean-deep">{opp.type}</h6>
                                   {opp.level && (
                                     <span className="text-xs bg-ucsb-navy text-white px-2 py-1 rounded-full whitespace-nowrap ml-2">
                                       {opp.level}
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-sm text-gray-700 mb-2">{opp.description}</p>
+                                <p className="text-sm text-warm-700 mb-2">{opp.description}</p>
                                 {opp.impact && (
-                                  <p className="text-xs text-blue-700 italic">{opp.impact}</p>
+                                  <p className="text-xs text-ocean-blue italic">{opp.impact}</p>
                                 )}
                                 {opp.examples && (
                                   <ul className="space-y-1 mt-2">
                                     {opp.examples.map((example: string, exIdx: number) => (
-                                      <li key={exIdx} className="text-sm text-gray-700 ml-4">
-                                        <span className="text-blue-600">→</span> {example}
+                                      <li key={exIdx} className="text-sm text-warm-700 ml-4">
+                                        <span className="text-ocean-blue">→</span> {example}
                                       </li>
                                     ))}
                                   </ul>
@@ -429,8 +429,8 @@ export default function GivePage() {
                         )}
 
                         {priority.details.impact && (
-                          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 border-l-4 border-ucsb-gold">
-                            <p className="text-sm text-gray-800 font-medium italic">
+                          <div className="bg-gradient-to-r from-ucsb-gold/10 to-ucsb-gold/5 rounded-lg p-4 border-l-4 border-ucsb-gold">
+                            <p className="text-sm text-ocean-deep font-medium italic">
                               <strong>Impact:</strong> {priority.details.impact}
                             </p>
                           </div>
@@ -453,14 +453,14 @@ export default function GivePage() {
             {waysToGive.map((way, index) => {
               const Icon = way.icon
               return (
-                <div key={index} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-8 shadow-md hover:shadow-lg transition border-t-4 border-ocean-blue">
+                <div key={index} className="bg-gradient-to-br from-warm-50 to-white rounded-xl p-8 shadow-md hover:shadow-lg transition border-t-4 border-ocean-blue">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-ocean-blue to-ocean-teal rounded-lg flex items-center justify-center">
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <h3 className="text-xl font-bold text-ucsb-navy">{way.method}</h3>
                   </div>
-                  <p className="text-gray-700 mb-6">{way.description}</p>
+                  <p className="text-warm-700 mb-6">{way.description}</p>
 
                   {way.link && (
                     <a
@@ -474,17 +474,17 @@ export default function GivePage() {
                   )}
 
                   {way.address && (
-                    <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-ocean-blue">
-                      <p className="text-xs text-gray-600 mb-1 font-semibold">Mail to:</p>
-                      <p className="text-sm text-gray-700">{way.address}</p>
-                      <p className="text-xs text-gray-500 mt-2">Include "EEMB" in the memo line</p>
+                    <div className="bg-ocean-blue/5 rounded-lg p-4 border-l-4 border-ocean-blue">
+                      <p className="text-xs text-warm-600 mb-1 font-semibold">Mail to:</p>
+                      <p className="text-sm text-warm-700">{way.address}</p>
+                      <p className="text-xs text-warm-500 mt-2">Include "EEMB" in the memo line</p>
                     </div>
                   )}
 
                   {way.contact && (
-                    <div className="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
-                      <p className="text-sm text-gray-700 mb-1">Contact: <span className="font-semibold">{way.contact}</span></p>
-                      <p className="text-xs text-gray-600">See contact information below</p>
+                    <div className="bg-ocean-blue/5 rounded-lg p-4 border-l-4 border-ocean-blue">
+                      <p className="text-sm text-warm-700 mb-1">Contact: <span className="font-semibold">{way.contact}</span></p>
+                      <p className="text-xs text-warm-600">See contact information below</p>
                     </div>
                   )}
                 </div>
@@ -560,9 +560,9 @@ export default function GivePage() {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 border-l-4 border-ocean-blue">
+            <div className="bg-gradient-to-br from-ocean-blue/5 to-ocean-teal/5 rounded-xl p-8 border-l-4 border-ocean-blue">
               <h3 className="text-xl font-bold text-ucsb-navy mb-4">Tax Information</h3>
-              <div className="space-y-3 text-sm text-gray-700">
+              <div className="space-y-3 text-sm text-warm-700">
                 <p>
                   <strong>The UC Santa Barbara Foundation</strong> is a 501(c)(3) nonprofit organization.
                   Your gift is tax-deductible to the extent allowed by law.
@@ -577,23 +577,23 @@ export default function GivePage() {
               </div>
             </div>
 
-            <div className="mt-8 bg-yellow-50 rounded-lg p-6 border-l-4 border-yellow-500">
-              <h4 className="font-bold text-yellow-900 mb-2">Other Ways to Support EEMB</h4>
-              <ul className="space-y-2 text-sm text-gray-700">
+            <div className="mt-8 bg-ucsb-gold/10 rounded-lg p-6 border-l-4 border-ucsb-gold">
+              <h4 className="font-bold text-ocean-deep mb-2">Other Ways to Support EEMB</h4>
+              <ul className="space-y-2 text-sm text-warm-700">
                 <li className="flex items-start gap-2">
-                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-ucsb-gold mt-1">•</span>
                   <span><strong>Planned Giving:</strong> Include EEMB in your estate plans through bequests, trusts, or beneficiary designations</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-ucsb-gold mt-1">•</span>
                   <span><strong>Matching Gifts:</strong> Many employers match charitable contributions—check if your company participates</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-ucsb-gold mt-1">•</span>
                   <span><strong>Stock Gifts:</strong> Donating appreciated securities can provide significant tax benefits</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-ucsb-gold mt-1">•</span>
                   <span><strong>IRA Charitable Rollover:</strong> If you're 70½ or older, you can make tax-free gifts from your IRA</span>
                 </li>
               </ul>
@@ -603,14 +603,14 @@ export default function GivePage() {
       </section>
 
       {/* General Department Contact */}
-      <section className="py-12 bg-gray-100">
+      <section className="py-12 bg-warm-100">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-600 mb-4">For general department inquiries</p>
+          <p className="text-warm-600 mb-4">For general department inquiries</p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <a href="tel:8058932974" className="text-ocean-blue hover:text-ocean-teal font-semibold">
               805-893-2974
             </a>
-            <span className="text-gray-400 hidden md:inline">|</span>
+            <span className="text-warm-500 hidden md:inline">|</span>
             <a href="mailto:info@eemb.ucsb.edu" className="text-ocean-blue hover:text-ocean-teal font-semibold">
               info@eemb.ucsb.edu
             </a>

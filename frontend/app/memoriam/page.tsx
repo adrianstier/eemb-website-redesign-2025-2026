@@ -95,9 +95,9 @@ export default function InMemoriamPage() {
   const selectedMem = memorials.find(m => m.id === selectedMemorial)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-warm-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 text-white py-16">
+      <section className="bg-gradient-to-br from-ocean-deep via-ocean-deep/90 to-ocean-deep/80 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">In Memoriam</h1>
@@ -112,7 +112,7 @@ export default function InMemoriamPage() {
       <section className="py-12 bg-white border-b">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-warm-700 leading-relaxed">
               The EEMB Department has been shaped by brilliant scientists, dedicated educators, and wonderful human beings.
               This page honors the memory of our departed colleagues whose contributions to science, teaching, and our community
               continue to inspire us. Their legacy lives on through their research, their students, and the lasting impact they
@@ -133,7 +133,7 @@ export default function InMemoriamPage() {
                 onClick={() => setSelectedMemorial(memorial.id)}
               >
                 {memorial.photo && (
-                  <div className="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
+                  <div className="relative h-48 bg-gradient-to-br from-warm-200 to-warm-200 overflow-hidden">
                     <Image
                       src={memorial.photo}
                       alt={memorial.name}
@@ -144,23 +144,23 @@ export default function InMemoriamPage() {
                   </div>
                 )}
                 {!memorial.photo && (
-                  <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                    <div className="w-32 h-32 bg-gray-400 rounded-full flex items-center justify-center text-white text-5xl font-bold">
+                  <div className="h-48 bg-gradient-to-br from-warm-200 to-warm-200 flex items-center justify-center">
+                    <div className="w-32 h-32 bg-warm-500 rounded-full flex items-center justify-center text-white text-5xl font-bold">
                       {memorial.name.split(' ').map(n => n[0]).join('')}
                     </div>
                   </div>
                 )}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{memorial.name}</h3>
-                  <p className="text-gray-600 font-semibold mb-1">{memorial.title}</p>
-                  <p className="text-gray-500 text-sm mb-4">{memorial.years}</p>
-                  <p className="text-gray-700 line-clamp-3">{memorial.bio}</p>
+                  <h3 className="text-2xl font-bold text-ocean-deep mb-2">{memorial.name}</h3>
+                  <p className="text-warm-600 font-semibold mb-1">{memorial.title}</p>
+                  <p className="text-warm-500 text-sm mb-4">{memorial.years}</p>
+                  <p className="text-warm-700 line-clamp-3">{memorial.bio}</p>
                   {memorial.researchAreas && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {memorial.researchAreas.map((area, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs"
+                          className="px-2 py-1 bg-warm-100 text-warm-600 rounded text-xs"
                         >
                           {area}
                         </span>
@@ -188,10 +188,10 @@ export default function InMemoriamPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">{selectedMem.name}</h2>
+              <h2 className="text-2xl font-bold text-ocean-deep">{selectedMem.name}</h2>
               <button
                 onClick={() => setSelectedMemorial(null)}
-                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-warm-100 transition"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -201,24 +201,24 @@ export default function InMemoriamPage() {
 
             <div className="p-6">
               <div className="mb-6">
-                <p className="text-gray-600 font-semibold mb-1">{selectedMem.title}</p>
-                <p className="text-gray-500">{selectedMem.years}</p>
+                <p className="text-warm-600 font-semibold mb-1">{selectedMem.title}</p>
+                <p className="text-warm-500">{selectedMem.years}</p>
               </div>
 
               {selectedMem.obituary && (
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
-                  <p className="text-gray-700 italic">{selectedMem.obituary}</p>
+                <div className="mb-6 p-4 bg-warm-50 rounded-lg border-l-4 border-warm-400">
+                  <p className="text-warm-700 italic">{selectedMem.obituary}</p>
                 </div>
               )}
 
               <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Biography</h3>
-                <p className="text-gray-700 leading-relaxed">{selectedMem.bio}</p>
+                <h3 className="text-xl font-bold text-ocean-deep mb-3">Biography</h3>
+                <p className="text-warm-700 leading-relaxed">{selectedMem.bio}</p>
               </div>
 
               {selectedMem.researchAreas && (
                 <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Research Areas</h3>
+                  <h3 className="text-xl font-bold text-ocean-deep mb-3">Research Areas</h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedMem.researchAreas.map((area, index) => (
                       <span
@@ -233,13 +233,13 @@ export default function InMemoriamPage() {
               )}
 
               <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Legacy</h3>
-                <p className="text-gray-700 leading-relaxed">{selectedMem.legacy}</p>
+                <h3 className="text-xl font-bold text-ocean-deep mb-3">Legacy</h3>
+                <p className="text-warm-700 leading-relaxed">{selectedMem.legacy}</p>
               </div>
 
               {selectedMem.externalLinks && selectedMem.externalLinks.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Additional Information</h3>
+                  <h3 className="text-xl font-bold text-ocean-deep mb-3">Additional Information</h3>
                   <div className="space-y-2">
                     {selectedMem.externalLinks.map((link, index) => (
                       <a
@@ -267,8 +267,8 @@ export default function InMemoriamPage() {
       <section className="py-16 bg-white border-t">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Submit a Memorial</h2>
-            <p className="text-gray-700 mb-6">
+            <h2 className="text-2xl font-bold text-ocean-deep mb-4">Submit a Memorial</h2>
+            <p className="text-warm-700 mb-6">
               If you would like to suggest someone to be remembered on this page or have additional information
               to contribute about those listed, please contact the department.
             </p>

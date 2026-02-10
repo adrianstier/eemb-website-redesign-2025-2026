@@ -159,15 +159,21 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Event ID is required' }, { status: 400 })
     }
 
+    const numericId = parseInt(id, 10)
+    if (isNaN(numericId) || numericId <= 0) {
+      return NextResponse.json({ error: 'Event ID must be a positive integer' }, { status: 400 })
+    }
+
     if (cancel) {
       // Cancel event instead of deleting
       const { error } = await supabase
         .from('events')
         .update({
           canceled: true,
-          cancellation_reason: reason || 'Event canceled'
+          cancellation_reason: reason || 'Event canceled',
+          updated_at: new Date().toISOString()
         })
-        .eq('id', parseInt(id))
+        .eq('id', numericId)
 
       if (error) {
         console.error('Error canceling event:', error)
@@ -178,7 +184,7 @@ export async function DELETE(request: NextRequest) {
       const { error } = await supabase
         .from('events')
         .delete()
-        .eq('id', parseInt(id))
+        .eq('id', numericId)
 
       if (error) {
         console.error('Error deleting event:', error)

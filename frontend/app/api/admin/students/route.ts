@@ -173,12 +173,17 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Student ID is required' }, { status: 400 })
     }
 
+    const numericId = parseInt(id, 10)
+    if (isNaN(numericId) || numericId <= 0) {
+      return NextResponse.json({ error: 'Student ID must be a positive integer' }, { status: 400 })
+    }
+
     if (hard) {
       // Hard delete
       const { error } = await supabase
         .from('graduate_students')
         .delete()
-        .eq('id', parseInt(id))
+        .eq('id', numericId)
 
       if (error) {
         console.error('Error deleting student:', error)
@@ -188,8 +193,8 @@ export async function DELETE(request: NextRequest) {
       // Soft delete - set inactive
       const { error } = await supabase
         .from('graduate_students')
-        .update({ active: false })
-        .eq('id', parseInt(id))
+        .update({ active: false, updated_at: new Date().toISOString() })
+        .eq('id', numericId)
 
       if (error) {
         console.error('Error deactivating student:', error)

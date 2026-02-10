@@ -23,8 +23,6 @@ interface Initiative {
   description: string
   fullDescription: string
   icon: LucideIcon
-  leader: string
-  contact: string
 }
 
 export default function DEIPage() {
@@ -46,8 +44,6 @@ export default function DEIPage() {
       description: 'Actively recruiting diverse students and faculty from underrepresented groups in STEM.',
       fullDescription: 'We have implemented comprehensive recruitment strategies targeting students from underrepresented backgrounds in biology and environmental sciences. Our efforts include partnerships with community colleges, minority-serving institutions, and outreach programs in K-12 schools.',
       icon: GraduationCap,
-      leader: 'DEI Committee',
-      contact: 'eemb-dei@ucsb.edu'
     },
     {
       id: 'mentorship',
@@ -55,8 +51,6 @@ export default function DEIPage() {
       description: 'Comprehensive mentoring for underrepresented students to support their success.',
       fullDescription: 'Our departmental mentorship programs pair students from underrepresented backgrounds with faculty and advanced graduate student mentors. Programs include academic support, career guidance, and professional development workshops.',
       icon: Handshake,
-      leader: 'Dr. James Wilson',
-      contact: 'jwilson@ucsb.edu'
     },
     {
       id: 'bias-training',
@@ -64,8 +58,6 @@ export default function DEIPage() {
       description: 'Regular training for faculty and staff on recognizing and addressing implicit bias.',
       fullDescription: 'All faculty, staff, and graduate teaching assistants participate in evidence-based training on unconscious bias, inclusive teaching, and creating welcoming learning environments.',
       icon: Brain,
-      leader: 'Dr. Angela Martinez',
-      contact: 'amartinez@ucsb.edu'
     },
     {
       id: 'accessibility',
@@ -73,8 +65,6 @@ export default function DEIPage() {
       description: 'Ensuring all students have equal access to educational opportunities and resources.',
       fullDescription: 'We work closely with Disabled Students Program (DSP) to provide accommodations for students with disabilities. Our facilities and curriculum are designed to be accessible, and we continuously work to improve our accessibility practices.',
       icon: Accessibility,
-      leader: 'Dr. Robert Chen',
-      contact: 'rchen@ucsb.edu'
     },
     {
       id: 'diversity-seminar',
@@ -82,8 +72,6 @@ export default function DEIPage() {
       description: 'Monthly seminars celebrating diverse perspectives and experiences in biological sciences.',
       fullDescription: 'This seminar series features speakers from underrepresented groups in biology discussing their research, career paths, and experiences in STEM. Open to all students, these events highlight diverse role models and foster inclusive community.',
       icon: Mic,
-      leader: 'Dr. Lisa Wong',
-      contact: 'lwong@ucsb.edu'
     },
     {
       id: 'family-support',
@@ -91,8 +79,6 @@ export default function DEIPage() {
       description: 'Support programs for graduate students with family responsibilities.',
       fullDescription: 'We provide childcare subsidies, parental leave policies, lactation rooms, and flexible scheduling to support graduate students who are parents or have other family responsibilities.',
       icon: Users,
-      leader: 'Dr. Patricia Johnson',
-      contact: 'pjohnson@ucsb.edu'
     },
     {
       id: 'lgbtq-support',
@@ -100,8 +86,6 @@ export default function DEIPage() {
       description: 'Creating a welcoming and affirming environment for LGBTQ+ members of our community.',
       fullDescription: 'Our department is committed to creating an inclusive environment for LGBTQ+ students, faculty, and staff. We use affirming language, support gender diversity, and actively work to address discrimination.',
       icon: Rainbow,
-      leader: 'Dr. Michael Torres',
-      contact: 'mtorres@ucsb.edu'
     },
     {
       id: 'first-gen',
@@ -109,8 +93,6 @@ export default function DEIPage() {
       description: 'Targeted support for first-generation college students navigating higher education.',
       fullDescription: 'First-generation students face unique challenges in higher education. We provide navigation support, peer mentoring, financial resources, and community to help first-gen students thrive.',
       icon: Star,
-      leader: 'Dr. Carlos Rodriguez',
-      contact: 'crodriguez@ucsb.edu'
     }
   ]
 
@@ -152,20 +134,13 @@ export default function DEIPage() {
     }
   ]
 
-  const statistics = [
-    { label: 'Women in Department', value: '45%' },
-    { label: 'International Students', value: '32%' },
-    { label: 'First-Generation Students', value: '28%' },
-    { label: 'Underrepresented Minorities', value: '22%' }
-  ]
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-warm-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-ocean-deep via-ocean-blue to-ocean-teal text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Diversity, Equity & Inclusion</h1>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Diversity, Equity & Inclusion</h1>
             <p className="text-lg md:text-xl text-white/90">
               Creating a welcoming, inclusive community where all students, faculty, and staff can thrive and contribute their unique perspectives and talents.
             </p>
@@ -174,11 +149,11 @@ export default function DEIPage() {
       </section>
 
       {/* Mission Statement */}
-      <section className="py-12 bg-white border-b">
+      <section className="py-12 bg-white border-b border-warm-200">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-ucsb-navy mb-4">Our Commitment to DEI</h2>
-            <p className="text-lg text-gray-700">
+            <h2 className="text-2xl font-bold text-ocean-deep mb-4">Our Commitment to DEI</h2>
+            <p className="text-lg text-warm-700">
               The Department of Ecology, Evolution and Marine Biology is committed to creating an environment that celebrates and respects diversity in all its forms. We recognize that diverse perspectives strengthen our research, enhance learning, and better equip us to address global environmental challenges. We are dedicated to recruiting and retaining talented individuals from underrepresented groups, fostering an inclusive culture, and working actively to dismantle barriers to equity in our department and the broader scientific community.
             </p>
           </div>
@@ -189,20 +164,20 @@ export default function DEIPage() {
       <section className="py-12 bg-gradient-to-br from-ocean-deep/5 to-ocean-teal/5">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-ucsb-navy mb-6 text-center">DEI Committee</h2>
-            <p className="text-lg text-gray-700 mb-8 text-center">
+            <h2 className="text-3xl font-bold text-ocean-deep mb-6 text-center">DEI Committee</h2>
+            <p className="text-lg text-warm-700 mb-8 text-center">
               {committeeInfo.description}
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               {committeeInfo.chairs.map((chair, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+                <div key={index} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border border-warm-200">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 bg-ocean-blue rounded-full flex items-center justify-center text-white text-2xl font-bold">
                       {chair.name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-ucsb-navy">{chair.name}</h3>
-                      <p className="text-gray-600">{chair.role}</p>
+                      <h3 className="text-xl font-bold text-ocean-deep">{chair.name}</h3>
+                      <p className="text-warm-600">{chair.role}</p>
                       <a href={`mailto:${chair.email}`} className="text-ocean-blue hover:underline text-sm">
                         {chair.email}
                       </a>
@@ -212,7 +187,7 @@ export default function DEIPage() {
               ))}
             </div>
             <div className="mt-6 text-center">
-              <p className="text-gray-600">
+              <p className="text-warm-600">
                 For DEI-related inquiries, please contact: <a href="mailto:eemb-dei@ucsb.edu" className="text-ocean-blue hover:underline font-semibold">eemb-dei@ucsb.edu</a>
               </p>
             </div>
@@ -220,41 +195,24 @@ export default function DEIPage() {
         </div>
       </section>
 
-      {/* Statistics */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-12 text-center">Departmental Demographics</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {statistics.map((stat, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-lg shadow-md text-center">
-                <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-2">
-                  {stat.value}
-                </div>
-                <p className="text-gray-600">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Initiatives Grid */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-12 text-center">Our Initiatives</h2>
+          <h2 className="text-3xl font-bold text-ocean-deep mb-12 text-center">Our Initiatives</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {initiatives.map(initiative => (
               <button
                 key={initiative.id}
                 onClick={() => setExpandedInitiative(expandedInitiative === initiative.id ? null : initiative.id)}
-                className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-6 text-left border-2 border-gray-200 hover:border-purple-600"
+                className="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-6 text-left border-2 border-warm-200 hover:border-ocean-teal"
               >
                 <div className="mb-4">
-                  <initiative.icon className="w-10 h-10 text-purple-600" />
+                  <initiative.icon className="w-10 h-10 text-ocean-teal" />
                 </div>
-                <h3 className="text-lg font-bold text-ucsb-navy mb-2 group-hover:text-purple-600 transition">
+                <h3 className="text-lg font-bold text-ocean-deep mb-2 group-hover:text-ocean-teal transition">
                   {initiative.title}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-warm-600">
                   {initiative.description}
                 </p>
               </button>
@@ -263,7 +221,7 @@ export default function DEIPage() {
 
           {/* Detailed View */}
           {expandedInitiative && (
-            <div className="mt-12 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg p-8 border-l-4 border-purple-600">
+            <div className="mt-12 bg-gradient-to-br from-ocean-teal/5 to-bioluminescent/5 rounded-xl shadow-lg p-8 border-l-4 border-ocean-teal">
               {initiatives.find(i => i.id === expandedInitiative) && (
                 <div className="max-w-3xl mx-auto">
                   {(() => {
@@ -272,30 +230,28 @@ export default function DEIPage() {
                       <>
                         <div className="flex items-start gap-6 mb-8">
                           <div>
-                            <initiative.icon className="w-16 h-16 text-purple-600" />
+                            <initiative.icon className="w-16 h-16 text-ocean-teal" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-3xl font-bold text-ucsb-navy mb-2">{initiative.title}</h3>
-                            <p className="text-lg text-gray-700">{initiative.description}</p>
+                            <h3 className="text-3xl font-bold text-ocean-deep mb-2">{initiative.title}</h3>
+                            <p className="text-lg text-warm-700">{initiative.description}</p>
                           </div>
                         </div>
 
-                        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                        <p className="text-lg text-warm-700 mb-8 leading-relaxed">
                           {initiative.fullDescription}
                         </p>
 
-                        <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
-                          <p className="text-sm text-gray-600 mb-2">Program Lead:</p>
-                          <p className="font-semibold text-ucsb-navy mb-3">{initiative.leader}</p>
-                          <p className="text-sm text-gray-600 mb-1">Contact:</p>
-                          <a href={`mailto:${initiative.contact}`} className="text-purple-600 font-semibold hover:underline">
-                            {initiative.contact}
+                        <div className="bg-white rounded-lg p-6 border-l-4 border-ocean-teal">
+                          <p className="text-sm text-warm-600 mb-2">For more information:</p>
+                          <a href="mailto:eemb-dei@ucsb.edu" className="text-ocean-teal font-semibold hover:underline">
+                            eemb-dei@ucsb.edu
                           </a>
                         </div>
 
                         <button
                           onClick={() => setExpandedInitiative(null)}
-                          className="mt-6 bg-ucsb-navy text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-900 transition"
+                          className="mt-6 bg-ocean-deep text-white px-8 py-3 rounded-lg font-semibold hover:bg-ocean-blue transition"
                         >
                           Close Details
                         </button>
@@ -310,19 +266,21 @@ export default function DEIPage() {
       </section>
 
       {/* Resources */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-warm-100">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Resources & Support</h2>
+          <h2 className="text-3xl font-bold text-ocean-deep mb-8 text-center">Resources & Support</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {resources.map((resource, idx) => (
               <a
                 key={idx}
                 href={resource.link}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 border-l-4 border-purple-600"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition p-6 border-l-4 border-ocean-teal"
               >
-                <h3 className="text-lg font-bold text-ucsb-navy mb-2">{resource.title}</h3>
-                <p className="text-gray-600 mb-4">{resource.description}</p>
-                <span className="text-purple-600 font-semibold hover:underline">Learn More →</span>
+                <h3 className="text-lg font-bold text-ocean-deep mb-2">{resource.title}</h3>
+                <p className="text-warm-600 mb-4">{resource.description}</p>
+                <span className="text-ocean-teal font-semibold hover:underline">Learn More &rarr;</span>
               </a>
             ))}
           </div>
@@ -332,7 +290,7 @@ export default function DEIPage() {
       {/* Belonging Section */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-ucsb-navy mb-8 text-center">Building Belonging</h2>
+          <h2 className="text-3xl font-bold text-ocean-deep mb-8 text-center">Building Belonging</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -351,12 +309,12 @@ export default function DEIPage() {
                 icon: Rocket
               }
             ].map((item, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-8 border-2 border-purple-200 hover:border-purple-600 transition">
+              <div key={idx} className="bg-gradient-to-br from-ocean-teal/5 to-bioluminescent/5 rounded-lg p-8 border-2 border-ocean-teal/20 hover:border-ocean-teal transition">
                 <div className="mb-4">
-                  <item.icon className="w-12 h-12 text-purple-600" />
+                  <item.icon className="w-12 h-12 text-ocean-teal" />
                 </div>
-                <h3 className="text-xl font-bold text-ucsb-navy mb-3">{item.title}</h3>
-                <p className="text-gray-700">{item.description}</p>
+                <h3 className="text-xl font-bold text-ocean-deep mb-3">{item.title}</h3>
+                <p className="text-warm-700">{item.description}</p>
               </div>
             ))}
           </div>
@@ -364,22 +322,22 @@ export default function DEIPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-purple-600 to-pink-500 text-white">
+      <section className="py-16 bg-gradient-to-r from-ocean-deep to-ocean-blue text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">We Welcome You</h2>
-          <p className="text-lg text-gray-100 mb-8 max-w-2xl mx-auto">
-            Whether you're a prospective student, a current member of our community, or someone interested in learning more about our DEI efforts, we'd love to hear from you.
+          <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+            Whether you&apos;re a prospective student, a current member of our community, or someone interested in learning more about our DEI efforts, we&apos;d love to hear from you.
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <Link
               href="/contact"
-              className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+              className="bg-ucsb-gold text-ocean-deep px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition"
             >
               Get in Touch
             </Link>
             <a
-              href="mailto:eemb-web@ucsb.edu?subject=DEI%20Community%20Interest"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition"
+              href="mailto:eemb-dei@ucsb.edu?subject=DEI%20Community%20Interest"
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-ocean-deep transition"
             >
               Join Our Community
             </a>
@@ -388,11 +346,11 @@ export default function DEIPage() {
       </section>
 
       {/* DEI Statement Footer */}
-      <section className="py-12 bg-gray-900 text-white">
+      <section className="py-12 bg-ocean-deep text-white">
         <div className="container mx-auto px-4 max-w-3xl">
           <h3 className="text-2xl font-bold mb-4">Our DEI Commitment</h3>
-          <p className="text-gray-300 leading-relaxed">
-            As scientists dedicated to understanding and protecting the natural world, we recognize that environmental challenges disproportionately affect communities that are already marginalized. A diverse, equitable, and inclusive scientific community better understands these complex issues and develops more effective solutions. We are committed to continuously improving our department's practices and working toward a science community where everyone belongs and can thrive.
+          <p className="text-white/80 leading-relaxed">
+            As scientists dedicated to understanding and protecting the natural world, we recognize that environmental challenges disproportionately affect communities that are already marginalized. A diverse, equitable, and inclusive scientific community better understands these complex issues and develops more effective solutions. We are committed to continuously improving our department&apos;s practices and working toward a science community where everyone belongs and can thrive.
           </p>
         </div>
       </section>

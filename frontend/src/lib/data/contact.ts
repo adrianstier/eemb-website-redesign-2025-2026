@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import type { TablesInsert } from '@/lib/supabase/types'
+import type { TablesInsert, Tables } from '@/lib/supabase/types'
+
+type ContactSubmission = Tables<'contact_submissions'>
 
 type ContactFormData = Omit<TablesInsert<'contact_submissions'>, 'id' | 'created_at' | 'status' | 'responded_at' | 'responded_by'>
 
@@ -36,7 +38,7 @@ export async function getContactSubmissions(options?: {
   status?: 'pending' | 'responded' | 'archived'
   limit?: number
   offset?: number
-}): Promise<{ submissions: TablesInsert<'contact_submissions'>[]; total: number }> {
+}): Promise<{ submissions: ContactSubmission[]; total: number }> {
   const supabase = await createClient()
 
   let query = supabase
@@ -48,12 +50,13 @@ export async function getContactSubmissions(options?: {
     query = query.eq('status', options.status)
   }
 
-  if (options?.limit) {
-    query = query.limit(options.limit)
-  }
-
+  // Apply pagination: use .range() when offset is specified (it handles both
+  // offset and limit), otherwise fall back to .limit() for simple truncation.
+  const limit = options?.limit || 10
   if (options?.offset) {
-    query = query.range(options.offset, options.offset + (options.limit || 10) - 1)
+    query = query.range(options.offset, options.offset + limit - 1)
+  } else if (options?.limit) {
+    query = query.limit(options.limit)
   }
 
   const { data, count, error } = await query

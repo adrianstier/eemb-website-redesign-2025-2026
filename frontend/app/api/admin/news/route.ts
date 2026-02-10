@@ -161,10 +161,15 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Article ID is required' }, { status: 400 })
     }
 
+    const numericId = parseInt(id, 10)
+    if (isNaN(numericId) || numericId <= 0) {
+      return NextResponse.json({ error: 'Article ID must be a positive integer' }, { status: 400 })
+    }
+
     const { error } = await supabase
       .from('news_articles')
       .delete()
-      .eq('id', parseInt(id))
+      .eq('id', numericId)
 
     if (error) {
       console.error('Error deleting news:', error)

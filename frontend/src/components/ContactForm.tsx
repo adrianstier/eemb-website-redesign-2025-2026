@@ -146,9 +146,9 @@ export default function ContactForm({
 
   if (submitStatus === 'success') {
     return (
-      <div className={`bg-kelp-50 rounded-2xl p-8 text-center ${className}`}>
+      <div className={`bg-kelp-50 rounded-2xl p-8 text-center ${className}`} role="status" aria-live="polite">
         <div className="w-16 h-16 mx-auto mb-4 bg-kelp-500 rounded-full flex items-center justify-center">
-          <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, ReactNode } from 'react'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 interface AnimatedSectionProps {
   children: ReactNode
@@ -35,9 +36,15 @@ export function AnimatedSection({
   id,
 }: AnimatedSectionProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion)
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
     const element = ref.current
     if (!element) return
 
@@ -60,7 +67,7 @@ export function AnimatedSection({
 
     observer.observe(element)
     return () => observer.disconnect()
-  }, [once, threshold])
+  }, [once, threshold, prefersReducedMotion])
 
   const getInitialTransform = () => {
     switch (direction) {
@@ -91,24 +98,23 @@ export function AnimatedSection({
   }
 
   return (
-    <div
-      ref={ref}
+    <Component
+      ref={ref as React.RefObject<HTMLDivElement>}
       id={id}
       className={`${bgClasses[background]} ${spacingClasses[spacing]} ${className}`}
-      style={{
+      style={prefersReducedMotion ? undefined : {
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'none' : getInitialTransform(),
         transition: `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
         willChange: 'opacity, transform',
       }}
-      role={Component === 'section' ? 'region' : Component === 'article' ? 'article' : undefined}
     >
       {container ? (
         <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl">
           {children}
         </div>
       ) : children}
-    </div>
+    </Component>
   )
 }
 
@@ -129,9 +135,15 @@ export function StaggeredChildren({
   itemClassName = '',
 }: StaggeredChildrenProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion)
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
     const element = ref.current
     if (!element) return
 
@@ -147,7 +159,7 @@ export function StaggeredChildren({
 
     observer.observe(element)
     return () => observer.disconnect()
-  }, [])
+  }, [prefersReducedMotion])
 
   return (
     <div ref={ref} className={className}>

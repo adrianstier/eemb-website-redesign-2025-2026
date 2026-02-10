@@ -46,6 +46,7 @@ export default function PartnersSection() {
                 }`}
                 style={{ transitionDelay: `${(index + 1) * 100}ms` }}
                 title={partner.name}
+                aria-label={`${partner.name} (opens in new tab)`}
               >
                 {/* Hover underline */}
                 <span className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-ocean-teal/30 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />

@@ -59,19 +59,39 @@ export default function HeroSection() {
   const [isPaused, setIsPaused] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const carouselRef = useRef<HTMLDivElement>(null)
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([])
+
+  // Helper to create tracked timeouts that are cleaned up on unmount
+  const safeTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(() => {
+      fn()
+      // Remove from tracked list after execution
+      timeoutsRef.current = timeoutsRef.current.filter(t => t !== id)
+    }, ms)
+    timeoutsRef.current.push(id)
+    return id
+  }, [])
+
+  // Clean up all pending timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout)
+      timeoutsRef.current = []
+    }
+  }, [])
 
   // Function to go to a specific slide
   const goToSlide = useCallback((index: number) => {
     if (index === currentIndex) return
     setIsVisible(false)
     setIsImageTransitioning(true)
-    setTimeout(() => {
+    safeTimeout(() => {
       setPreviousIndex(currentIndex)
       setCurrentIndex(index)
       setIsVisible(true)
-      setTimeout(() => setIsImageTransitioning(false), 800)
+      safeTimeout(() => setIsImageTransitioning(false), 800)
     }, 400)
-  }, [currentIndex])
+  }, [currentIndex, safeTimeout])
 
   // Parallax effect - disabled for reduced motion
   useEffect(() => {
@@ -95,19 +115,19 @@ export default function HeroSection() {
       setIsVisible(false)
       setIsImageTransitioning(true)
 
-      setTimeout(() => {
+      safeTimeout(() => {
         setPreviousIndex(currentIndex)
         setCurrentIndex((prev) => (prev + 1) % headlines.length)
         setIsVisible(true)
 
         // Reset image transition after new image loads
-        setTimeout(() => {
+        safeTimeout(() => {
           setIsImageTransitioning(false)
         }, 800)
       }, 400)
     }, 5000)
     return () => clearInterval(interval)
-  }, [currentIndex, prefersReducedMotion, isPaused])
+  }, [currentIndex, prefersReducedMotion, isPaused, safeTimeout])
 
   // Pause rotation on focus within carousel for accessibility
   const handleFocus = () => setIsPaused(true)

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useInView } from '@/hooks/useInView'
 import useReducedMotion from '@/hooks/useReducedMotion'
 
@@ -37,27 +37,45 @@ export default function FacultyQuote() {
   const [isAnimating, setIsAnimating] = useState(false)
   const { ref, isInView } = useInView({ threshold: 0.2 })
   const prefersReducedMotion = useReducedMotion()
+  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Clean up any pending animation timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (prefersReducedMotion) return
     const interval = setInterval(() => {
       setIsAnimating(true)
-      setTimeout(() => {
+      animationTimeoutRef.current = setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % quotes.length)
         setIsAnimating(false)
       }, 500)
     }, 8000)
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current)
+      }
+    }
   }, [prefersReducedMotion])
 
-  const handleDotClick = (index: number) => {
+  const handleDotClick = useCallback((index: number) => {
     if (index === currentIndex) return
     setIsAnimating(true)
-    setTimeout(() => {
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current)
+    }
+    animationTimeoutRef.current = setTimeout(() => {
       setCurrentIndex(index)
       setIsAnimating(false)
     }, 500)
-  }
+  }, [currentIndex])
 
   const current = quotes[currentIndex]
 
@@ -67,10 +85,10 @@ export default function FacultyQuote() {
       className="relative py-24 md:py-32 lg:py-40 bg-ocean-midnight overflow-hidden"
     >
       {/* Animated background elements */}
-      <div className="absolute inset-0">
-        {/* Gradient orbs */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-bioluminescent/5 rounded-full blur-3xl animate-float-slow" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-ocean-teal/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+      <div className="absolute inset-0" aria-hidden="true">
+        {/* Gradient orbs - motion-safe ensures they only animate when reduced motion is not preferred */}
+        <div className={`absolute top-0 right-0 w-[800px] h-[800px] bg-bioluminescent/5 rounded-full blur-3xl ${prefersReducedMotion ? '' : 'animate-float-slow'}`} />
+        <div className={`absolute bottom-0 left-0 w-[600px] h-[600px] bg-ocean-teal/10 rounded-full blur-3xl ${prefersReducedMotion ? '' : 'animate-float'}`} style={prefersReducedMotion ? undefined : { animationDelay: '2s' }} />
 
         {/* Wave pattern */}
         <svg className="absolute bottom-0 left-0 right-0 text-white/[0.02] h-64" viewBox="0 0 1440 320" preserveAspectRatio="none">

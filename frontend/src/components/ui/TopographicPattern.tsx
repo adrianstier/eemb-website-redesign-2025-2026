@@ -5,6 +5,8 @@
  * Use as a background element in sections or cards to add texture without overwhelming
  */
 
+import { useId } from 'react'
+
 interface TopographicPatternProps {
   className?: string
   opacity?: number
@@ -16,6 +18,8 @@ export default function TopographicPattern({
   opacity = 0.05,
   variant = 'subtle',
 }: TopographicPatternProps) {
+  const uniqueId = useId()
+  const patternId = `topo-${variant}-${uniqueId}`
   const colorClass =
     variant === 'ocean'
       ? 'stroke-ocean-blue'
@@ -28,10 +32,11 @@ export default function TopographicPattern({
       className={`absolute inset-0 w-full h-full pointer-events-none ${className}`}
       style={{ opacity }}
       preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
     >
       <defs>
         <pattern
-          id={`topo-${variant}`}
+          id={patternId}
           x="0"
           y="0"
           width="200"
@@ -104,7 +109,7 @@ export default function TopographicPattern({
           />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill={`url(#topo-${variant})`} />
+      <rect width="100%" height="100%" fill={`url(#${patternId})`} />
     </svg>
   )
 }

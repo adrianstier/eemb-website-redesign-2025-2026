@@ -13,6 +13,7 @@ const ContentSecurityPolicy = `
   img-src 'self' data: blob: https://res.cloudinary.com https://www.eemb.ucsb.edu https://jgmrtzxxggvdilsjhzxn.supabase.co https://www.google-analytics.com;
   font-src 'self' https://fonts.gstatic.com;
   connect-src 'self' https://jgmrtzxxggvdilsjhzxn.supabase.co https://www.google-analytics.com https://www.googletagmanager.com;
+  object-src 'none';
   frame-ancestors 'none';
   base-uri 'self';
   form-action 'self';

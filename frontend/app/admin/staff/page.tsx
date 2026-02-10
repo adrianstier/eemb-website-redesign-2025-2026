@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface StaffMember {
   id: number
@@ -29,6 +30,7 @@ export default function StaffManagement() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editForm, setEditForm] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchStaff()
@@ -36,15 +38,16 @@ export default function StaffManagement() {
 
   const fetchStaff = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/admin/staff')
       if (!response.ok) {
-        console.error('Failed to fetch staff:', response.status)
-        return
+        throw new Error(`Failed to fetch: ${response.status}`)
       }
       const data = await response.json()
       setStaff(data || [])
-    } catch (error) {
-      console.error('Failed to fetch staff:', error)
+    } catch (err) {
+      console.error('Failed to fetch staff:', err)
+      setError('Failed to load staff data. Please try refreshing the page.')
     } finally {
       setLoading(false)
     }
@@ -107,7 +110,8 @@ export default function StaffManagement() {
         setEditingId(null)
         setEditForm({})
       } else {
-        alert('Failed to save changes')
+        const errorData = await response.json().catch(() => null)
+        alert(errorData?.error || 'Failed to save changes')
       }
     } catch (error) {
       console.error('Failed to save:', error)
@@ -118,7 +122,8 @@ export default function StaffManagement() {
   }
 
   const handleLogout = async () => {
-    await fetch('/auth/logout', { method: 'POST' })
+    const supabase = createClient()
+    await supabase.auth.signOut()
     router.push('/')
     router.refresh()
   }
@@ -169,6 +174,13 @@ export default function StaffManagement() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error State */}
+        {error && (
+          <div className="mb-6 p-4 rounded-lg bg-red-50 border-l-4 border-red-500">
+            <p className="text-red-700 font-semibold">{error}</p>
+          </div>
+        )}
+
         <div className="mb-6">
           <input
             type="text"
@@ -264,9 +276,9 @@ export default function StaffManagement() {
                           <option value="">Select a department...</option>
                           <option value="EEMB">EEMB</option>
                           <option value="MCDB">MCDB</option>
-                          <option value="ERI">ERI</option>
-                          <option value="MSI">MSI</option>
-                          <option value="Other">Other</option>
+                          <option value="Joint Appointment">Joint Appointment</option>
+                          <option value="Administration">Administration</option>
+                          <option value="Shared">Shared</option>
                         </select>
                       </div>
                     </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, ReactNode } from 'react'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -24,9 +25,15 @@ export function ScrollReveal({
   threshold = 0.1,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion)
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
     const element = ref.current
     if (!element) return
 
@@ -50,7 +57,7 @@ export function ScrollReveal({
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [once, threshold])
+  }, [once, threshold, prefersReducedMotion])
 
   const getInitialTransform = () => {
     switch (direction) {
@@ -73,7 +80,7 @@ export function ScrollReveal({
     <div
       ref={ref}
       className={className}
-      style={{
+      style={prefersReducedMotion ? undefined : {
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'none' : getInitialTransform(),
         transition: `opacity ${duration}ms ease-out ${delay}ms, transform ${duration}ms ease-out ${delay}ms`,

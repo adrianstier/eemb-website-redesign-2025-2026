@@ -36,10 +36,11 @@ const contactInfo: ContactInfo[] = [
       description: 'General inquiries and department information',
       icon: Building2,
       details: [
-        'Life Sciences Building, Room 2001',
+        'Life Sciences Building, Room 4102',
         'University of California, Santa Barbara',
-        'Santa Barbara, CA 93106',
-        'Phone: (805) 893-2100'
+        'Santa Barbara, CA 93106-9620',
+        'Phone: (805) 893-2974',
+        'Email: info@eemb.ucsb.edu'
       ]
     },
     {
@@ -47,8 +48,8 @@ const contactInfo: ContactInfo[] = [
       description: 'Information about graduate applications and programs',
       icon: GraduationCap,
       details: [
-        'Phone: (805) 893-2200',
-        'Email: gradinfo@eemb.ucsb.edu',
+        'Staff Graduate Advisor: Mengshu Ye',
+        'Email: mengshuye@ucsb.edu',
         'Office Hours: Mon-Fri, 9am-5pm'
       ],
       href: '/academics/graduate'
@@ -58,30 +59,30 @@ const contactInfo: ContactInfo[] = [
       description: 'Undergraduate majors, minors, and courses',
       icon: BookOpen,
       details: [
-        'Phone: (805) 893-2300',
-        'Email: undergradinfo@eemb.ucsb.edu',
-        'Office Hours: Mon-Fri, 10am-4pm'
+        'Undergraduate Advisor: Evelin Ambrocio-Silva',
+        'Phone: (805) 893-4622',
+        'Email: eambrocio@lifesci.ucsb.edu'
       ]
     },
     {
-      title: 'Research Office',
-      description: 'Research opportunities and collaborations',
+      title: 'Research',
+      description: 'Research themes and faculty expertise',
       icon: Microscope,
       details: [
-        'Phone: (805) 893-2400',
-        'Email: research@eemb.ucsb.edu',
-        'Location: Marine Science Institute'
+        'Marine Science Institute',
+        'Explore our research areas online',
+        'Contact faculty directly via profiles'
       ],
       href: '/research'
     },
     {
-      title: 'Admissions',
-      description: 'Application questions and admissions support',
+      title: 'Academic Personnel',
+      description: 'Faculty recruitment, merit, and promotion',
       icon: Mail,
       details: [
-        'Email: admissions@eemb.ucsb.edu',
-        'Phone: (805) 893-2500',
-        'Website: ucsb.edu/admissions'
+        'Rosa Vasquez',
+        'Email: rosavasquez@ucsb.edu',
+        'Curriculum & faculty matters'
       ]
     },
     {
@@ -89,9 +90,8 @@ const contactInfo: ContactInfo[] = [
       description: 'DEI initiatives and community support',
       icon: Rainbow,
       details: [
-        'Email: dei@eemb.ucsb.edu',
-        'Phone: (805) 893-2600',
-        'Office: Life Sciences Building, Room 3005'
+        'Email: eemb-dei@ucsb.edu',
+        'Co-Chairs: Deron Burkepile & Cherie Briggs'
       ],
       href: '/dei'
     }

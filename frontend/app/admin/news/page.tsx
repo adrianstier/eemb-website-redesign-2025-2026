@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface NewsArticle {
   id: number
@@ -192,7 +193,8 @@ export default function NewsManagement() {
   }
 
   const handleLogout = async () => {
-    await fetch('/auth/logout', { method: 'POST' })
+    const supabase = createClient()
+    await supabase.auth.signOut()
     router.push('/')
     router.refresh()
   }

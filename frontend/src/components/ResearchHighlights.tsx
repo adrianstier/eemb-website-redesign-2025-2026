@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Waves, Dna, Bug, Microscope, LucideIcon } from 'lucide-react'
 
 interface Highlight {
@@ -46,15 +47,15 @@ export default function ResearchHighlights() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {highlights.map((item, index) => (
-            <a
-              key={index}
+          {highlights.map((item) => (
+            <Link
+              key={item.link}
               href={item.link}
               className="group"
             >
               <div className="bg-gradient-to-br from-ucsb-navy to-blue-700 text-white p-6 rounded-lg h-full hover:shadow-xl transition-all transform hover:-translate-y-1">
                 <div className="mb-4">
-                  <item.icon className="w-12 h-12 text-ucsb-gold" />
+                  <item.icon className="w-12 h-12 text-ucsb-gold" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3 group-hover:text-ucsb-gold transition">
                   {item.title}
@@ -63,14 +64,14 @@ export default function ResearchHighlights() {
                   {item.description}
                 </p>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <a href="/research" className="inline-block bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition">
+          <Link href="/research" className="inline-block bg-ucsb-gold text-ucsb-navy px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition">
             Explore All Research Areas
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface Student {
   id: number
@@ -35,6 +36,7 @@ export default function StudentsManagement() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editForm, setEditForm] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchStudents()
@@ -42,12 +44,14 @@ export default function StudentsManagement() {
 
   const fetchStudents = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/admin/students')
       if (!response.ok) throw new Error('Failed to fetch')
       const data = await response.json()
       setStudents(data || [])
-    } catch (error) {
-      console.error('Failed to fetch students:', error)
+    } catch (err) {
+      console.error('Failed to fetch students:', err)
+      setError('Failed to load student data. Please try refreshing the page.')
     } finally {
       setLoading(false)
     }
@@ -81,10 +85,13 @@ export default function StudentsManagement() {
     setSaving(true)
 
     try {
+      const fullName = `${editForm.first_name} ${editForm.last_name}`.trim()
+
       const dataToSave = {
         id: editingId,
         first_name: editForm.first_name,
         last_name: editForm.last_name,
+        full_name: fullName || null,
         email: editForm.email,
         degree_program: editForm.degree_program || null,
         year_entered: editForm.year_entered ? parseInt(editForm.year_entered) : null,
@@ -126,7 +133,8 @@ export default function StudentsManagement() {
   }
 
   const handleLogout = async () => {
-    await fetch('/auth/logout', { method: 'POST' })
+    const supabase = createClient()
+    await supabase.auth.signOut()
     router.push('/')
     router.refresh()
   }
@@ -176,6 +184,13 @@ export default function StudentsManagement() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error State */}
+        {error && (
+          <div className="mb-6 p-4 rounded-lg bg-red-50 border-l-4 border-red-500">
+            <p className="text-red-700 font-semibold">{error}</p>
+          </div>
+        )}
+
         <div className="mb-6">
           <input
             type="text"

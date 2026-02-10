@@ -1,45 +1,50 @@
-# Bug Bash Fix Plan — Wave 3
+# Bug Bash Fix Plan — Wave 4
 
 ## Status
 - **Wave 1** (audit): Complete — 68 bugs found
 - **P0 fixes**: Complete — 7 critical bugs + 3 bonus
 - **Wave 2** (fix): Complete — 55 bugs fixed, 6 deferred
-- **Wave 3** (regression + deep audit): In progress
+- **Wave 3** (regression): Complete — 2 regressions fixed (heroicons in support page, dead footer links)
+- **Wave 4** (deep audit + polish): In progress
 
-## Wave 3 Scope Splits
+## Wave 4 Scope Splits
 
-Focus: Verify wave 2 fixes didn't introduce regressions. Deep-dive into areas that got the most changes. Find any bugs the original audit missed.
+Focus: Deep audit of areas not fully covered in waves 1-3. Find any remaining bugs, dead code, broken patterns, accessibility issues, or runtime errors. Each agent reads, audits, fixes, and reports.
 
-### Scope 1: Admin Pages & API Routes (Regression Check)
-- Verify all 5 admin pages render correctly, forms submit, enum dropdowns work
-- Verify the new admin news page is complete and functional
-- Verify isAdmin() accepts client param correctly in all 5 API routes
-- Check for any new TypeScript errors, missing imports, broken JSX
-- Check updated_at is being set correctly
-- Check full_name auto-generation logic is correct
+### Scope 1: Admin Pages & API Routes (Deep Audit)
+- Read every admin page and API route end-to-end
+- Check for missing error states, loading states, form validation gaps
+- Verify enum values match database constraints
+- Check for XSS vectors in any user-input rendering
+- Look for missing auth checks or authorization bypasses
+- Check pagination/filtering if applicable
+- Report: `bug-bash-reports/wave4-admin.md`
 
-### Scope 2: People Pages (Regression Check)
-- Verify null safety fixes don't break rendering for valid data
-- Verify next/image replacements have correct props
-- Verify generateMetadata try/catch returns valid metadata
-- Check the /faculty redirect works
-- Check imageErrors prefixed keys are consistent
-- Verify active faculty filter doesn't accidentally exclude valid records
+### Scope 2: Public Pages & SEO (Deep Audit)
+- Read every public page (home, about, research, academics, dei, give, memoriam, calendar, good-news, alumni, support, contact)
+- Check for hardcoded/fake data that slipped through
+- Verify all external links are real URLs (not # or placeholder)
+- Check metadata exports (title, description) on every page
+- Check for missing alt text on images
+- Look for layout/responsive issues in JSX
+- Report: `bug-bash-reports/wave4-public-pages.md`
 
-### Scope 3: Content Pages + Components (Regression Check)
-- Verify DEI links are valid URLs
-- Verify contact form maxLength works with the counter
-- Verify heroicons→lucide migration in give page has correct icon names
-- Verify useInView shared import works (check hook API matches usage in all 7 components)
-- Verify Header scroll handler with useRef works correctly
-- Verify TestimonialCarousel keyboard scoping works
-- Verify CardEyebrow lookup object has all needed variants
+### Scope 3: Components & Hooks (Deep Audit)
+- Read every shared component in src/components/
+- Check for accessibility issues (missing aria labels, keyboard nav, focus management)
+- Verify all imports resolve (no dangling references)
+- Check for any remaining @heroicons/react imports that should be lucide
+- Verify animation/scroll components handle edge cases (SSR, reduced motion)
+- Check for prop type mismatches or unused props
+- Report: `bug-bash-reports/wave4-components.md`
 
-### Scope 4: Auth & Cross-cutting (Regression + New Issues)
-- Verify login error allowlist handles all real error strings
-- Verify revalidation route timingSafeEqual works with edge cases
-- Verify middleware error handling redirects correctly
-- Check for any remaining security issues missed in wave 1
-- Check for any new dead code, unused imports, or broken references
+### Scope 4: Data Layer, Auth & Config (Deep Audit)
+- Read all files in src/lib/ (supabase client, data queries, hooks)
+- Verify middleware auth logic is correct and complete
+- Check next.config.js CSP covers all actual resource origins
+- Look for any remaining localhost:1337 references outside test files
+- Check environment variable usage (fallbacks, missing vars)
+- Verify TypeScript strict mode compliance
+- Report: `bug-bash-reports/wave4-data-auth.md`
 
-## Wave 3 Post-fix: Build verification + final summary
+## Wave 4 Post-fix: Build verification + consolidated final summary

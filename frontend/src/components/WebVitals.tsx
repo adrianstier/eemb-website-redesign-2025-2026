@@ -45,7 +45,7 @@ function getRating(name: string, value: number): 'good' | 'needs-improvement' | 
 function sendToGA(metric: WebVitalsMetric) {
   // Check if GA is available
   if (typeof window !== 'undefined' && 'gtag' in window) {
-    const gtag = (window as typeof window & { gtag: Function }).gtag
+    const gtag = (window as typeof window & { gtag: (...args: unknown[]) => void }).gtag
     gtag('event', metric.name, {
       event_category: 'Web Vitals',
       event_label: metric.id,

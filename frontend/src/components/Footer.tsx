@@ -150,8 +150,10 @@ export default function Footer() {
                 <a
                   key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-white/50 hover:bg-bioluminescent/20 hover:text-bioluminescent transition-all duration-300 border border-white/10 hover:border-bioluminescent/30"
-                  aria-label={social.label}
+                  aria-label={`${social.label} (opens in new tab)`}
                 >
                   {social.icon}
                 </a>
