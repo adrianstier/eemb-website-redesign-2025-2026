@@ -142,34 +142,32 @@ test.describe('Comprehensive People Database', () => {
     console.log('✅ Search functionality works');
   });
 
-  test('should check API endpoints directly', async ({ request }) => {
-    console.log('Testing backend API endpoints directly...');
+  test('should verify people data loads via Supabase on the rendered page', async ({ page }) => {
+    console.log('Testing that people data loads from Supabase via the app...');
 
-    // Test faculty endpoint
-    const facultyResponse = await request.get('http://localhost:1337/api/faculties?pagination[limit]=5');
-    expect(facultyResponse.ok()).toBeTruthy();
-    const facultyData = await facultyResponse.json();
-    console.log(`Faculty API returned ${facultyData.data?.length || 0} records`);
-    expect(facultyData.data).toBeDefined();
-    expect(facultyData.data.length).toBeGreaterThan(0);
+    await page.goto('http://localhost:3000/people', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(2000);
 
-    // Test staff endpoint
-    const staffResponse = await request.get('http://localhost:1337/api/staff-members?pagination[limit]=5');
-    expect(staffResponse.ok()).toBeTruthy();
-    const staffData = await staffResponse.json();
-    console.log(`Staff API returned ${staffData.data?.length || 0} records`);
-    expect(staffData.data).toBeDefined();
-    expect(staffData.data.length).toBeGreaterThan(0);
+    // Verify faculty data loaded
+    const facultyCards = await page.locator('div.bg-white.rounded-lg.shadow-lg').count();
+    console.log(`Faculty cards rendered: ${facultyCards}`);
+    expect(facultyCards).toBeGreaterThan(0);
 
-    // Test students endpoint
-    const studentsResponse = await request.get('http://localhost:1337/api/graduate-students?pagination[limit]=5');
-    expect(studentsResponse.ok()).toBeTruthy();
-    const studentsData = await studentsResponse.json();
-    console.log(`Students API returned ${studentsData.data?.length || 0} records`);
-    expect(studentsData.data).toBeDefined();
-    expect(studentsData.data.length).toBeGreaterThan(0);
+    // Switch to staff tab and verify data
+    await page.locator('button:has-text("Staff")').click();
+    await page.waitForTimeout(1000);
+    const staffCards = await page.locator('div.bg-white.rounded-lg.shadow-lg').count();
+    console.log(`Staff cards rendered: ${staffCards}`);
+    expect(staffCards).toBeGreaterThan(0);
 
-    console.log('✅ All API endpoints are working');
+    // Switch to students tab and verify data
+    await page.locator('button:has-text("Students")').click();
+    await page.waitForTimeout(1000);
+    const studentCards = await page.locator('div.bg-white.rounded-lg.shadow-lg').count();
+    console.log(`Student cards rendered: ${studentCards}`);
+    expect(studentCards).toBeGreaterThan(0);
+
+    console.log('All people data is loading from Supabase');
   });
 
   test('should display correct counts in tabs', async ({ page }) => {

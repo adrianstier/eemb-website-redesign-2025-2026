@@ -55,7 +55,7 @@ export default defineConfig({
 
     // Environment variables
     env: {
-      apiUrl: 'http://localhost:1337',
+      apiUrl: 'http://localhost:3000',
       coverage: false,
     },
   },

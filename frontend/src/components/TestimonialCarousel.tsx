@@ -154,7 +154,7 @@ export default function TestimonialCarousel({
                 <p className="font-display font-bold text-ocean-deep">{studentName}</p>
               )}
               {currentTestimonial.student?.degree_program && (
-                <p className="text-sm text-warm-500">
+                <p className="text-sm text-warm-600">
                   {currentTestimonial.student.degree_program} Candidate
                 </p>
               )}

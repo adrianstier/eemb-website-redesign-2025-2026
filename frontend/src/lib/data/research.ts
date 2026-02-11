@@ -5,6 +5,10 @@ export type ResearchAreaWithFaculty = ResearchArea & {
   faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url'>[]
 }
 
+export type ResearchAreaWithDetailedFaculty = ResearchArea & {
+  faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'short_bio'>[]
+}
+
 /**
  * Get all research areas
  */
@@ -23,6 +27,82 @@ export async function getAllResearchAreas(): Promise<ResearchArea[]> {
   }
 
   return areas
+}
+
+/**
+ * Get all research areas with associated faculty details
+ * Used on the Research page to show themes with faculty lists
+ */
+export async function getAllResearchAreasWithFaculty(): Promise<ResearchAreaWithDetailedFaculty[]> {
+  const supabase = await createClient()
+
+  const { data: areas, error } = await supabase
+    .from('research_areas')
+    .select(`
+      *,
+      faculty_research_areas(
+        faculty:faculty_id(
+          id,
+          first_name,
+          last_name,
+          slug,
+          photo_url,
+          short_bio,
+          active
+        )
+      )
+    `)
+    .order('order_index', { ascending: true })
+    .order('name', { ascending: true })
+
+  if (error || !areas) {
+    console.error('Error fetching research areas with faculty:', error)
+    return []
+  }
+
+  // Transform nested data structure and filter active faculty
+  return areas.map(area => {
+    const { faculty_research_areas, ...areaData } = area
+    return {
+      ...areaData,
+      faculty: (faculty_research_areas || [])
+        .map((fra: { faculty: Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'short_bio' | 'active'> | null }) => fra.faculty)
+        .filter((f): f is Pick<Faculty, 'id' | 'first_name' | 'last_name' | 'slug' | 'photo_url' | 'short_bio' | 'active'> => f !== null && f.active === true)
+        .map(({ active: _active, ...rest }) => rest) // Remove active field from output
+    }
+  })
+}
+
+/**
+ * Get total count of active faculty
+ */
+export async function getFacultyCount(): Promise<number> {
+  const supabase = await createClient()
+  const { count, error } = await supabase
+    .from('faculty')
+    .select('id', { count: 'exact', head: true })
+    .eq('active', true)
+  if (error) {
+    console.error('Error fetching faculty count:', error)
+    return 0
+  }
+  return count || 0
+}
+
+/**
+ * Get total count of active graduate students
+ */
+export async function getStudentCount(): Promise<number> {
+  const supabase = await createClient()
+  const { count, error } = await supabase
+    .from('graduate_students')
+    .select('id', { count: 'exact', head: true })
+    .eq('active', true)
+  if (error) {
+    console.error('Error fetching student count:', error)
+    return 0
+  }
+  return count || 0
 }
 
 /**

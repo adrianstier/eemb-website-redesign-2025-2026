@@ -100,7 +100,8 @@ global.fetch = jest.fn()
 // Environment variables for testing
 process.env = {
   ...process.env,
-  NEXT_PUBLIC_API_URL: 'http://localhost:1337',
+  NEXT_PUBLIC_SUPABASE_URL: 'https://test-project.supabase.co',
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'test-anon-key',
   NEXT_PUBLIC_SITE_URL: 'http://localhost:3000',
 }
 

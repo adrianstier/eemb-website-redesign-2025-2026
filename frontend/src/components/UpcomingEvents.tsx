@@ -51,7 +51,7 @@ export default function UpcomingEvents({ initialEvents = [] }: UpcomingEventsPro
   if (events.length === 0) {
     return (
       <div className="bg-white rounded-2xl p-8 border border-warm-200 text-center">
-        <p className="text-warm-500">No upcoming events scheduled</p>
+        <p className="text-warm-600">No upcoming events scheduled</p>
         <Link href="/calendar" className="text-ocean-teal hover:underline text-sm mt-2 inline-block">
           View past events →
         </Link>
@@ -112,7 +112,7 @@ export default function UpcomingEvents({ initialEvents = [] }: UpcomingEventsPro
 
                 {/* Location */}
                 {event.location && (
-                  <p className="text-sm text-warm-500 flex items-center gap-1.5">
+                  <p className="text-sm text-warm-600 flex items-center gap-1.5">
                     <svg className="w-4 h-4 text-warm-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />

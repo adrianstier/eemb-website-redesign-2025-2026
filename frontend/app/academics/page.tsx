@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import WaveDivider from '@/components/ui/WaveDivider'
+import { useFeaturedTestimonials } from '@/hooks/useTestimonials'
 
-// Real graduate student perspectives
-const studentVoices = [
+// Fallback student voices used when DB returns empty
+const fallbackStudentVoices = [
   {
     quote: "What drew me to EEMB was the chance to study kelp forest ecology literally steps from my lab. I can run an experiment in the morning and be diving at Campus Point in the afternoon.",
     name: "PhD Student",
@@ -92,6 +93,23 @@ const programFacts = {
 }
 
 export default function AcademicsPage() {
+  const { testimonials, loading: testimonialsLoading } = useFeaturedTestimonials(3)
+
+  // Map DB testimonials to the shape the UI expects, falling back to hardcoded data
+  const studentVoices = (!testimonialsLoading && testimonials.length > 0)
+    ? testimonials.map((t) => ({
+        quote: t.quote,
+        name: t.student
+          ? `${t.student.first_name} ${t.student.last_name}`
+          : 'Graduate Student',
+        year: t.student?.degree_program
+          ? `${t.student.degree_program} Candidate`
+          : 'Graduate Student',
+        advisor: t.student?.degree_program || 'EEMB',
+        research: '',
+      }))
+    : fallbackStudentVoices
+
   return (
     <div className="min-h-screen bg-warm-50">
       {/* Hero Section - More personal and inviting */}
@@ -253,7 +271,11 @@ export default function AcademicsPage() {
                 <div className="border-t border-warm-200 pt-4">
                   <div className="font-semibold text-ucsb-navy">{student.name}</div>
                   <div className="text-sm text-warm-600">{student.year} • {student.advisor}</div>
-                  <div className="text-sm text-ocean-blue mt-1">{student.research}</div>
+                  {student.research && (
+                    <div className="text-sm text-ocean-blue mt-1">
+                      {student.research}
+                    </div>
+                  )}
                 </div>
               </article>
             ))}
@@ -327,7 +349,7 @@ export default function AcademicsPage() {
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="px-3 py-1 bg-ocean-teal/10 text-ocean-teal rounded-full text-sm font-bold">MA</span>
-                  <span className="text-warm-500">{programFacts.ma.duration}</span>
+                  <span className="text-warm-600">{programFacts.ma.duration}</span>
                 </div>
                 <h3 className="font-heading text-2xl font-bold text-ucsb-navy mb-4">Master of Arts</h3>
                 <p className="text-warm-600 leading-relaxed mb-6">

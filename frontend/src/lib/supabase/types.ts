@@ -304,6 +304,57 @@ export type Database = {
           },
         ]
       }
+      memorials: {
+        Row: {
+          id: number
+          name: string
+          title: string | null
+          birth_year: number | null
+          death_year: number | null
+          photo_url: string | null
+          bio: string | null
+          legacy: string | null
+          research_areas: string[] | null
+          external_links: Json | null
+          slug: string
+          display_order: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          name: string
+          title?: string | null
+          birth_year?: number | null
+          death_year?: number | null
+          photo_url?: string | null
+          bio?: string | null
+          legacy?: string | null
+          research_areas?: string[] | null
+          external_links?: Json | null
+          slug: string
+          display_order?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          name?: string
+          title?: string | null
+          birth_year?: number | null
+          death_year?: number | null
+          photo_url?: string | null
+          bio?: string | null
+          legacy?: string | null
+          research_areas?: string[] | null
+          external_links?: Json | null
+          slug?: string
+          display_order?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       graduate_students: {
         Row: {
           active: boolean
@@ -992,3 +1043,4 @@ export type StudentTestimonial = Tables<"student_testimonials">
 export type ContactSubmission = Tables<"contact_submissions">
 export type AuditLog = Tables<"audit_log">
 export type ProfileVersion = Tables<"profile_versions">
+export type MemorialRow = Tables<"memorials">

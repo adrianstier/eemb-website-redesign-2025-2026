@@ -436,11 +436,11 @@ export default function PeoplePage() {
                 <p className="text-sm text-ocean-teal font-medium">
                   {person.degree_program} Student
                   {person.year_entered && (
-                    <span className="text-warm-500 font-normal"> · {person.year_entered}</span>
+                    <span className="text-warm-600 font-normal"> · {person.year_entered}</span>
                   )}
                 </p>
                 {person.expected_graduation && (
-                  <p className="text-xs text-warm-500 mt-0.5">
+                  <p className="text-xs text-warm-600 mt-0.5">
                     Expected {person.expected_graduation}
                   </p>
                 )}
@@ -456,7 +456,7 @@ export default function PeoplePage() {
                     {person.advisor.last_name} Lab
                   </Link>
                 ) : (
-                  <span className="text-warm-500">{person.advisor.last_name} Lab</span>
+                  <span className="text-warm-600">{person.advisor.last_name} Lab</span>
                 )}
               </p>
             )}
@@ -474,7 +474,7 @@ export default function PeoplePage() {
             {person.email && (
               <a
                 href={`mailto:${person.email}`}
-                className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 hover:bg-ocean-teal text-warm-500 hover:text-white transition-all duration-300"
+                className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 hover:bg-ocean-teal text-warm-600 hover:text-white transition-all duration-300"
                 aria-label="Email"
                 title={person.email}
               >
@@ -485,7 +485,7 @@ export default function PeoplePage() {
             )}
             {person.office && (
               <div
-                className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 text-warm-500 cursor-help"
+                className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 text-warm-600 cursor-help"
                 title={person.office}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -497,7 +497,7 @@ export default function PeoplePage() {
             {person.phone && (
               <a
                 href={`tel:${person.phone}`}
-                className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 hover:bg-ocean-teal text-warm-500 hover:text-white transition-all duration-300"
+                className="flex items-center justify-center w-9 h-9 rounded-full bg-warm-100 hover:bg-ocean-teal text-warm-600 hover:text-white transition-all duration-300"
                 aria-label="Phone"
                 title={person.phone}
               >
@@ -516,7 +516,7 @@ export default function PeoplePage() {
                   href={person.lab_website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-kelp-500 text-warm-500 hover:text-white transition-all duration-300"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-kelp-500 text-warm-600 hover:text-white transition-all duration-300"
                   title="Lab Website"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -529,7 +529,7 @@ export default function PeoplePage() {
                   href={person.google_scholar}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-blue-600 text-warm-500 hover:text-white transition-all duration-300"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-blue-600 text-warm-600 hover:text-white transition-all duration-300"
                   title="Google Scholar"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 512 512">
@@ -542,7 +542,7 @@ export default function PeoplePage() {
                   href={`https://orcid.org/${person.orcid}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-[#A6CE39] text-warm-500 hover:text-white transition-all duration-300"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-[#A6CE39] text-warm-600 hover:text-white transition-all duration-300"
                   title="ORCID"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 256 256">
@@ -560,7 +560,7 @@ export default function PeoplePage() {
                   href={person.twitter.startsWith('http') ? person.twitter : `https://twitter.com/${person.twitter}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-black text-warm-500 hover:text-white transition-all duration-300"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-black text-warm-600 hover:text-white transition-all duration-300"
                   title="Twitter/X"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -573,7 +573,7 @@ export default function PeoplePage() {
                   href={person.linkedin.startsWith('http') ? person.linkedin : `https://linkedin.com/in/${person.linkedin}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-[#0077B5] text-warm-500 hover:text-white transition-all duration-300"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-warm-100 hover:bg-[#0077B5] text-warm-600 hover:text-white transition-all duration-300"
                   title="LinkedIn"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -680,15 +680,15 @@ export default function PeoplePage() {
             <div className="flex gap-6 ml-4 md:ml-0">
               <div className="text-center">
                 <span className="block text-2xl font-heading font-bold text-ocean-deep">{getCategoryCount('faculty')}</span>
-                <span className="text-warm-500 text-xs uppercase tracking-wide">Faculty</span>
+                <span className="text-warm-600 text-xs uppercase tracking-wide">Faculty</span>
               </div>
               <div className="text-center">
                 <span className="block text-2xl font-heading font-bold text-ocean-deep">{getCategoryCount('students')}</span>
-                <span className="text-warm-500 text-xs uppercase tracking-wide">Students</span>
+                <span className="text-warm-600 text-xs uppercase tracking-wide">Students</span>
               </div>
               <div className="text-center">
                 <span className="block text-2xl font-heading font-bold text-ocean-deep">{getCategoryCount('staff')}</span>
-                <span className="text-warm-500 text-xs uppercase tracking-wide">Staff</span>
+                <span className="text-warm-600 text-xs uppercase tracking-wide">Staff</span>
               </div>
             </div>
           </div>
@@ -935,7 +935,7 @@ export default function PeoplePage() {
                                   </a>
                                 ) : '—'}
                               </td>
-                              <td className="px-6 py-4 text-sm text-warm-500 hidden lg:table-cell">
+                              <td className="px-6 py-4 text-sm text-warm-600 hidden lg:table-cell">
                                 {person.office || '—'}
                               </td>
                             </tr>

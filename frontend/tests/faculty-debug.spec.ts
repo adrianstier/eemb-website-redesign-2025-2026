@@ -54,20 +54,20 @@ test.describe('Faculty Page Debug', () => {
     await page.waitForTimeout(2000);
   });
 
-  test('should check backend API directly', async ({ request }) => {
-    console.log('Testing backend API directly...');
+  test('should verify faculty data loads on the rendered page', async ({ page }) => {
+    console.log('Verifying faculty data is available via the app (Supabase)...');
 
-    const response = await request.get('http://localhost:1337/api/faculties?pagination[limit]=100');
-    console.log('API Status:', response.status());
+    await page.goto('http://localhost:3000/people', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(3000);
 
-    const data = await response.json();
-    console.log('API Response:', JSON.stringify(data, null, 2).substring(0, 1000));
+    // Check if faculty cards are rendered (data came from Supabase)
+    const facultyCards = await page.locator('[class*="bg-white"][class*="rounded-lg"]').count();
+    console.log('Faculty cards found:', facultyCards);
+    expect(facultyCards).toBeGreaterThan(0);
 
-    if (data.data) {
-      console.log('Number of faculty records:', data.data.length);
-      if (data.data.length > 0) {
-        console.log('First faculty record:', JSON.stringify(data.data[0], null, 2));
-      }
-    }
+    // Grab first faculty name as a sanity check
+    const firstCardName = await page.locator('[class*="bg-white"][class*="rounded-lg"] h3').first().textContent();
+    console.log('First faculty name:', firstCardName);
+    expect(firstCardName).toBeTruthy();
   });
 });

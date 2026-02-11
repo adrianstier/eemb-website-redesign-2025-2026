@@ -63,7 +63,7 @@ export default function EventCard({
             <h3 className="font-heading font-semibold text-ocean-deep text-sm leading-snug line-clamp-2 group-hover:text-ocean-teal transition-colors">
               {event.title}
             </h3>
-            <p className="text-xs text-warm-500 mt-1">
+            <p className="text-xs text-warm-600 mt-1">
               {eventDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
               {event.location && ` · ${event.location}`}
             </p>
@@ -141,7 +141,7 @@ export default function EventCard({
           )}
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-sm text-warm-500">
+            <div className="flex items-center gap-4 text-sm text-warm-600">
               {/* Time */}
               <span className="flex items-center gap-1.5">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -230,7 +230,7 @@ export default function EventCard({
           )}
 
           {/* Location & Host */}
-          <div className="flex items-center gap-3 text-sm text-warm-500 flex-wrap">
+          <div className="flex items-center gap-3 text-sm text-warm-600 flex-wrap">
             {event.location && (
               <span className="flex items-center gap-1.5">
                 <svg className="w-4 h-4 text-warm-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

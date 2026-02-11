@@ -430,7 +430,7 @@ export default function AboutPage() {
                 </div>
                 <p className="text-xs font-semibold text-ocean-teal uppercase tracking-wide mb-2">{leader.role}</p>
                 <h3 className="text-lg font-bold text-ucsb-navy">{leader.name}</h3>
-                <p className="text-warm-500 text-sm mb-4">{leader.title}</p>
+                <p className="text-warm-600 text-sm mb-4">{leader.title}</p>
                 <Link href={`/people/faculty/${leader.slug}`} className="inline-flex items-center gap-1 text-ocean-blue font-semibold text-sm hover:gap-2 hover:text-ocean-teal transition-all">
                   View Profile
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -533,7 +533,7 @@ export default function AboutPage() {
                   <link.icon className="w-10 h-10 text-ocean-blue" />
                 </div>
                 <h3 className="font-bold text-ucsb-navy group-hover:text-ocean-blue transition-colors">{link.label}</h3>
-                <p className="text-warm-500 text-sm">{link.desc}</p>
+                <p className="text-warm-600 text-sm">{link.desc}</p>
               </Link>
             ))}
           </div>

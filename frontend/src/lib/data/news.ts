@@ -33,6 +33,7 @@ export async function getAllNews(options?: {
   limit?: number
   offset?: number
   category?: NewsCategory
+  categories?: NewsCategory[]
 }): Promise<NewsWithFaculty[]> {
   const supabase = await createClient()
 
@@ -53,7 +54,9 @@ export async function getAllNews(options?: {
     .order('pinned', { ascending: false })
     .order('publish_date', { ascending: false })
 
-  if (options?.category) {
+  if (options?.categories && options.categories.length > 0) {
+    query = query.in('category', options.categories)
+  } else if (options?.category) {
     query = query.eq('category', options.category)
   }
 

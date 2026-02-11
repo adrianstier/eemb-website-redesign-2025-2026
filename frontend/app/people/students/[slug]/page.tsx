@@ -114,7 +114,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                         <Mail className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Email</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Email</p>
                         <a
                           href={`mailto:${student.email}`}
                           className="text-ocean-teal hover:text-ocean-deep hover:underline break-words font-medium transition-colors duration-150"
@@ -132,7 +132,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                         <Phone className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Phone</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Phone</p>
                         <a
                           href={`tel:${student.phone}`}
                           className="text-warm-700 hover:text-ocean-teal font-medium transition-colors duration-150"
@@ -150,7 +150,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                         <MapPin className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Office</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Office</p>
                         <p className="text-warm-700 font-medium">{student.office}</p>
                       </div>
                     </div>
@@ -163,7 +163,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                         <GraduationCap className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Program</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Program</p>
                         <p className="text-warm-700 font-medium">
                           {student.year_entered && `Entered ${student.year_entered}`}
                           {student.year_entered && student.expected_graduation && ' · '}
@@ -252,7 +252,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                           href={student.twitter.startsWith('http') ? student.twitter : `https://twitter.com/${student.twitter}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-lg bg-warm-100 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white text-warm-500 transition-colors duration-150"
+                          className="w-10 h-10 rounded-lg bg-warm-100 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white text-warm-600 transition-colors duration-150"
                           aria-label="Twitter"
                         >
                           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -265,7 +265,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                           href={student.linkedin.startsWith('http') ? student.linkedin : `https://linkedin.com/in/${student.linkedin}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-lg bg-warm-100 flex items-center justify-center hover:bg-[#0A66C2] hover:text-white text-warm-500 transition-colors duration-150"
+                          className="w-10 h-10 rounded-lg bg-warm-100 flex items-center justify-center hover:bg-[#0A66C2] hover:text-white text-warm-600 transition-colors duration-150"
                           aria-label="LinkedIn"
                         >
                           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -305,7 +305,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                         <p className="text-warm-600 font-medium mb-2">
                           Graduate researcher in training
                         </p>
-                        <p className="text-warm-500 text-sm max-w-md mx-auto">
+                        <p className="text-warm-600 text-sm max-w-md mx-auto">
                           {student.first_name} is a {student.degree_program ? `${student.degree_program} ` : ''}student{student.advisor ? ` in the ${student.advisor.last_name} lab` : ''} working on exciting research in ecology, evolution, and marine biology.
                         </p>
                         {student.email && (
@@ -370,7 +370,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
                           <p className="font-semibold text-ocean-deep">
                             {student.advisor.full_name || `${student.advisor.first_name} ${student.advisor.last_name}`}
                           </p>
-                          <p className="text-sm text-warm-500">{student.advisor.title}</p>
+                          <p className="text-sm text-warm-600">{student.advisor.title}</p>
                         </div>
                       </>
                     )

@@ -53,11 +53,15 @@ export {
 // Research Areas
 export {
   getAllResearchAreas,
+  getAllResearchAreasWithFaculty,
   getFeaturedResearchAreas,
   getResearchAreaBySlug,
   getResearchAreasByCategory,
   getAllResearchAreaSlugs,
-  type ResearchAreaWithFaculty
+  getFacultyCount,
+  getStudentCount,
+  type ResearchAreaWithFaculty,
+  type ResearchAreaWithDetailedFaculty
 } from './research'
 
 // Testimonials
@@ -73,3 +77,10 @@ export {
   getContactSubmissions,
   updateContactStatus
 } from './contact'
+
+// Memorials
+export {
+  getAllMemorials,
+  getMemorialBySlug,
+  type Memorial
+} from './memorials'

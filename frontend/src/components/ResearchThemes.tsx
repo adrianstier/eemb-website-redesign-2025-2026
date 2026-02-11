@@ -3,8 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useInView } from '@/hooks/useInView'
+import type { ResearchArea } from '@/lib/supabase/types'
 
-const themes = [
+// Hardcoded fallback themes used when DB returns no data
+const defaultThemes = [
   {
     title: 'Marine Ecology',
     subtitle: 'From kelp to coral',
@@ -37,7 +39,79 @@ const themes = [
   },
 ]
 
-export default function ResearchThemes() {
+// Visual properties keyed by category, used to enrich DB research areas
+// with design-system colors and imagery the database doesn't store
+const categoryVisuals: Record<string, { subtitle: string; image: string; accent: string; accentColor: string }> = {
+  'Marine Biology': {
+    subtitle: 'From kelp to coral',
+    image: '/images/about/marine-reef.jpg',
+    accent: 'bioluminescent',
+    accentColor: '#22d3ee',
+  },
+  'Evolution': {
+    subtitle: 'How life diversifies',
+    image: '/images/about/evolution-flower.jpg',
+    accent: 'ucsb-gold',
+    accentColor: '#FEBC11',
+  },
+  'Ecology': {
+    subtitle: 'Patterns at scale',
+    image: '/images/about/campus-lagoon.jpg',
+    accent: 'kelp-500',
+    accentColor: '#10b981',
+  },
+}
+
+// Default visuals for areas whose category doesn't match any known entry
+const fallbackVisuals = {
+  subtitle: 'Explore the science',
+  image: '/images/about/campus-lagoon.jpg',
+  accent: 'ocean-teal',
+  accentColor: '#0d9488',
+}
+
+export type ThemeItem = {
+  title: string
+  subtitle: string
+  description: string
+  image: string
+  href: string
+  accent: string
+  accentColor: string
+  number: string
+}
+
+/**
+ * Map DB research areas into the shape expected by ThemeCard.
+ * Returns defaultThemes if the DB data is empty.
+ */
+function buildThemes(researchAreas?: ResearchArea[]): ThemeItem[] {
+  if (!researchAreas || researchAreas.length === 0) {
+    return defaultThemes
+  }
+
+  return researchAreas.map((area, index) => {
+    const visuals = categoryVisuals[area.category ?? ''] ?? fallbackVisuals
+    return {
+      title: area.name,
+      subtitle: visuals.subtitle,
+      description: area.description ?? '',
+      image: area.icon_url ?? visuals.image,
+      href: area.slug ? `/research#${area.slug}` : '/research',
+      accent: visuals.accent,
+      accentColor: visuals.accentColor,
+      number: String(index + 1).padStart(2, '0'),
+    }
+  })
+}
+
+interface ResearchThemesProps {
+  /** Featured research areas fetched server-side from Supabase */
+  researchAreas?: ResearchArea[]
+}
+
+export default function ResearchThemes({ researchAreas }: ResearchThemesProps) {
+  const themes = buildThemes(researchAreas)
   const { ref: sectionRef, isInView: sectionInView } = useInView({ threshold: 0.1 })
 
   return (
@@ -95,7 +169,7 @@ export default function ResearchThemes() {
   )
 }
 
-function ThemeCard({ theme, index, isEven }: { theme: typeof themes[0]; index: number; isEven: boolean }) {
+function ThemeCard({ theme, index, isEven }: { theme: ThemeItem; index: number; isEven: boolean }) {
   const { ref, isInView } = useInView({ threshold: 0.2 })
 
   return (

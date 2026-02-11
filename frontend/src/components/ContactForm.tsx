@@ -170,6 +170,16 @@ export default function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} className={className} noValidate>
+      {/* Honeypot field — hidden from real users, catches bots that auto-fill all fields */}
+      <input
+        type="text"
+        name="website"
+        className="hidden"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
+
       {/* Error banner */}
       {submitStatus === 'error' && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl" role="alert">

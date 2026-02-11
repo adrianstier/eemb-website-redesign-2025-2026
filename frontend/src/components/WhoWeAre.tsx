@@ -99,7 +99,7 @@ export default function WhoWeAre() {
                   <div className="font-heading font-bold text-ocean-deep group-hover:text-ocean-blue transition-colors">
                     Santa Barbara Coastal LTER
                   </div>
-                  <div className="text-sm text-warm-500 mt-1">
+                  <div className="text-sm text-warm-600 mt-1">
                     25 years of kelp forest research
                   </div>
                 </div>
@@ -113,7 +113,7 @@ export default function WhoWeAre() {
                   <div className="font-heading font-bold text-ocean-deep group-hover:text-ocean-blue transition-colors">
                     Moorea Coral Reef LTER
                   </div>
-                  <div className="text-sm text-warm-500 mt-1">
+                  <div className="text-sm text-warm-600 mt-1">
                     Tropical reef dynamics since 2004
                   </div>
                 </div>

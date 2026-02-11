@@ -323,7 +323,7 @@ END:VEVENT
                         </Link>
                       ))}
                       {day.events.length > 3 && (
-                        <div className="text-xs text-warm-500 px-2">
+                        <div className="text-xs text-warm-600 px-2">
                           +{day.events.length - 3} more
                         </div>
                       )}
@@ -373,7 +373,7 @@ END:VEVENT
               </h3>
 
               {selectedDate && selectedDayEvents.length === 0 && (
-                <p className="text-warm-500 text-sm">No events on this date</p>
+                <p className="text-warm-600 text-sm">No events on this date</p>
               )}
 
               <div className="space-y-4 max-h-[600px] overflow-y-auto">
@@ -389,12 +389,12 @@ END:VEVENT
                       {formatTime(event.start_date)}
                     </p>
                     {event.location && (
-                      <p className="text-xs text-warm-500 mb-2">
+                      <p className="text-xs text-warm-600 mb-2">
                         📍 {event.location}
                       </p>
                     )}
                     {event.speaker && (
-                      <p className="text-xs text-warm-500 mb-3">
+                      <p className="text-xs text-warm-600 mb-3">
                         🎤 {event.speaker}
                       </p>
                     )}

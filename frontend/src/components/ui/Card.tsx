@@ -270,7 +270,7 @@ export const CardMeta: React.FC<{
   className?: string
 }> = ({ children, className = '' }) => {
   return (
-    <div className={`flex items-center gap-4 text-sm text-warm-500 ${className}`}>
+    <div className={`flex items-center gap-4 text-sm text-warm-600 ${className}`}>
       {children}
     </div>
   )

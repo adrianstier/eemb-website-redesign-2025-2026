@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { getAllNews } from '@/lib/data/news'
 import type { Metadata } from 'next'
+import type { Database } from '@/lib/supabase/types'
+
+type NewsCategory = Database['public']['Enums']['news_category']
 
 export const revalidate = 900
 
@@ -9,8 +12,18 @@ export const metadata: Metadata = {
   description: 'Celebrating achievements, awards, publications, and milestones of the EEMB community at UC Santa Barbara.',
 }
 
+/** Categories that represent positive/celebratory news */
+const GOOD_NEWS_CATEGORIES: NewsCategory[] = [
+  'Faculty Achievement',
+  'Student Achievement',
+  'Alumni Success',
+  'Research Breakthrough',
+  'Grant Award',
+  'Publication',
+]
+
 export default async function GoodNewsPage() {
-  const articles = await getAllNews({ category: 'good_news' as never })
+  const articles = await getAllNews({ categories: GOOD_NEWS_CATEGORIES })
 
   return (
     <div className="min-h-screen bg-warm-50">
@@ -37,7 +50,7 @@ export default async function GoodNewsPage() {
                     {article.title}
                   </h3>
                   {article.publish_date && (
-                    <p className="text-sm text-warm-500 mb-3">
+                    <p className="text-sm text-warm-600 mb-3">
                       {new Date(article.publish_date).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',

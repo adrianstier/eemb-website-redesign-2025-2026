@@ -297,7 +297,7 @@ test.describe('People Page - Detailed Audit', () => {
     const completedCalls = apiCalls.filter(call => call.duration !== undefined);
     console.log(`\nAPI Calls Made: ${completedCalls.length}`);
     completedCalls.forEach(call => {
-      const url = call.url.replace('http://localhost:1337', '');
+      const url = call.url.replace(/https?:\/\/[^/]+/, '');
       console.log(`  ${url}: ${call.duration}ms`);
     });
 

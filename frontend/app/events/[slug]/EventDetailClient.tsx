@@ -171,7 +171,7 @@ END:VCALENDAR`
                 ) : event.short_description ? (
                   <p>{event.short_description}</p>
                 ) : (
-                  <p className="text-warm-500 italic">No description available.</p>
+                  <p className="text-warm-600 italic">No description available.</p>
                 )}
               </div>
             </div>
@@ -201,7 +201,7 @@ END:VCALENDAR`
                             {relatedEvent.title}
                           </h4>
                           {relatedEvent.event_type && (
-                            <span className="text-xs text-warm-500">{relatedEvent.event_type}</span>
+                            <span className="text-xs text-warm-600">{relatedEvent.event_type}</span>
                           )}
                         </div>
                       </div>

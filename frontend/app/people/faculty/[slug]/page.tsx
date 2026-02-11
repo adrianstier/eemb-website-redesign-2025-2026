@@ -122,7 +122,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                         <Mail className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Email</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Email</p>
                         <a
                           href={`mailto:${faculty.email}`}
                           className="text-ocean-teal hover:text-ocean-deep hover:underline break-words font-medium transition-colors duration-150"
@@ -140,7 +140,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                         <Phone className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Phone</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Phone</p>
                         <a
                           href={`tel:${faculty.phone}`}
                           className="text-warm-700 hover:text-ocean-teal font-medium transition-colors duration-150"
@@ -158,7 +158,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                         <MapPin className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Office</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Office</p>
                         <p className="text-warm-700 font-medium">{faculty.office}</p>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                         <GraduationCap className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Office Hours</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Office Hours</p>
                         <p className="text-warm-700 font-medium">{faculty.office_hours}</p>
                       </div>
                     </div>
@@ -270,7 +270,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                         <p className="text-warm-600 font-medium mb-2">
                           Exploring the frontiers of science
                         </p>
-                        <p className="text-warm-500 text-sm max-w-md mx-auto">
+                        <p className="text-warm-600 text-sm max-w-md mx-auto">
                           {fullName}&apos;s research explores questions at the intersection of ecology, evolution, and marine biology. Visit their lab website or publications for more details.
                         </p>
                         {faculty.lab_website && (
@@ -356,7 +356,7 @@ export default async function FacultyProfilePage({ params }: { params: Promise<{
                             <p className="font-medium text-ocean-deep">
                               {student.full_name || `${student.first_name} ${student.last_name}`}
                             </p>
-                            <p className="text-sm text-warm-500">{student.degree_program}</p>
+                            <p className="text-sm text-warm-600">{student.degree_program}</p>
                           </div>
                         </>
                       )

@@ -121,7 +121,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                         <Mail className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Email</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Email</p>
                         <a
                           href={`mailto:${staff.email}`}
                           className="text-ocean-teal hover:text-ocean-deep hover:underline break-words font-medium transition-colors duration-150"
@@ -139,7 +139,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                         <Phone className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Phone</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Phone</p>
                         <a
                           href={`tel:${staff.phone}`}
                           className="text-warm-700 hover:text-ocean-teal font-medium transition-colors duration-150"
@@ -157,7 +157,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                         <MapPin className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Office</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Office</p>
                         <p className="text-warm-700 font-medium">{staff.office}</p>
                       </div>
                     </div>
@@ -170,7 +170,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                         <Building2 className="w-5 h-5 text-ocean-teal" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-semibold text-warm-500 uppercase tracking-wide mb-1">Department</p>
+                        <p className="text-xs font-semibold text-warm-600 uppercase tracking-wide mb-1">Department</p>
                         <p className="text-warm-700 font-medium">{staff.department}</p>
                       </div>
                     </div>
@@ -224,7 +224,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ s
                         <p className="text-warm-600 font-medium mb-2">
                           {fullName} keeps EEMB running smoothly
                         </p>
-                        <p className="text-warm-500 text-sm max-w-md mx-auto">
+                        <p className="text-warm-600 text-sm max-w-md mx-auto">
                             {staff.title
                             ? <>As {staff.title.toLowerCase().startsWith('a') || staff.title.toLowerCase().startsWith('e') || staff.title.toLowerCase().startsWith('i') || staff.title.toLowerCase().startsWith('o') || staff.title.toLowerCase().startsWith('u') ? 'an' : 'a'} {staff.title}, {staff.first_name} plays a vital role in supporting our department&apos;s research and educational mission.</>
                             : <>{staff.first_name} plays a vital role in supporting our department&apos;s research and educational mission.</>

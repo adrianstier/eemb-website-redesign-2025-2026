@@ -112,7 +112,7 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
                 className="object-cover"
               />
             </div>
-            <div className="text-sm text-warm-500">
+            <div className="text-sm text-warm-600">
               <p>To update your photo, please contact the web administrator.</p>
             </div>
           </div>
@@ -141,9 +141,9 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
               type="text"
               value={faculty.title}
               readOnly
-              className="w-full px-4 py-3 border border-warm-200 rounded-xl bg-warm-50 text-warm-500 cursor-not-allowed"
+              className="w-full px-4 py-3 border border-warm-200 rounded-xl bg-warm-50 text-warm-600 cursor-not-allowed"
             />
-            <p className="text-xs text-warm-500 mt-1">Contact admin to change title</p>
+            <p className="text-xs text-warm-600 mt-1">Contact admin to change title</p>
           </div>
 
           <div>
@@ -211,7 +211,7 @@ export default function FacultyProfileForm({ faculty }: FacultyProfileFormProps)
             placeholder="Describe your research interests and current projects..."
             className="w-full px-4 py-3 border border-warm-300 rounded-xl focus:ring-2 focus:ring-ocean-blue/20 focus:border-ocean-blue transition resize-y"
           />
-          <p className="text-sm text-warm-500 mt-2">
+          <p className="text-sm text-warm-600 mt-2">
             This will appear on your profile page. You can use plain text or basic formatting.
           </p>
         </div>

@@ -81,7 +81,7 @@ export default function Footer() {
               </div>
               <div>
                 <h3 className="font-heading text-xl font-bold tracking-tight">EEMB</h3>
-                <p className="text-[10px] text-white/40 tracking-wider uppercase">UC Santa Barbara</p>
+                <p className="text-[10px] text-white/60 tracking-wider uppercase">UC Santa Barbara</p>
               </div>
             </div>
 
@@ -92,14 +92,14 @@ export default function Footer() {
               Research that matters for the future of life on Earth.
             </p>
 
-            <div className="text-white/40 text-sm space-y-1">
+            <div className="text-white/60 text-sm space-y-1">
               <p>University of California, Santa Barbara</p>
               <p>Santa Barbara, CA 93106-9620</p>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
+          <nav aria-label="Quick links">
             <h4 className="font-heading font-semibold text-bioluminescent mb-6 text-sm tracking-wider uppercase">
               Quick Links
             </h4>
@@ -116,10 +116,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Resources */}
-          <div>
+          <nav aria-label="Resources">
             <h4 className="font-heading font-semibold text-bioluminescent mb-6 text-sm tracking-wider uppercase">
               Resources
             </h4>
@@ -136,7 +136,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Connect */}
           <div>
@@ -186,14 +186,14 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/40 text-sm">
+          <p className="text-white/60 text-sm">
             &copy; {new Date().getFullYear()} The Regents of the University of California. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="https://www.policy.ucsb.edu/terms-of-use/privacy-notification" className="text-white/40 hover:text-white/70 transition-colors text-sm">
+            <a href="https://www.policy.ucsb.edu/terms-of-use/privacy-notification" className="text-white/60 hover:text-white/80 transition-colors text-sm">
               Privacy Policy
             </a>
-            <a href="https://www.ucsb.edu/accessibility" className="text-white/40 hover:text-white/70 transition-colors text-sm">
+            <a href="https://www.ucsb.edu/accessibility" className="text-white/60 hover:text-white/80 transition-colors text-sm">
               Accessibility
             </a>
           </div>

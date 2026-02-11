@@ -365,7 +365,7 @@ export default function NewsArticleClient({ article, relatedArticles }: NewsArti
                       </div>
                     </div>
                     <div className="p-6">
-                      <div className="flex items-center gap-2 text-sm text-warm-500 mb-3">
+                      <div className="flex items-center gap-2 text-sm text-warm-600 mb-3">
                         <Calendar className="w-3.5 h-3.5" />
                         <time>{itemDate}</time>
                       </div>

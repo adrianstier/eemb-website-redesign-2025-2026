@@ -352,10 +352,10 @@ export default function ContactPage() {
                 </p>
                 <p className="flex justify-between">
                   <span className="font-medium">Saturday - Sunday</span>
-                  <span className="text-warm-500">Closed</span>
+                  <span className="text-warm-600">Closed</span>
                 </p>
               </div>
-              <p className="text-sm text-warm-500 mt-4">
+              <p className="text-sm text-warm-600 mt-4">
                 Hours may vary during holidays and academic breaks.
               </p>
             </div>

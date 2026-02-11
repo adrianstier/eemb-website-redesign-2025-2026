@@ -51,7 +51,7 @@ export default function FeaturedNews({ initialNews = [] }: FeaturedNewsProps) {
   if (news.length === 0) {
     return (
       <div className="bg-white rounded-2xl p-8 border border-warm-200 text-center">
-        <p className="text-warm-500">No news articles available</p>
+        <p className="text-warm-600">No news articles available</p>
         <Link href="/news" className="text-ocean-blue hover:underline text-sm mt-2 inline-block">
           View news archive →
         </Link>
@@ -107,7 +107,7 @@ export default function FeaturedNews({ initialNews = [] }: FeaturedNewsProps) {
                 </h3>
 
                 {item.excerpt && (
-                  <p className="text-sm text-warm-500 line-clamp-1 leading-relaxed">
+                  <p className="text-sm text-warm-600 line-clamp-1 leading-relaxed">
                     {item.excerpt}
                   </p>
                 )}

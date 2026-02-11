@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import HeroSection from '@/components/HeroSection'
 import QuickNav from '@/components/QuickNav'
 import WhoWeAre from '@/components/WhoWeAre'
@@ -8,17 +9,27 @@ import FeaturedNews from '@/components/FeaturedNews'
 import UpcomingEvents from '@/components/UpcomingEvents'
 import PartnersSection from '@/components/PartnersSection'
 import Link from 'next/link'
-import { getAllFaculty, getUpcomingEvents, getAllNews } from '@/lib/data'
+import { getAllFaculty, getUpcomingEvents, getAllNews, getFeaturedResearchAreas } from '@/lib/data'
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
+
+export const metadata: Metadata = {
+  openGraph: {
+    title: 'EEMB - Ecology, Evolution & Marine Biology | UC Santa Barbara',
+    description: 'Department of Ecology, Evolution and Marine Biology at UC Santa Barbara. Where the Santa Ynez Mountains meet the Pacific, we ask questions that matter.',
+    type: 'website',
+    siteName: 'EEMB | UC Santa Barbara',
+  },
+}
 
 export const revalidate = 900 // Revalidate every 15 minutes
 
 export default async function HomePage() {
   // Fetch data server-side in parallel
-  const [faculty, events, news] = await Promise.all([
+  const [faculty, events, news, researchAreas] = await Promise.all([
     getAllFaculty(),
     getUpcomingEvents({ limit: 5 }),
-    getAllNews({ limit: 5 })
+    getAllNews({ limit: 5 }),
+    getFeaturedResearchAreas()
   ])
 
   return (
@@ -33,7 +44,7 @@ export default async function HomePage() {
       <WhoWeAre />
 
       {/* Research areas - magazine style */}
-      <ResearchThemes />
+      <ResearchThemes researchAreas={researchAreas} />
 
       {/* Featured faculty - dynamic grid */}
       <FeaturedFaculty initialFaculty={faculty} />

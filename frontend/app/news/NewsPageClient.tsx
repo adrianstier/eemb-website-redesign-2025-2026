@@ -104,7 +104,7 @@ export default function NewsPageClient({ newsData }: NewsPageClientProps) {
       <section className="bg-warm-50 pt-6 pb-4">
         <div className="container mx-auto px-4">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-warm-500 mb-4">
+          <nav className="flex items-center gap-2 text-sm text-warm-600 mb-4">
             <Link href="/" className="hover:text-ocean-blue transition">Home</Link>
             <ChevronRight className="w-4 h-4" />
             <span className="text-warm-800 font-medium">News</span>
@@ -125,12 +125,12 @@ export default function NewsPageClient({ newsData }: NewsPageClientProps) {
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1.5">
                 <span className="text-2xl font-bold text-ucsb-navy">{newsData.length}</span>
-                <span className="text-warm-500">articles</span>
+                <span className="text-warm-600">articles</span>
               </div>
               <div className="w-px h-6 bg-warm-300" />
               <div className="flex items-center gap-1.5">
                 <span className="text-2xl font-bold text-ucsb-navy">{years.length}</span>
-                <span className="text-warm-500">years</span>
+                <span className="text-warm-600">years</span>
               </div>
             </div>
           </div>
@@ -204,7 +204,7 @@ export default function NewsPageClient({ newsData }: NewsPageClientProps) {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1.5 text-sm text-warm-500 hover:text-warm-700 transition"
+                className="flex items-center gap-1.5 text-sm text-warm-600 hover:text-warm-700 transition"
               >
                 <X className="w-4 h-4" />
                 Clear
@@ -232,7 +232,7 @@ export default function NewsPageClient({ newsData }: NewsPageClientProps) {
           )}
 
           {/* Results count */}
-          <div className="mt-3 text-sm text-warm-500">
+          <div className="mt-3 text-sm text-warm-600">
             {filteredNews.length} article{filteredNews.length !== 1 ? 's' : ''}
             {hasActiveFilters && ' matching your filters'}
           </div>
@@ -246,7 +246,7 @@ export default function NewsPageClient({ newsData }: NewsPageClientProps) {
             {/* Section label */}
             <div className="flex items-center gap-3 mb-8">
               <div className="w-2 h-2 bg-ucsb-gold rounded-full" />
-              <span className="text-sm font-semibold text-warm-500 uppercase tracking-wider">Featured Stories</span>
+              <span className="text-sm font-semibold text-warm-600 uppercase tracking-wider">Featured Stories</span>
               <div className="flex-1 h-px bg-gradient-to-r from-warm-200 to-transparent" />
             </div>
 
@@ -313,7 +313,7 @@ export default function NewsPageClient({ newsData }: NewsPageClientProps) {
                 <h2 className="text-xl font-serif font-bold text-warm-800">More Stories</h2>
                 <div className="w-16 h-px bg-gradient-to-r from-ocean-blue/50 to-transparent" />
               </div>
-              <span className="text-sm text-warm-500">
+              <span className="text-sm text-warm-600">
                 Showing {Math.min(visibleCount + 5, filteredNews.length)} of {filteredNews.length}
               </span>
             </div>

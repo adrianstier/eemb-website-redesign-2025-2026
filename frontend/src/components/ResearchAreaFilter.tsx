@@ -265,7 +265,7 @@ export default function ResearchAreaFilter({
       {/* Active filter count */}
       {localSelectedAreas.length > 0 && (
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-warm-200">
-          <span className="text-sm text-warm-500">
+          <span className="text-sm text-warm-600">
             {localSelectedAreas.length} area{localSelectedAreas.length !== 1 ? 's' : ''} selected
           </span>
           <button

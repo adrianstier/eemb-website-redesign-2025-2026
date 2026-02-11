@@ -88,23 +88,35 @@ test.describe('Faculty Photos Verification', () => {
     console.log(`📸 Profile screenshot saved to: /tmp/faculty-profile-proulx.png`);
   });
 
-  test('should verify photo URLs are accessible', async ({ page, request }) => {
-    console.log(`\n🔗 Testing photo URL accessibility...`);
+  test('should verify faculty photo images load correctly on the page', async ({ page }) => {
+    console.log(`\nTesting faculty photo accessibility on the rendered page...`);
 
-    const photoUrls = [
-      'http://localhost:1337/uploads/faculty/stephen-proulx.jpg',
-      'http://localhost:1337/uploads/faculty/cherie-briggs.jpg',
-      'http://localhost:1337/uploads/faculty/adrian-stier.jpg',
-      'http://localhost:1337/uploads/faculty/holly-moeller-976.jpg',
-      'http://localhost:1337/uploads/faculty/todd-oakley.jpg'
-    ];
+    await page.goto('http://localhost:3000/people');
+    await page.waitForSelector('[class*="bg-white"][class*="rounded-lg"]', { timeout: 10000 });
+    await page.waitForTimeout(2000);
 
-    for (const url of photoUrls) {
-      const response = await request.get(url);
-      const status = response.status();
-      const result = status === 200 ? '✅' : '❌';
-      const filename = url.split('/').pop();
-      console.log(`  ${result} ${filename}: ${status}`);
+    // Find all faculty photo images and check they loaded (naturalWidth > 0)
+    const images = await page.locator('img[src*="/uploads/faculty/"]').all();
+    console.log(`  Found ${images.length} faculty photo images`);
+
+    let loadedCount = 0;
+    let brokenCount = 0;
+
+    for (const img of images) {
+      const src = await img.getAttribute('src');
+      const naturalWidth = await img.evaluate((el: HTMLImageElement) => el.naturalWidth);
+      const filename = src?.split('/').pop() || 'unknown';
+
+      if (naturalWidth > 0) {
+        loadedCount++;
+        console.log(`  OK ${filename}: loaded`);
+      } else {
+        brokenCount++;
+        console.log(`  BROKEN ${filename}: failed to load`);
+      }
     }
+
+    console.log(`\n  Summary: ${loadedCount} loaded, ${brokenCount} broken`);
+    expect(brokenCount).toBe(0);
   });
 });

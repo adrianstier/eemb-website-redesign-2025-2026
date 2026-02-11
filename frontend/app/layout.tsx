@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
+import WebVitals from '@/components/WebVitals'
 
 // Body font - warm, friendly, highly readable
 const dmSans = DM_Sans({
@@ -22,8 +23,13 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://eemb.ucsb.edu'),
   title: 'EEMB - Ecology, Evolution & Marine Biology | UC Santa Barbara',
   description: 'Department of Ecology, Evolution and Marine Biology at UC Santa Barbara. Where the Santa Ynez Mountains meet the Pacific, we ask questions that matter.',
+  twitter: {
+    card: 'summary_large_image',
+    site: '@UCSBEcoEvo',
+  },
 }
 
 // Viewport configuration for accessibility
@@ -43,6 +49,32 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <GoogleAnalytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "EducationalOrganization",
+              "name": "Department of Ecology, Evolution and Marine Biology",
+              "alternateName": "EEMB",
+              "url": "https://eemb.ucsb.edu",
+              "parentOrganization": {
+                "@type": "CollegeOrUniversity",
+                "name": "University of California, Santa Barbara",
+                "url": "https://www.ucsb.edu"
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Noble Hall",
+                "addressLocality": "Santa Barbara",
+                "addressRegion": "CA",
+                "postalCode": "93106",
+                "addressCountry": "US"
+              },
+              "department": "College of Letters and Science"
+            }),
+          }}
+        />
       </head>
       <body className={`${dmSans.variable} ${fraunces.variable} font-sans antialiased`}>
         {/* Skip to main content link for accessibility */}
@@ -61,6 +93,7 @@ export default function RootLayout({
         <Header />
         <main id="main-content" className="min-h-screen overflow-x-hidden">{children}</main>
         <Footer />
+        <WebVitals />
       </body>
     </html>
   )

@@ -1,19 +1,120 @@
-'use client'
-
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import WaveDivider from '@/components/ui/WaveDivider'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter'
+import ResearchThemeAccordion from '@/components/research/ResearchThemeAccordion'
+import type { ResearchThemeData } from '@/components/research/ResearchThemeAccordion'
+import { getAllResearchAreasWithFaculty, getFacultyCount, getStudentCount } from '@/lib/data/research'
 
-// Research themes derived from actual EEMB faculty expertise
-const researchThemes = [
+// Supplementary display data keyed by slug — enriches DB records with UI-specific fields
+// (subtitles, questions, images, colors) that aren't stored in the research_areas table
+const themeDisplayData: Record<string, {
+  subtitle: string
+  questions: string[]
+  image: string
+  color: string
+  facultyFocusMap?: Record<string, string>
+}> = {
+  'marine-ecosystems': {
+    subtitle: 'From kelp forests to coral reefs',
+    questions: [
+      'How do herbivores and predators structure coral reef communities?',
+      'What mechanisms control diversity and function in marine plankton?',
+      'How will ocean acidification affect marine organisms?',
+      'Can sustainable aquaculture help feed a growing world?',
+    ],
+    image: '/images/about/marine-reef.jpg',
+    color: 'ocean-teal',
+    facultyFocusMap: {
+      'burkepile': 'Coral reef ecology & herbivory',
+      'hofmann': 'Ocean acidification & physiology',
+      'mccauley': 'Marine megafauna & conservation',
+      'froehlich': 'Sustainable aquaculture',
+      'iglesias-rodriguez': 'Phytoplankton & ocean carbon',
+      'thurber': 'Deep-sea & Antarctic ecology',
+    },
+  },
+  'terrestrial-ecology': {
+    subtitle: 'Plants, fire, and ecosystem change',
+    questions: [
+      'How do invasive species transform native ecosystems?',
+      'What drives vegetation dynamics in fire-prone landscapes?',
+      'How do plants and microbes interact to cycle nutrients?',
+      'Can we restore degraded ecosystems to health?',
+    ],
+    image: '/images/about/campus-lagoon.jpg',
+    color: 'kelp-500',
+    facultyFocusMap: {
+      'dantonio': 'Invasion biology & restoration',
+      'anderegg': 'Plant drought physiology',
+      'schimel': 'Soil microbial ecology',
+      'zhou': 'Savanna carbon dynamics',
+      'thellman': 'Freshwater ecosystem change',
+    },
+  },
+  'evolution-genetics': {
+    subtitle: 'How life diversifies and adapts',
+    questions: [
+      'How do flowers evolve to attract different pollinators?',
+      'What genetic changes underlie the evolution of complex traits?',
+      'How do genomes and organelles coevolve?',
+      'What drives speciation and adaptive radiation?',
+    ],
+    image: '/images/about/evolution-flower.jpg',
+    color: 'ucsb-gold',
+    facultyFocusMap: {
+      'hodges': 'Flower evolution in Aquilegia',
+      'oakley': 'Bioluminescence & eye evolution',
+      'mazer': 'Plant evolutionary ecology',
+      'sharbrough': 'Cytonuclear coevolution',
+      'martinez-gomez': 'Plant macroevolution',
+      'yi': 'Epigenetics & genome evolution',
+    },
+  },
+  'disease-ecology': {
+    subtitle: 'Pathogens in populations and ecosystems',
+    questions: [
+      'Why do some populations collapse from disease while others persist?',
+      'How do parasites influence ecosystem structure and function?',
+      'What environmental factors drive disease emergence?',
+      'Can we predict and prevent wildlife disease outbreaks?',
+    ],
+    image: '/images/about/kelp-banner.jpg',
+    color: 'ucsb-coral',
+    facultyFocusMap: {
+      'briggs': 'Amphibian disease dynamics',
+      'kuris': 'Parasite ecology',
+      'young': 'Zoonotic disease & defaunation',
+      'vega-thurber': 'Coral microbiome & disease',
+    },
+  },
+  'microbial-ecology': {
+    subtitle: 'The hidden majority of life',
+    questions: [
+      'How do microbial communities assemble and function?',
+      'What controls nitrogen cycling in the ocean?',
+      'How do plant-microbe symbioses evolve?',
+      'What role do viruses play in ecosystem processes?',
+    ],
+    image: '/images/about/ucsb-aerial.jpg',
+    color: 'ocean-blue',
+    facultyFocusMap: {
+      'santoro': 'Marine nitrogen cycling',
+      'wilbanks': 'Sulfur bacteria metabolism',
+      'oono': 'Plant-fungal symbioses',
+      'shay': 'Microbial community ecology',
+    },
+  },
+}
+
+// Hardcoded fallback data — used when the research_areas table is empty
+const fallbackResearchThemes: ResearchThemeData[] = [
   {
     id: 'marine-ecosystems',
     title: 'Marine Ecosystems',
     subtitle: 'From kelp forests to coral reefs',
-    description: 'Our marine ecologists study the complex dynamics of ocean ecosystems—from California kelp forests to tropical coral reefs in Moorea. We investigate how herbivory, productivity, and climate change shape these vital habitats.',
+    description: 'Our marine ecologists study the complex dynamics of ocean ecosystems\u2014from California kelp forests to tropical coral reefs in Moorea. We investigate how herbivory, productivity, and climate change shape these vital habitats.',
     questions: [
       'How do herbivores and predators structure coral reef communities?',
       'What mechanisms control diversity and function in marine plankton?',
@@ -27,7 +128,7 @@ const researchThemes = [
       { name: 'Gretchen Hofmann', focus: 'Ocean acidification & physiology', slug: 'hofmann' },
       { name: 'Douglas McCauley', focus: 'Marine megafauna & conservation', slug: 'mccauley' },
       { name: 'Halley Froehlich', focus: 'Sustainable aquaculture', slug: 'froehlich' },
-      { name: 'Débora Iglesias-Rodriguez', focus: 'Phytoplankton & ocean carbon', slug: 'iglesias-rodriguez' },
+      { name: 'D\u00e9bora Iglesias-Rodriguez', focus: 'Phytoplankton & ocean carbon', slug: 'iglesias-rodriguez' },
       { name: 'Andrew Thurber', focus: 'Deep-sea & Antarctic ecology', slug: 'thurber' },
     ],
   },
@@ -70,7 +171,7 @@ const researchThemes = [
       { name: 'Todd Oakley', focus: 'Bioluminescence & eye evolution', slug: 'oakley' },
       { name: 'Susan Mazer', focus: 'Plant evolutionary ecology', slug: 'mazer' },
       { name: 'Joel Sharbrough', focus: 'Cytonuclear coevolution', slug: 'sharbrough' },
-      { name: 'Jesús Martínez-Gómez', focus: 'Plant macroevolution', slug: 'martinez-gomez' },
+      { name: 'Jes\u00fas Mart\u00ednez-G\u00f3mez', focus: 'Plant macroevolution', slug: 'martinez-gomez' },
       { name: 'Soojin Yi', focus: 'Epigenetics & genome evolution', slug: 'yi' },
     ],
   },
@@ -78,7 +179,7 @@ const researchThemes = [
     id: 'disease-ecology',
     title: 'Disease Ecology',
     subtitle: 'Pathogens in populations and ecosystems',
-    description: 'We study how diseases spread through populations, how parasites structure communities, and how environmental change affects disease dynamics—from amphibian chytrid to zoonotic spillover.',
+    description: 'We study how diseases spread through populations, how parasites structure communities, and how environmental change affects disease dynamics\u2014from amphibian chytrid to zoonotic spillover.',
     questions: [
       'Why do some populations collapse from disease while others persist?',
       'How do parasites influence ecosystem structure and function?',
@@ -116,8 +217,8 @@ const researchThemes = [
   },
 ]
 
-// Featured research highlights - real examples from faculty work
-const researchHighlights = [
+// Hardcoded research highlights
+const fallbackResearchHighlights = [
   {
     title: 'Understanding Amphibian Declines',
     description: 'Dr. Briggs combines mathematical modeling with field studies to understand why some frog populations collapse from chytrid fungus while others persist.',
@@ -144,11 +245,11 @@ const researchHighlights = [
   },
 ]
 
-// Long-term ecological research sites
+// Long-term ecological research sites (stable data, not in DB)
 const lterSites = [
   {
     name: 'Santa Barbara Coastal LTER',
-    description: "Since 2000, we've studied how climate variability, ocean processes, and human activities shape Southern California coastal ecosystems—from giant kelp forests to sandy beaches.",
+    description: "Since 2000, we've studied how climate variability, ocean processes, and human activities shape Southern California coastal ecosystems\u2014from giant kelp forests to sandy beaches.",
     image: '/images/about/kelp-banner.jpg',
     link: 'https://sbclter.msi.ucsb.edu/',
     stats: ['25 years', 'Kelp forests', 'Climate impacts'],
@@ -162,20 +263,64 @@ const lterSites = [
   },
 ]
 
-export default function ResearchPage() {
-  const [activeTheme, setActiveTheme] = useState<string | null>(null)
+/**
+ * Transform DB research areas into the display format used by the accordion component.
+ * Merges DB data (name, description, faculty list) with supplementary display data
+ * (subtitles, questions, images, colors) from the themeDisplayData map.
+ */
+function transformDbToThemes(
+  dbAreas: Awaited<ReturnType<typeof getAllResearchAreasWithFaculty>>
+): ResearchThemeData[] {
+  return dbAreas.map((area) => {
+    const slug = area.slug || area.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    const display = themeDisplayData[slug]
 
-  // Map theme colors to actual Tailwind classes (avoiding dynamic class generation issues)
-  const getColorClasses = (color: string) => {
-    const colorMap: Record<string, { badge: string; overlay: string }> = {
-      'ocean-teal': { badge: 'bg-ocean-teal', overlay: 'bg-ocean-teal/30' },
-      'kelp-500': { badge: 'bg-kelp-500', overlay: 'bg-kelp-500/30' },
-      'ucsb-gold': { badge: 'bg-ucsb-gold', overlay: 'bg-ucsb-gold/30' },
-      'ucsb-coral': { badge: 'bg-ucsb-coral', overlay: 'bg-ucsb-coral/30' },
-      'ocean-blue': { badge: 'bg-ocean-blue', overlay: 'bg-ocean-blue/30' },
+    // Map DB faculty to display format
+    const faculty = area.faculty.map((f) => {
+      const facultySlug = f.slug || `${f.first_name}-${f.last_name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      // Use the focus map if available, fall back to short_bio, then a generic label
+      const focus = display?.facultyFocusMap?.[facultySlug]
+        || f.short_bio
+        || 'Faculty'
+      return {
+        name: `${f.first_name} ${f.last_name}`,
+        focus,
+        slug: facultySlug,
+      }
+    })
+
+    return {
+      id: slug,
+      title: area.name,
+      subtitle: display?.subtitle || area.description?.slice(0, 50) || '',
+      description: area.description || '',
+      questions: display?.questions || [],
+      image: display?.image || '/images/about/ucsb-aerial.jpg',
+      color: display?.color || 'ocean-teal',
+      faculty,
     }
-    return colorMap[color] || { badge: 'bg-ocean-teal', overlay: 'bg-ocean-teal/30' }
-  }
+  })
+}
+
+export default async function ResearchPage() {
+  // Fetch data from Supabase in parallel
+  const [dbResearchAreas, facultyCount, studentCount] = await Promise.all([
+    getAllResearchAreasWithFaculty(),
+    getFacultyCount(),
+    getStudentCount(),
+  ])
+
+  // Use DB data if available, otherwise fall back to hardcoded data
+  const researchThemes: ResearchThemeData[] = dbResearchAreas.length > 0
+    ? transformDbToThemes(dbResearchAreas)
+    : fallbackResearchThemes
+
+  // Use dynamic counts if available, otherwise use hardcoded fallbacks
+  const statFacultyCount = facultyCount > 0 ? facultyCount : 35
+  const statStudentCount = studentCount > 0 ? studentCount : 100
+
+  // Research highlights stay hardcoded (no DB table for these)
+  const researchHighlights = fallbackResearchHighlights
 
   return (
     <div className="min-h-screen bg-warm-50">
@@ -256,134 +401,13 @@ export default function ResearchPage() {
               What We Study
             </h2>
             <p className="text-warm-600 text-lg leading-relaxed">
-              Our research spans five interconnected themes. Click any theme to see
+              Our research spans {researchThemes.length} interconnected themes. Click any theme to see
               the questions driving our work and the faculty leading the way.
             </p>
           </div>
 
-          {/* Theme cards */}
-          <div className="space-y-6">
-            {researchThemes.map((theme) => {
-              const colors = getColorClasses(theme.color)
-              return (
-                <article
-                  key={theme.id}
-                  className={`bg-white rounded-2xl overflow-hidden shadow-warm-md hover:shadow-warm-xl transition-all duration-500 border border-warm-200 ${
-                    activeTheme === theme.id ? 'ring-2 ring-ocean-blue' : ''
-                  }`}
-                >
-                  <button
-                    onClick={() => setActiveTheme(activeTheme === theme.id ? null : theme.id)}
-                    className="w-full text-left"
-                  >
-                    <div className="flex flex-col md:flex-row">
-                      {/* Image */}
-                      <div className="relative h-48 md:h-auto md:w-64 shrink-0">
-                        <Image
-                          src={theme.image}
-                          alt={theme.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 256px"
-                          className="object-cover"
-                        />
-                        <div className={`absolute inset-0 ${colors.overlay}`} />
-                      </div>
-
-                      {/* Content preview */}
-                      <div className="p-6 md:p-8 flex-1">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold text-white ${colors.badge} mb-3`}>
-                              {theme.faculty.length} Faculty
-                            </span>
-                            <h3 className="font-heading text-xl md:text-2xl font-bold text-ucsb-navy mb-2">
-                              {theme.title}
-                            </h3>
-                            <p className="text-ocean-blue font-medium text-sm mb-3">
-                              {theme.subtitle}
-                            </p>
-                            <p className="text-warm-600 leading-relaxed">
-                              {theme.description}
-                            </p>
-                          </div>
-                          <svg
-                            className={`w-6 h-6 text-warm-400 shrink-0 ml-4 transition-transform duration-300 ${
-                              activeTheme === theme.id ? 'rotate-180' : ''
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-
-                  {/* Expanded content */}
-                  <div
-                    className={`overflow-hidden transition-all duration-500 ${
-                      activeTheme === theme.id ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    <div className="border-t border-warm-200 p-6 md:p-8 bg-warm-50">
-                      <div className="grid md:grid-cols-2 gap-8">
-                        {/* Research questions */}
-                        <div>
-                          <h4 className="font-heading font-bold text-ucsb-navy mb-4 flex items-center gap-2">
-                            <svg className="w-5 h-5 text-ocean-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Questions We Ask
-                          </h4>
-                          <ul className="space-y-3">
-                            {theme.questions.map((question, idx) => (
-                              <li key={idx} className="flex items-start gap-3 text-warm-700">
-                                <span className="w-1.5 h-1.5 rounded-full bg-ocean-teal mt-2 shrink-0" />
-                                {question}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* Faculty in this theme */}
-                        <div>
-                          <h4 className="font-heading font-bold text-ucsb-navy mb-4 flex items-center gap-2">
-                            <svg className="w-5 h-5 text-ocean-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            Faculty in This Area
-                          </h4>
-                          <div className="grid gap-3">
-                            {theme.faculty.map((person) => (
-                              <Link
-                                key={person.slug}
-                                href={`/people/faculty/${person.slug}`}
-                                className="group flex items-center justify-between p-3 bg-white rounded-xl border border-warm-200 hover:border-ocean-teal/30 hover:shadow-warm-md transition-all"
-                              >
-                                <div>
-                                  <div className="font-semibold text-ucsb-navy group-hover:text-ocean-blue transition-colors">
-                                    {person.name}
-                                  </div>
-                                  <div className="text-sm text-warm-600">
-                                    {person.focus}
-                                  </div>
-                                </div>
-                                <svg className="w-4 h-4 text-warm-400 group-hover:text-ocean-teal group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
+          {/* Theme cards — interactive accordion (client component) */}
+          <ResearchThemeAccordion themes={researchThemes} />
         </div>
       </section>
 
@@ -523,8 +547,8 @@ export default function ResearchPage() {
           </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { value: 35, suffix: '+', label: 'Faculty', sublabel: 'across all ranks' },
-              { value: 100, suffix: '+', label: 'Grad Students', sublabel: 'PhD & Masters' },
+              { value: statFacultyCount, suffix: '+', label: 'Faculty', sublabel: 'across all ranks' },
+              { value: statStudentCount, suffix: '+', label: 'Grad Students', sublabel: 'PhD & Masters' },
               { value: 2, label: 'LTER Sites', sublabel: 'coastal & coral reef' },
               { value: 25, prefix: '$', suffix: 'M+', label: 'Annual Funding', sublabel: 'NSF, NIH, NOAA' },
             ].map((stat, idx) => (
@@ -538,7 +562,7 @@ export default function ResearchPage() {
                     labelClassName="hidden"
                   />
                   <p className="font-semibold text-ucsb-navy mt-1">{stat.label}</p>
-                  <p className="text-xs text-warm-500 mt-1">{stat.sublabel}</p>
+                  <p className="text-xs text-warm-600 mt-1">{stat.sublabel}</p>
                 </div>
               </ScrollReveal>
             ))}

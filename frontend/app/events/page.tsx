@@ -206,7 +206,7 @@ export default async function EventsPage() {
                         </svg>
                       </div>
                       <h4 className="font-semibold text-ocean-deep text-sm mb-1">Weekly Seminars</h4>
-                      <p className="text-warm-500 text-xs">Research talks every Thursday during the academic year</p>
+                      <p className="text-warm-600 text-xs">Research talks every Thursday during the academic year</p>
                     </div>
                     <div className="bg-warm-50 rounded-xl p-4 text-left border border-warm-200">
                       <div className="w-8 h-8 bg-ucsb-gold/10 rounded-lg flex items-center justify-center mb-3">
@@ -215,7 +215,7 @@ export default async function EventsPage() {
                         </svg>
                       </div>
                       <h4 className="font-semibold text-ocean-deep text-sm mb-1">Prospective Student Days</h4>
-                      <p className="text-warm-500 text-xs">Meet faculty and tour labs during recruitment season</p>
+                      <p className="text-warm-600 text-xs">Meet faculty and tour labs during recruitment season</p>
                     </div>
                     <div className="bg-warm-50 rounded-xl p-4 text-left border border-warm-200">
                       <div className="w-8 h-8 bg-bioluminescent/10 rounded-lg flex items-center justify-center mb-3">
@@ -224,7 +224,7 @@ export default async function EventsPage() {
                         </svg>
                       </div>
                       <h4 className="font-semibold text-ocean-deep text-sm mb-1">Field Trips</h4>
-                      <p className="text-warm-500 text-xs">Explore coastal ecosystems with our research community</p>
+                      <p className="text-warm-600 text-xs">Explore coastal ecosystems with our research community</p>
                     </div>
                   </div>
                 </div>

@@ -219,7 +219,7 @@ export default function FeaturedFaculty({ initialFaculty = [] }: FeaturedFaculty
                       <h3 className="font-display font-bold text-ocean-deep group-hover:text-ocean-blue transition-colors leading-tight">
                         {memberName}
                       </h3>
-                      <p className="text-sm text-warm-500 mt-1">{member.title}</p>
+                      <p className="text-sm text-warm-600 mt-1">{member.title}</p>
                     </div>
                   </Link>
                 )

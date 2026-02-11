@@ -477,7 +477,7 @@ export default function GivePage() {
                     <div className="bg-ocean-blue/5 rounded-lg p-4 border-l-4 border-ocean-blue">
                       <p className="text-xs text-warm-600 mb-1 font-semibold">Mail to:</p>
                       <p className="text-sm text-warm-700">{way.address}</p>
-                      <p className="text-xs text-warm-500 mt-2">Include "EEMB" in the memo line</p>
+                      <p className="text-xs text-warm-600 mt-2">Include "EEMB" in the memo line</p>
                     </div>
                   )}
 
@@ -610,7 +610,7 @@ export default function GivePage() {
             <a href="tel:8058932974" className="text-ocean-blue hover:text-ocean-teal font-semibold">
               805-893-2974
             </a>
-            <span className="text-warm-500 hidden md:inline">|</span>
+            <span className="text-warm-600 hidden md:inline">|</span>
             <a href="mailto:info@eemb.ucsb.edu" className="text-ocean-blue hover:text-ocean-teal font-semibold">
               info@eemb.ucsb.edu
             </a>

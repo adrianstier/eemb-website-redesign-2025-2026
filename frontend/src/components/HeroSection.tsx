@@ -226,19 +226,19 @@ export default function HeroSection() {
               <span className="block text-4xl md:text-5xl font-heading font-bold text-white group-hover:text-bioluminescent transition-colors">
                 25
               </span>
-              <span className="text-white/40 text-sm tracking-wide">Faculty</span>
+              <span className="text-white/60 text-sm tracking-wide">Faculty</span>
             </div>
             <div className="group">
               <span className="block text-4xl md:text-5xl font-heading font-bold text-white group-hover:text-bioluminescent transition-colors">
                 100+
               </span>
-              <span className="text-white/40 text-sm tracking-wide">Graduate Students</span>
+              <span className="text-white/60 text-sm tracking-wide">Graduate Students</span>
             </div>
             <div className="group">
               <span className="block text-4xl md:text-5xl font-heading font-bold text-white group-hover:text-bioluminescent transition-colors">
                 2
               </span>
-              <span className="text-white/40 text-sm tracking-wide">NSF LTER Sites</span>
+              <span className="text-white/60 text-sm tracking-wide">NSF LTER Sites</span>
             </div>
           </div>
 

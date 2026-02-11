@@ -201,7 +201,7 @@ export default function EmptyState({
                     {suggestion.icon}
                   </div>
                   <h4 className="font-semibold text-ocean-deep text-sm mb-1">{suggestion.title}</h4>
-                  <p className="text-warm-500 text-xs">{suggestion.description}</p>
+                  <p className="text-warm-600 text-xs">{suggestion.description}</p>
                 </div>
               )
             })}

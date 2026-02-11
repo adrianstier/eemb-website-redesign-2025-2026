@@ -66,7 +66,7 @@ export default function QuickNav() {
       <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl relative">
         {/* Section intro */}
         <div className={`text-center mb-12 transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <p className="text-warm-500 text-sm font-medium tracking-wide uppercase mb-2">How can we help?</p>
+          <p className="text-warm-600 text-sm font-medium tracking-wide uppercase mb-2">How can we help?</p>
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-ocean-deep">Find your path</h2>
         </div>
 
@@ -104,7 +104,7 @@ export default function QuickNav() {
                     {path.question}
                   </h3>
 
-                  <p className="text-warm-500 text-[15px] leading-relaxed mb-6">
+                  <p className="text-warm-600 text-[15px] leading-relaxed mb-6">
                     {path.answer}
                   </p>
 

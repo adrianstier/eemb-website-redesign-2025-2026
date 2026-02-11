@@ -136,7 +136,7 @@ function LoginContent() {
           </button>
 
           <div className="mt-6 pt-6 border-t border-warm-200">
-            <p className="text-sm text-warm-500 text-center">
+            <p className="text-sm text-warm-600 text-center">
               Use your <span className="font-medium">@ucsb.edu</span> email address to sign in.
               Only EEMB faculty and staff can edit their profiles.
             </p>
@@ -145,7 +145,7 @@ function LoginContent() {
 
         {/* Help Text */}
         <div className="mt-6 text-center">
-          <p className="text-sm text-warm-500">
+          <p className="text-sm text-warm-600">
             Having trouble?{' '}
             <a href="mailto:eemb-web@ucsb.edu" className="text-ocean-blue hover:underline">
               Contact support

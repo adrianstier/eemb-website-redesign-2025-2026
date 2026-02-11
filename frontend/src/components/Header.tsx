@@ -130,9 +130,9 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto px-5 sm:px-6 lg:px-8 max-w-7xl">
-        <nav className="flex items-center justify-between">
+        <nav className="flex items-center justify-between" aria-label="Main navigation">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-4 group">
+          <Link href="/" className="flex items-center gap-4 group" aria-label="EEMB Home">
             {/* Logo mark */}
             <div className="relative">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
